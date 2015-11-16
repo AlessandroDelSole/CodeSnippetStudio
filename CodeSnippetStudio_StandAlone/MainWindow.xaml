@@ -1,0 +1,237 @@
+﻿<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CodeSnippetStudio_StandAlone"
+        mc:Ignorable="d"
+        Title="Code Snippet Studio" Height="600" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="Control" x:Key="myErrorTemplate">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Right" 
+                        Foreground="Red"
+                        FontSize="12pt" 
+                        FontWeight="ExtraBold">*
+                            </TextBlock>
+                            <Border BorderBrush="Red" BorderThickness="4">
+                                <AdornedElementPlaceholder Name="myControl"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Definisce uno stile per le TextBox, che sfrutta l'ErrorTemplate -->
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource myErrorTemplate}">
+
+            <Setter Property="FontSize" Value="12"/>
+
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Name="LayoutRoot" DataContext="{Binding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button Width="130" Name="AboutButton" Margin="3" Click="AboutButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" Width="16" />
+                    <TextBlock Text="About" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1">
+            <TabItem Header="Snippet Editor">
+                
+            </TabItem>
+            <TabItem Header="Package and Share (Vsix)">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="130" Name="AddSnippetsButton" Margin="3" Click="AddSnippetsButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="16" Source="/Images/snippet_16xLG.png" />
+                                <TextBlock Text="Add Snippets" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Width="130" Name="BuildVsixButton" Margin="3" Click="BuildVsixButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/ExtensionManager_vsix.png" Width="16" />
+                                <TextBlock Text="Build VSIX" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Width="130" Name="RemoveSnippetButton" Margin="3" Click="RemoveSnippetButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="pack://application:,,,/Images/delete.png" Width="16" />
+                                <TextBlock Text="Remove Snippet(s)" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Width="130" Name="ResetPkgButton" Margin="3" Click="ResetPkgButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/RestoreDefaultView_9695.png" Width="16" />
+                                <TextBlock Text="Reset Package" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="Package Metadata" Name="PackageTab">
+                            <Grid>
+                                <Grid x:Name="Grid1" HorizontalAlignment="Left" Margin="0,0,0,-332" VerticalAlignment="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Package Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" />
+                                    <TextBox x:Name="PackageNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="0" Text="{Binding PackageName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnValidationError=true, ValidatesOnDataErrors=True, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Package Description:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBox x:Name="PackageDescriptionTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="1" Text="{Binding PackageDescription, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Package Author:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBox x:Name="PackageAuthorTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="2" Text="{Binding PackageAuthor, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Package Version:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBox x:Name="MajorTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="3" Text="{Binding PackageVersion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True, ValidatesOnExceptions=True}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Snippet Folder Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <TextBox x:Name="SnippetFolderNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="4" Text="{Binding SnippetFolderName, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Getting Started Guide:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="5" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="GettingStartedGuideTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="5" Text="{Binding GettingStartedGuide, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Button Grid.Column="2" Grid.Row="5" Width="100" Content="Browse..." Name="GuideButton" Margin="1.8,2,0,2" HorizontalAlignment="Left"/>
+
+                                    <Label Content="Icon Path:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="6" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="IconPathTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="6" Text="{Binding IconPath, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Button Grid.Column="2" Grid.Row="6" Width="100" Content="Browse..." Name="IconButton" Margin="2"/>
+
+                                    <Label Content="Preview Image Path:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="7" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="PreviewImagePathTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="7" Text="{Binding PreviewImagePath, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Button Grid.Column="2" Grid.Row="7" Width="100" Content="Browse..." Name="ImageButton" Margin="2"/>
+
+                                    <Label Content="License:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="8" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="LicenseTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="8" Text="{Binding License, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Button Grid.Column="2" Grid.Row="8" Width="100" Content="Browse..." Name="LicenseButton" Margin="2"/>
+
+                                    <Label Content="More Info URL:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="9" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="MoreInfoURLTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="9" Text="{Binding MoreInfoURL, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Label Content="Release Notes:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="10" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="ReleaseNotesTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="10" Text="{Binding ReleaseNotes, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <Button Grid.Column="2" Grid.Row="10" Width="100" Content="Browse..." Name="RelNotesButton" Margin="2"/>
+
+                                    <Label Content="Requires Admin Elevation:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="11" VerticalAlignment="Center"/>
+                                    <CheckBox x:Name="RequiresAdminElevationCheckBox" Content="" Grid.Column="1" HorizontalAlignment="Left" 
+                                  IsChecked="{Binding RequiresAdminElevation, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Row="11" VerticalAlignment="Center"/>
+                                    <Label Content="Requires Windows Installer:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="12" VerticalAlignment="Center"/>
+                                    <CheckBox x:Name="RequiresWindowsInstallerCheckBox" Content="" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding RequiresWindowsInstaller, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="3" Grid.Row="12" VerticalAlignment="Center"/>
+                                    <Label Content="Tags (comma separated):" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="13" VerticalAlignment="Center"/>
+                                    <TextBox x:Name="TagsTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="13" Text="{Binding Tags, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Code Snippets" Name="SnippetsTab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Column headers will be automatically resized when you add snippets. You can remove multiple snippets with multi-selection (e.g. Shift + Click, Ctrl + Click)" VerticalAlignment="Center"/>
+
+                                <DataGrid x:Name="CodeSnippetsDataGrid" Grid.Row="1"
+                              AutoGenerateColumns="False" EnableRowVirtualization="True" 
+                              ItemsSource="{Binding CodeSnippets}" RowDetailsVisibilityMode="VisibleWhenSelected">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn x:Name="FileNameColumn" Binding="{Binding SnippetFileName, ValidatesOnDataErrors=True, Mode=OneWay}" Header="File Name" Width="SizeToCells"/>
+                                        <DataGridTextColumn x:Name="SnippetLanguageColumn" Binding="{Binding SnippetLanguage, ValidatesOnDataErrors=True, Mode=OneWay}" Header="Snippet Language" Width="SizeToHeader"/>
+                                        <DataGridTextColumn x:Name="SnippetDescriptionColumn" Binding="{Binding SnippetDescription, ValidatesOnDataErrors=True, Mode=OneWay}" Header="Description" Width="SizeToCells"/>
+                                        <DataGridTextColumn x:Name="SnippetPathColumn" Binding="{Binding SnippetPath, ValidatesOnDataErrors=True, Mode=OneWay}" Header="Path" Width="SizeToCells"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Vsix Tools">
+                <StackPanel Orientation="Vertical">
+                    <GroupBox Header=" Convert .vsi to .vsix" >
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Convert an old .vsi archive (Visual Studio Community Content Installer) into a modern .vsix package. The source .vsi must contain only code snippets, otherwise conversion will fail."
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Important: the conversion tool uses the information provided in the Metadata of the Package and Share tab, so make sure you have provided the required information." TextWrapping="Wrap"
+                                       Foreground="Red" />
+                            <Button Width="130" Name="VsiButton" Margin="3" HorizontalAlignment="Left" Click="VsiButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" Width="16" />
+                                    <TextBlock Text="Convert .vsi to .vsix" Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header=" Digitally sign .vsix package">
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="You can add a digital signature to an existing .vsix package. The digital signature must be a password-protected .pfx file based on the X.509 standard." TextWrapping="Wrap"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Digital signature file (.pfx): "/>
+                                <TextBox Name="PfxTextBox" Width="250"/>
+                                <Button Name="PfxButton" Content="Browse..." Width="100" Click="PfxButton_Click"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Password: "/>
+                                <PasswordBox Name="PfxPassword" Width="250"/>
+                            </StackPanel>
+                            <Button Width="130" Name="SignButton" Margin="3" HorizontalAlignment="Left" Click="SignButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" Width="16" />
+                                    <TextBlock Text="Sign .vsix package" Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
