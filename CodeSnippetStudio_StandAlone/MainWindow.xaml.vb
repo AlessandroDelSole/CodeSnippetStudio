@@ -1,5 +1,6 @@
 ﻿Imports DelSole.VSIX
 Imports Microsoft.Win32
+Imports Syncfusion.Windows.Edit
 
 Class MainWindow
     Private theData As VSIXPackage
@@ -13,6 +14,8 @@ Class MainWindow
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
         ResetPkg()
+
+        Me.editControl1.DocumentLanguage = Languages.VisualBasic
     End Sub
 
 
