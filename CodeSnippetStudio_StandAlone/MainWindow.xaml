@@ -46,7 +46,7 @@
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
 
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" Name="RootTabControl">
-            <TabItem Header="Snippet Editor">
+            <TabItem Header="Snippet Editor" Height="30">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -56,6 +56,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition />
+                            <RowDefinition Height="120"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Language:"/>
@@ -66,11 +67,13 @@
                                 <ComboBoxItem Tag="XML">XML</ComboBoxItem>
                             </ComboBox>
                             <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click">
-                                <Image />
+                                <Image Source="Images/save_16xLG.png" />
                             </Button>
                         </StackPanel>
                         <syncfusion:EditControl x:Name="editControl1" Grid.Row="1"
                                                 BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" />
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid" AutoGenerateColumns="True"
+                                               AllowEditing="True" EditTrigger="OnTap" />
                     </Grid>
                     <syncfusion:PropertyGrid Grid.Column="1" Name="SnippetPropertyGrid">
                         <syncfusion:PropertyGrid.SelectedObject>
@@ -219,7 +222,7 @@
 								TextWrapping="Wrap"/>
                             <TextBlock Text="Important: the conversion tool uses the information provided in the Metadata of the Package and Share tab, so make sure you have provided the required information." TextWrapping="Wrap"
 								Foreground="Red" />
-                            <Button Width="130" x:Name="VsiButton" Margin="3" HorizontalAlignment="Left" Click="VsiButton_Click">
+                            <Button Width="130" Height="30"  x:Name="VsiButton" Margin="3" HorizontalAlignment="Left" Click="VsiButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Images/VSContentInstaller_16.png" Width="16" />
                                     <TextBlock Text="Convert .vsi to .vsix" Margin="5,0,0,0"/>
@@ -229,20 +232,20 @@
                     </GroupBox>
 
                     <GroupBox Header=" Digitally sign .vsix package">
-                        <StackPanel Orientation="Vertical" Margin="5">
+                        <StackPanel Orientation="Vertical" Margin="5" >
                             <TextBlock Text="You can add a digital signature to an existing .vsix package. The digital signature must be a password-protected .pfx file based on the X.509 standard." TextWrapping="Wrap"/>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Digital signature file (.pfx): "/>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="Digital signature file (.pfx): " VerticalAlignment="Center" />
                                 <TextBox x:Name="PfxTextBox" Width="250"/>
-                                <Button x:Name="PfxButton" Content="Browse..." Width="100" Click="PfxButton_Click"/>
+                                <Button x:Name="PfxButton" Content="Browse..." Width="100" Height="30"  Click="PfxButton_Click"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Password: "/>
-                                <PasswordBox x:Name="PfxPassword" Width="250"/>
+                                <TextBlock Text="Password: " VerticalAlignment="Center" />
+                                <PasswordBox x:Name="PfxPassword" Width="250" Height="30"/>
                             </StackPanel>
-                            <Button Width="130" x:Name="SignButton" Margin="3" HorizontalAlignment="Left" Click="SignButton_Click">
+                            <Button Width="130" x:Name="SignButton" Height="30"  Margin="3" HorizontalAlignment="Left" Click="SignButton_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" Width="16" />
+                                    <Image Source="Images/certificate_16xLG.png" Width="16" />
                                     <TextBlock Text="Sign .vsix package" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>

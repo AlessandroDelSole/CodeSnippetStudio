@@ -1,4 +1,5 @@
-﻿Imports DelSole.VSIX
+﻿Imports System.Collections.ObjectModel
+Imports DelSole.VSIX
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
 Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
@@ -6,6 +7,7 @@ Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 Class MainWindow
     Private theData As VSIXPackage
     Private snippetProperties As SnippetFile
+    Private Property [Imports] As New [Imports]
 
     Private Sub ResetPkg()
         Me.theData = New VSIXPackage
@@ -19,8 +21,8 @@ Class MainWindow
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Languages.VisualBasic
         Me.LanguageCombo.SelectedIndex = 0
-
         Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
+        Me.ImportsDataGrid.ItemsSource = Me.Imports
     End Sub
 
 
@@ -218,7 +220,8 @@ Class MainWindow
             .Title = "Select the .vsix you want to sign"
             .Filter = "VSIX packages (*.vsix)|*.pfx|All files|*.*"
             If .ShowDialog = True Then
-                VSIXPackage.SignVsix(.FileName, PfxTextBox.Text, Nothing)
+                VSIXPackage.SignVsix(.FileName, PfxTextBox.Text, PfxPassword.Password)
+                MessageBox.Show($"{ .FileName} signed successfully.")
             End If
         End With
     End Sub
@@ -332,4 +335,12 @@ Class MainWindow
         doc.Save(fileName)
         MessageBox.Show($"{fileName} saved correctly")
     End Sub
+End Class
+
+Class [Import]
+    Property ImportDirective As String
+End Class
+
+Class [Imports]
+    Inherits ObservableCollection(Of [Import])
 End Class
