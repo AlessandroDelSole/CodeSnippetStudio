@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CodeSnippetStudio_StandAlone"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
-        mc:Ignorable="d"
-        Title="Code Snippet Studio" Height="600" Width="800">
+        mc:Ignorable="d" Background="Black"
+        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="600" Width="800">
 
     <Window.Resources>
         <Style TargetType="{x:Type Control}" x:Key="myErrorTemplate">
@@ -44,28 +44,39 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Code Snippet Studio by Alessandro Del Sole, Copyright (C) 2015 - Powered by Syncfusion" Foreground="Blue" FontWeight="Bold"/>
-            <Button Width="130" x:Name="AboutButton" Margin="3" Click="AboutButton_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" Width="16" />
-                    <TextBlock Text="About" Margin="5,0,0,0"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1">
+
+        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" Name="RootTabControl">
             <TabItem Header="Snippet Editor">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="200"/>
                     </Grid.ColumnDefinitions>
-                    <syncfusion:EditControl x:Name="editControl1" BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" />
-                    <syncfusion:PropertyGrid Grid.Column="1"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Language:"/>
+                            <ComboBox Width="100" Margin="5,0,0,0" Name="LanguageCombo">
+                                <ComboBoxItem Tag="VB">Visual Basic</ComboBoxItem>
+                                <ComboBoxItem Tag="CSharp">C#</ComboBoxItem>
+                                <ComboBoxItem Tag="SQL">SQL</ComboBoxItem>
+                                <ComboBoxItem Tag="XML">XML</ComboBoxItem>
+                            </ComboBox>
+                            <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click">
+                                <Image />
+                            </Button>
+                        </StackPanel>
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="1"
+                                                BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" />
+                    </Grid>
+                    <syncfusion:PropertyGrid Grid.Column="1" Name="SnippetPropertyGrid">
+                        <syncfusion:PropertyGrid.SelectedObject>
+                            <local:SnippetFile/>
+                        </syncfusion:PropertyGrid.SelectedObject>
+                    </syncfusion:PropertyGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Package and Share (Vsix)">

@@ -1,9 +1,11 @@
 ﻿Imports DelSole.VSIX
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
+Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 
 Class MainWindow
     Private theData As VSIXPackage
+    Private snippetProperties As SnippetFile
 
     Private Sub ResetPkg()
         Me.theData = New VSIXPackage
@@ -14,8 +16,11 @@ Class MainWindow
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
         ResetPkg()
-
+        Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Languages.VisualBasic
+        Me.LanguageCombo.SelectedIndex = 0
+
+        Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
     End Sub
 
 
@@ -227,5 +232,104 @@ Class MainWindow
                 Me.PfxTextBox.Text = .FileName
             End If
         End With
+    End Sub
+
+    Private Sub LanguageCombo_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles LanguageCombo.SelectionChanged
+        Dim cb = CType(sender, ComboBox)
+        Select Case cb.SelectedIndex
+            Case = 0
+                Me.editControl1.DocumentLanguage = Languages.VisualBasic
+            Case = 1
+                Me.editControl1.DocumentLanguage = Languages.CSharp
+            Case = 2
+                Me.editControl1.DocumentLanguage = Languages.SQL
+            Case = 3
+                Me.editControl1.DocumentLanguage = Languages.XML
+        End Select
+    End Sub
+
+    Private Sub SaveSnippetButton_Click(sender As Object, e As RoutedEventArgs)
+        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, SnippetFile)
+
+        If snippetProperties.Author = "" Or String.IsNullOrEmpty(snippetProperties.Author) Then
+            MessageBox.Show("Snippet author is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
+
+        If snippetProperties.Title = "" Or String.IsNullOrEmpty(snippetProperties.Title) Then
+            MessageBox.Show("Snippet title is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
+
+        If snippetProperties.Description = "" Or String.IsNullOrEmpty(snippetProperties.Description) Then
+            MessageBox.Show("Snippet description is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
+
+        Dim dlg2 As New SaveFileDialog
+        With dlg2
+            .OverwritePrompt = True
+            .Title = "Output .snippet file"
+            .Filter = ".snippet files (*.snippet)|*.snippet|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+
+            SaveSnippet(.FileName)
+        End With
+    End Sub
+
+    Private Sub SaveSnippet(fileName As String)
+        Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
+
+        Dim cdata As New XCData(editControl1.Text)
+
+        Dim doc = <?xml version="1.0" encoding="utf-8"?>
+                  <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+                      <CodeSnippet Format="1.0.0">
+                          <Header>
+                              <Title><%= snippetProperties.Title %></Title>
+                              <Author><%= snippetProperties.Author %></Author>
+                              <Description><%= snippetProperties.Description %></Description>
+                              <HelpUrl><%= snippetProperties.HelpUrl %></HelpUrl>
+                              <SnippetTypes>
+                                  <SnippetType>Expansion</SnippetType>
+                              </SnippetTypes>
+                              <Keywords>
+                                  <Keyword></Keyword>
+                              </Keywords>
+                              <Shortcut><%= snippetProperties.Shortcut %></Shortcut>
+                          </Header>
+                          <Snippet>
+                              <References>
+                                  <Reference>
+                                      <Assembly/>
+                                      <Url></Url>
+                                  </Reference>
+                              </References>
+                              <Imports>
+                                  <Import>
+                                      <Namespace></Namespace>
+                                  </Import>
+                              </Imports>
+                              <!--
+                              <Declarations>
+                                  <Object Editable="true">
+                                      <ID>document</ID>
+                                      <Type>Microsoft.Office.Interop.Word.Document</Type>
+                                      <ToolTip>Sostituire con il documento di cui verificare lo stato salvato.</ToolTip>
+                                      <Default>document</Default>
+                                      <Function></Function>
+                                  </Object>
+                              </Declarations>-->
+                              <Code Language=<%= currentLang %> Kind="" Delimiter="$"></Code>
+                          </Snippet>
+                      </CodeSnippet>
+                  </CodeSnippets>
+
+        doc...<Code>.First.Add(cdata)
+
+        doc.Save(fileName)
+        MessageBox.Show($"{fileName} saved correctly")
     End Sub
 End Class
