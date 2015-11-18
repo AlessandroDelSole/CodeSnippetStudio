@@ -3,11 +3,15 @@ Imports DelSole.VSIX
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
 Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+Imports Microsoft.WindowsAPICodePack.Dialogs
+Imports Syncfusion.UI.Xaml.Grid
 
 Class MainWindow
     Private theData As VSIXPackage
     Private snippetProperties As SnippetFile
     Private Property [Imports] As New [Imports]
+    Private Property References As New References
+    Private Property Declarations As New Declarations
 
     Private Sub ResetPkg()
         Me.theData = New VSIXPackage
@@ -23,6 +27,8 @@ Class MainWindow
         Me.LanguageCombo.SelectedIndex = 0
         Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
         Me.ImportsDataGrid.ItemsSource = Me.Imports
+        Me.RefDataGrid.ItemsSource = Me.References
+        Me.DeclarationsDataGrid.ItemsSource = Me.Declarations
     End Sub
 
 
@@ -57,7 +63,7 @@ Class MainWindow
         End If
 
         If theData.CodeSnippets.Any = False Then
-            System.Windows.MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.", "Snippet Package Builder", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Error)
+            MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.", "Snippet Package Builder", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -77,7 +83,7 @@ Class MainWindow
                 .Filter = "VSIX packages|*.vsix"
                 If .ShowDialog = True Then
                     Me.theData.Build(.FileName)
-                    Dim result = System.Windows.MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Snippet Package Builder", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
+                    Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Snippet Package Builder", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
                     If result = Windows.MessageBoxResult.No Then
                         Exit Sub
                     Else
@@ -237,7 +243,7 @@ Class MainWindow
         End With
     End Sub
 
-    Private Sub LanguageCombo_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles LanguageCombo.SelectionChanged
+    Private Sub LanguageCombo_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles LanguageCombo.SelectionChanged
         Dim cb = CType(sender, ComboBox)
         Select Case cb.SelectedIndex
             Case = 0
@@ -305,26 +311,28 @@ Class MainWindow
                           </Header>
                           <Snippet>
                               <References>
-                                  <Reference>
-                                      <Assembly/>
-                                      <Url></Url>
-                                  </Reference>
+                                  <%= From ref In Me.References
+                                      Select <Reference>
+                                                 <Assembly><%= ref.Assembly %></Assembly>
+                                                 <Url><%= ref.Url %></Url>
+                                             </Reference> %>
                               </References>
                               <Imports>
-                                  <Import>
-                                      <Namespace></Namespace>
-                                  </Import>
+                                  <%= From imp In Me.Imports
+                                      Select <Import>
+                                                 <Namespace><%= imp.ImportDirective %></Namespace>
+                                             </Import> %>
                               </Imports>
-                              <!--
                               <Declarations>
-                                  <Object Editable="true">
-                                      <ID>document</ID>
-                                      <Type>Microsoft.Office.Interop.Word.Document</Type>
-                                      <ToolTip>Sostituire con il documento di cui verificare lo stato salvato.</ToolTip>
-                                      <Default>document</Default>
-                                      <Function></Function>
-                                  </Object>
-                              </Declarations>-->
+                                  <%= From decl In Me.Declarations
+                                      Select <Object Editable="true">
+                                                 <ID><%= decl.ID %></ID>
+                                                 <Type><%= decl.Type %></Type>
+                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
+                                                 <Default><%= decl.Default %></Default>
+                                                 <Function><%= decl.Function %></Function>
+                                             </Object> %>
+                              </Declarations>
                               <Code Language=<%= currentLang %> Kind="" Delimiter="$"></Code>
                           </Snippet>
                       </CodeSnippet>
@@ -335,12 +343,74 @@ Class MainWindow
         doc.Save(fileName)
         MessageBox.Show($"{fileName} saved correctly")
     End Sub
+
+    Private Sub ExtractButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+        Dim inputFile As String, outputFolder As String
+
+        With dlg
+            .Title = "Select .vsix file"
+            .Filter = "Visual Studio Extension (*.vsix)|*.vsix|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            inputFile = .FileName
+        End With
+
+        Dim dlg2 As New CommonOpenFileDialog()
+        dlg2.Title = "Destination folder"
+        dlg2.IsFolderPicker = True
+        dlg2.InitialDirectory = Environment.SpecialFolder.MyDocuments
+        dlg2.DefaultDirectory = Environment.SpecialFolder.MyDocuments
+        dlg2.EnsureFileExists = True
+        dlg2.EnsurePathExists = True
+        dlg2.EnsureValidNames = True
+        dlg2.Multiselect = False
+        dlg2.ShowPlacesList = True
+
+        If Not dlg2.ShowDialog = CommonFileDialogResult.Ok Then
+            Exit Sub
+        End If
+
+        outputFolder = dlg2.FileName
+
+        VSIXPackage.ExtractVsix(inputFile, outputFolder)
+        MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
+    End Sub
+
+    Private Sub DeclarationsDataGrid_AddNewRowInitiating(sender As Object, args As AddNewRowInitiatingEventArgs) Handles DeclarationsDataGrid.AddNewRowInitiating
+        Dim item = CType(args.NewObject, CodeObject)
+        item.ID = editControl1.SelectedText
+        item.Default = editControl1.SelectedText
+    End Sub
 End Class
 
-Class [Import]
+Class Import
     Property ImportDirective As String
 End Class
 
 Class [Imports]
-    Inherits ObservableCollection(Of [Import])
+    Inherits ObservableCollection(Of Import)
+End Class
+
+Class Reference
+    Property Assembly As String
+    Property Url As String
+End Class
+
+Class References
+    Inherits ObservableCollection(Of Reference)
+End Class
+
+Class CodeObject
+    Property Editable As Boolean = True
+    Property ID As String
+    Property [Type] As String
+    Property ToolTip As String
+    Property [Default] As String
+    Property [Function] As String
+End Class
+
+Class Declarations
+    Inherits ObservableCollection(Of CodeObject)
 End Class

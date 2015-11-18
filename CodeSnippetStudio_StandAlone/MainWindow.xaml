@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CodeSnippetStudio_StandAlone"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
         mc:Ignorable="d" Background="Black"
-        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="600" Width="800">
+        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="650" Width="800">
 
     <Window.Resources>
         <Style TargetType="{x:Type Control}" x:Key="myErrorTemplate">
@@ -44,7 +44,13 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
-
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Syncfusion.SfGrid.WPF;component/Styles/Styles.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" Name="RootTabControl">
             <TabItem Header="Snippet Editor" Height="30">
                 <Grid>
@@ -56,7 +62,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition />
-                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Language:"/>
@@ -72,14 +78,48 @@
                         </StackPanel>
                         <syncfusion:EditControl x:Name="editControl1" Grid.Row="1"
                                                 BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" />
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid" AutoGenerateColumns="True"
-                                               AllowEditing="True" EditTrigger="OnTap" />
+
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="DeclarationsDataGrid"
+                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Type" MappingName="Type" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Defaults to" MappingName="Default" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="ToolTip" MappingName="ToolTip" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Function" MappingName="Function" TextAlignment="Left" />
+                                <syncfusion:GridCheckBoxColumn HeaderText="Editable" MappingName="Editable" IsHidden="True"
+                                                               TextAlignment="Left" />
+                            </syncfusion:SfDataGrid.Columns>
+                        </syncfusion:SfDataGrid>
                     </Grid>
-                    <syncfusion:PropertyGrid Grid.Column="1" Name="SnippetPropertyGrid">
-                        <syncfusion:PropertyGrid.SelectedObject>
-                            <local:SnippetFile/>
-                        </syncfusion:PropertyGrid.SelectedObject>
-                    </syncfusion:PropertyGrid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid">
+                            <syncfusion:PropertyGrid.SelectedObject>
+                                <local:SnippetFile/>
+                            </syncfusion:PropertyGrid.SelectedObject>
+                        </syncfusion:PropertyGrid>
+                        <syncfusion:SfDataGrid Grid.Row="1" ItemsSource="{Binding}" Name="ImportsDataGrid"
+                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn HeaderText="Imports directives" MappingName="ImportDirective" TextAlignment="Left" />
+                            </syncfusion:SfDataGrid.Columns>
+                        </syncfusion:SfDataGrid>
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="RefDataGrid"
+                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />
+                            </syncfusion:SfDataGrid.Columns>
+                        </syncfusion:SfDataGrid>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Package and Share (Vsix)">
@@ -216,7 +256,12 @@
 
             <TabItem Header="Vsix Tools">
                 <StackPanel Orientation="Vertical">
-                    <GroupBox Header=" Convert .vsi to .vsix" >
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold"  Text=" Convert .vsi to .vsix "/>
+                            </StackPanel>
+                        </GroupBox.Header>
                         <StackPanel Margin="5">
                             <TextBlock Text="Convert an old .vsi archive (Visual Studio Community Content Installer) into a modern .vsix package. The source .vsi must contain only code snippets, otherwise conversion will fail."
 								TextWrapping="Wrap"/>
@@ -231,7 +276,12 @@
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Header=" Digitally sign .vsix package">
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold"  Text=" Digitally sign a .vsix package "/>
+                            </StackPanel>
+                        </GroupBox.Header>
                         <StackPanel Orientation="Vertical" Margin="5" >
                             <TextBlock Text="You can add a digital signature to an existing .vsix package. The digital signature must be a password-protected .pfx file based on the X.509 standard." TextWrapping="Wrap"/>
                             <StackPanel Orientation="Horizontal" >
@@ -247,6 +297,22 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Images/certificate_16xLG.png" Width="16" />
                                     <TextBlock Text="Sign .vsix package" Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold"  Text=" Extract .vsix package "/>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <StackPanel Orientation="Vertical" Margin="5" >
+                            <TextBlock Text="Extract the whole content of any existing .vsix package, including definition and manifest files." TextWrapping="Wrap"/>
+                            <Button Width="130" Height="30"  x:Name="ExtractButton" Margin="3" HorizontalAlignment="Left" Click="ExtractButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Images/VSContentInstaller_16.png" Width="16" />
+                                    <TextBlock Text="Extract .vsix" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
