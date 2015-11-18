@@ -26,4 +26,22 @@ Public Class SnippetFile
     <DisplayName("Shortcut")>
     <Description("Keyboard shortcut for IntelliSense. This is an optional value.")>
     Public Property Shortcut As String
+
+    <Category("Properties")>
+    <DisplayName("Keywords")>
+    <Description("Comma separated list of keywords that help identifying a code snippet.")>
+    Public Property Keywords As String
+
+    <Category("Properties")>
+    <DisplayName("Kind")>
+    <Description("Determine the kind of code snippet.")>
+    Public Property Kind As CodeSnippetTypes
 End Class
+
+Public Enum CodeSnippetTypes
+    MethodBody
+    MethodDeclaration
+    TypeDeclaration
+    File
+    Any
+End Enum

@@ -34,13 +34,9 @@
         </Style>
 
         <!-- Definisce uno stile per le TextBox, che sfrutta l'ErrorTemplate -->
-
         <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource myErrorTemplate}">
-
             <Setter Property="FontSize" Value="12"/>
-
         </Style>
-
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
@@ -71,6 +67,9 @@
                                 <ComboBoxItem Tag="CSharp">C#</ComboBoxItem>
                                 <ComboBoxItem Tag="SQL">SQL</ComboBoxItem>
                                 <ComboBoxItem Tag="XML">XML</ComboBoxItem>
+                                <ComboBoxItem Tag="CPP">C++</ComboBoxItem>
+                                <ComboBoxItem Tag="HTML">Html</ComboBoxItem>
+                                <ComboBoxItem Tag="JavaScript">JavaScript</ComboBoxItem>
                             </ComboBox>
                             <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click">
                                 <Image Source="Images/save_16xLG.png" />
@@ -90,6 +89,8 @@
                                 <syncfusion:GridTextColumn HeaderText="Function" MappingName="Function" TextAlignment="Left" />
                                 <syncfusion:GridCheckBoxColumn HeaderText="Editable" MappingName="Editable" IsHidden="True"
                                                                TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Replacement mode" IsHidden="True"
+                                                               MappingName="ReplacementType"/>
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                     </Grid>
@@ -99,21 +100,21 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid">
+                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
                             <syncfusion:PropertyGrid.SelectedObject>
                                 <local:SnippetFile/>
                             </syncfusion:PropertyGrid.SelectedObject>
                         </syncfusion:PropertyGrid>
                         <syncfusion:SfDataGrid Grid.Row="1" ItemsSource="{Binding}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="Imports directives" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="RefDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />

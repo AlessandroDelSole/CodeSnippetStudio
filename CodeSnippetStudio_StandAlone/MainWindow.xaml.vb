@@ -5,6 +5,7 @@ Imports Syncfusion.Windows.Edit
 Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
+Imports System.ComponentModel
 
 Class MainWindow
     Private theData As VSIXPackage
@@ -25,7 +26,7 @@ Class MainWindow
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Languages.VisualBasic
         Me.LanguageCombo.SelectedIndex = 0
-        Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
+        'Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
         Me.ImportsDataGrid.ItemsSource = Me.Imports
         Me.RefDataGrid.ItemsSource = Me.References
         Me.DeclarationsDataGrid.ItemsSource = Me.Declarations
@@ -33,7 +34,7 @@ Class MainWindow
 
 
     Private Sub AddSnippetsButton_Click(sender As Object, e As Windows.RoutedEventArgs)
-        Dim dlg As New Microsoft.Win32.OpenFileDialog
+        Dim dlg As New OpenFileDialog
         With dlg
             .Multiselect = True
             .Filter = "Snippet files (*.snippet)|*.snippet|All files|*.*"
@@ -76,7 +77,7 @@ Class MainWindow
         End If
 
         Try
-            Dim dlg As New Microsoft.Win32.SaveFileDialog
+            Dim dlg As New SaveFileDialog
             With dlg
                 .Title = "Specify the .vsix name and location"
                 .OverwritePrompt = True
@@ -201,7 +202,11 @@ Class MainWindow
             outputFile = .FileName
         End With
 
-        VSIXPackage.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName, theData.PackageAuthor, theData.ProductName, theData.PackageDescription, theData.IconPath, theData.PreviewImagePath, theData.MoreInfoURL)
+        VSIXPackage.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName,
+                             theData.PackageAuthor, theData.ProductName,
+                             theData.PackageDescription,
+                             theData.IconPath, theData.PreviewImagePath,
+                             theData.MoreInfoURL)
         MessageBox.Show($"Successfully converted {inputFile} into {outputFile}")
     End Sub
 
@@ -248,12 +253,25 @@ Class MainWindow
         Select Case cb.SelectedIndex
             Case = 0
                 Me.editControl1.DocumentLanguage = Languages.VisualBasic
+                EnableDataGrids()
             Case = 1
                 Me.editControl1.DocumentLanguage = Languages.CSharp
+                DisableDataGrids()
             Case = 2
                 Me.editControl1.DocumentLanguage = Languages.SQL
+                DisableDataGrids()
             Case = 3
                 Me.editControl1.DocumentLanguage = Languages.XML
+                DisableDataGrids()
+            Case = 4
+                Me.editControl1.DocumentLanguage = Languages.Text
+                DisableDataGrids()
+            Case = 5
+                Me.editControl1.DocumentLanguage = Languages.XML
+                DisableDataGrids()
+            Case = 6
+                Me.editControl1.DocumentLanguage = Languages.XML
+                DisableDataGrids()
         End Select
     End Sub
 
@@ -291,8 +309,34 @@ Class MainWindow
     Private Sub SaveSnippet(fileName As String)
         Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
 
-        Dim cdata As New XCData(editControl1.Text)
+        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, SnippetFile)
+        Dim snippetKind As String
+        Select Case selectedSnippet.Kind
+            Case CodeSnippetTypes.MethodBody
+                snippetKind = "method body"
+            Case CodeSnippetTypes.MethodDeclaration
+                snippetKind = "method decl"
+            Case CodeSnippetTypes.File
+                snippetKind = "file"
+            Case CodeSnippetTypes.TypeDeclaration
+                snippetKind = "type decl"
+            Case Else
+                snippetKind = "any"
+        End Select
 
+        Dim editedCode = editControl1.Text
+        For Each decl In Declarations
+            editedCode = editedCode.Replace(decl.Default, "$" & decl.ID & "$")
+        Next
+
+        Dim keywords As IEnumerable(Of String)
+        If selectedSnippet.Keywords Is Nothing Then
+            keywords = New List(Of String) From {String.Empty}
+        Else
+            keywords = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
+        End If
+
+        Dim cdata As New XCData(editControl1.Text)
         Dim doc = <?xml version="1.0" encoding="utf-8"?>
                   <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
                       <CodeSnippet Format="1.0.0">
@@ -305,7 +349,8 @@ Class MainWindow
                                   <SnippetType>Expansion</SnippetType>
                               </SnippetTypes>
                               <Keywords>
-                                  <Keyword></Keyword>
+                                  <%= From key In keywords
+                                      Select <Keyword><%= key %></Keyword> %>
                               </Keywords>
                               <Shortcut><%= snippetProperties.Shortcut %></Shortcut>
                           </Header>
@@ -325,6 +370,7 @@ Class MainWindow
                               </Imports>
                               <Declarations>
                                   <%= From decl In Me.Declarations
+                                      Where decl.ReplacementType.ToLower = "object"
                                       Select <Object Editable="true">
                                                  <ID><%= decl.ID %></ID>
                                                  <Type><%= decl.Type %></Type>
@@ -332,8 +378,17 @@ Class MainWindow
                                                  <Default><%= decl.Default %></Default>
                                                  <Function><%= decl.Function %></Function>
                                              </Object> %>
+                                  <%= From decl In Me.Declarations
+                                      Where decl.ReplacementType.ToLower = "literal"
+                                      Select <Literal Editable="true">
+                                                 <ID><%= decl.ID %></ID>
+                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
+                                                 <Default><%= decl.Default %></Default>
+                                                 <Function><%= decl.Function %></Function>
+                                             </Literal> %>
                               </Declarations>
-                              <Code Language=<%= currentLang %> Kind="" Delimiter="$"></Code>
+                              <Code Language=<%= currentLang %> Kind=<%= snippetKind %>
+                                  Delimiter="$"></Code>
                           </Snippet>
                       </CodeSnippet>
                   </CodeSnippets>
@@ -383,6 +438,16 @@ Class MainWindow
         item.ID = editControl1.SelectedText
         item.Default = editControl1.SelectedText
     End Sub
+
+    Private Sub DisableDataGrids()
+        Me.ImportsDataGrid.IsEnabled = False
+        Me.RefDataGrid.IsEnabled = False
+    End Sub
+
+    Private Sub EnableDataGrids()
+        Me.ImportsDataGrid.IsEnabled = True
+        Me.RefDataGrid.IsEnabled = True
+    End Sub
 End Class
 
 Class Import
@@ -403,14 +468,41 @@ Class References
 End Class
 
 Class CodeObject
+    Implements INotifyPropertyChanged
+
     Property Editable As Boolean = True
+    Private _id As String
     Property ID As String
+        Get
+            Return _id
+        End Get
+        Set(value As String)
+            _id = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ID)))
+        End Set
+    End Property
+
     Property [Type] As String
     Property ToolTip As String
+    Private _default As String
     Property [Default] As String
+        Get
+            Return _default
+        End Get
+        Set(value As String)
+            _default = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf([Default])))
+        End Set
+    End Property
     Property [Function] As String
+    Property ReplacementType As String = "Literal"
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 End Class
 
 Class Declarations
     Inherits ObservableCollection(Of CodeObject)
 End Class
+
+
+
