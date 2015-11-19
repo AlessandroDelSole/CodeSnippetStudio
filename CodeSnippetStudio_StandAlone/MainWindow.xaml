@@ -309,7 +309,8 @@
                             </StackPanel>
                         </GroupBox.Header>
                         <StackPanel Orientation="Vertical" Margin="5" >
-                            <TextBlock Text="Extract the whole content of any existing .vsix package, including definition and manifest files." TextWrapping="Wrap"/>
+                            <TextBlock Text="Extract the whole content of any existing .vsix package, including definition and manifest files." TextWrapping="Wrap" Margin="5"/>
+                            <CheckBox Margin="5" Name="OnlySnippetsCheckBox" IsChecked="True" Content="Extract only code snippet files"/>
                             <Button Width="130" Height="30"  x:Name="ExtractButton" Margin="3" HorizontalAlignment="Left" Click="ExtractButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Images/VSContentInstaller_16.png" Width="16" />

@@ -2,6 +2,7 @@
 Imports System, System.Linq
 Imports System.Diagnostics
 Imports DelSole.VSIX
+Imports DelSole.VSIX.VsiTools
 Imports Microsoft.Win32
 '''<summary>
 ''' Interaction logic for CodeSnippetStudioToolWindowControl.xaml
@@ -194,6 +195,6 @@ provided the required information.", "Warning", Windows.MessageBoxButton.OKCance
             outputFile = .FileName
         End With
 
-        VSIXPackage.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName, theData.PackageAuthor, theData.ProductName, theData.PackageDescription, theData.IconPath, theData.PreviewImagePath, theData.MoreInfoURL)
+        VsiService.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName, theData.PackageAuthor, theData.ProductName, theData.PackageDescription, theData.IconPath, theData.PreviewImagePath, theData.MoreInfoURL)
     End Sub
 End Class

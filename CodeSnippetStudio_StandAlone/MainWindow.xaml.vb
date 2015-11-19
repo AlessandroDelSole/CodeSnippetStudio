@@ -6,13 +6,14 @@ Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
 Imports System.ComponentModel
+Imports DelSole.VSIX.VsiTools
 
 Class MainWindow
     Private theData As VSIXPackage
     Private snippetProperties As SnippetFile
-    Private Property [Imports] As New [Imports]
-    Private Property References As New References
-    Private Property Declarations As New Declarations
+    Private Property [Imports] As [Imports]
+    Private Property References As References
+    Private Property Declarations As Declarations
 
     Private Sub ResetPkg()
         Me.theData = New VSIXPackage
@@ -26,7 +27,12 @@ Class MainWindow
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Languages.VisualBasic
         Me.LanguageCombo.SelectedIndex = 0
+
         'Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
+        Me.Imports = New [Imports]
+        Me.Declarations = New Declarations
+        Me.References = New References
+
         Me.ImportsDataGrid.ItemsSource = Me.Imports
         Me.RefDataGrid.ItemsSource = Me.References
         Me.DeclarationsDataGrid.ItemsSource = Me.Declarations
@@ -202,7 +208,7 @@ Class MainWindow
             outputFile = .FileName
         End With
 
-        VSIXPackage.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName,
+        VsiService.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName,
                              theData.PackageAuthor, theData.ProductName,
                              theData.PackageDescription,
                              theData.IconPath, theData.PreviewImagePath,
@@ -336,7 +342,7 @@ Class MainWindow
             keywords = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
         End If
 
-        Dim cdata As New XCData(editControl1.Text)
+        Dim cdata As New XCData(editedCode)
         Dim doc = <?xml version="1.0" encoding="utf-8"?>
                   <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
                       <CodeSnippet Format="1.0.0">
@@ -429,7 +435,7 @@ Class MainWindow
 
         outputFolder = dlg2.FileName
 
-        VSIXPackage.ExtractVsix(inputFile, outputFolder)
+        VSIXPackage.ExtractVsix(inputFile, outputFolder, OnlySnippetsCheckBox.IsChecked)
         MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
     End Sub
 
@@ -470,8 +476,21 @@ End Class
 Class CodeObject
     Implements INotifyPropertyChanged
 
-    Property Editable As Boolean = True
+    Private _editable As Boolean
+    Property Editable As Boolean
+        Get
+            Return _editable
+        End Get
+        Set(value As Boolean)
+            _editable = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Editable)))
+        End Set
+    End Property
     Private _id As String
+
+    ''' <summary>
+    ''' The replacement ID
+    ''' </summary>
     Property ID As String
         Get
             Return _id
@@ -482,9 +501,41 @@ Class CodeObject
         End Set
     End Property
 
+    Private _type As String
+    ''' <summary>
+    ''' The .NET type of the object 
+    ''' </summary>
+    ''' <returns></returns>
     Property [Type] As String
+        Get
+            Return _type
+        End Get
+        Set(value As String)
+            _type = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Type)))
+        End Set
+    End Property
+
+    Private _toolTip As String
+    ''' <summary>
+    ''' A description explaining how the user can replace the code
+    ''' </summary>
+    ''' <returns></returns>
     Property ToolTip As String
+        Get
+            Return _toolTip
+        End Get
+        Set(value As String)
+            _toolTip = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ToolTip)))
+        End Set
+    End Property
+
     Private _default As String
+    ''' <summary>
+    ''' The default value for the replacement
+    ''' </summary>
+    ''' <returns></returns>
     Property [Default] As String
         Get
             Return _default
@@ -494,10 +545,39 @@ Class CodeObject
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf([Default])))
         End Set
     End Property
+
+    Private _function As String
+    ''' <summary>
+    ''' A method that will be invoked when the snippet is inserted
+    ''' </summary>
+    ''' <returns></returns>
     Property [Function] As String
-    Property ReplacementType As String = "Literal"
+        Get
+            Return _function
+        End Get
+        Set(value As String)
+            _function = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf([Function])))
+        End Set
+    End Property
+
+    Private _replacementType As String
+    Property ReplacementType As String
+        Get
+            Return _replacementType
+        End Get
+        Set(value As String)
+            _replacementType = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ReplacementType)))
+        End Set
+    End Property
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+    Public Sub New()
+        Editable = True
+        ReplacementType = "Literal"
+    End Sub
 End Class
 
 Class Declarations

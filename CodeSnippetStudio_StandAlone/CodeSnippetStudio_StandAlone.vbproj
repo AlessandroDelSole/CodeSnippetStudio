@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.5799.33660\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.5801.21758\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
@@ -184,13 +184,13 @@
     <Resource Include="Images\VSContentInstaller_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5799.33660\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\save_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\certificate_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5801.21758\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
