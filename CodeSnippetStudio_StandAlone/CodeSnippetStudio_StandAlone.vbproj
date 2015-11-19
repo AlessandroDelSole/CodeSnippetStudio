@@ -8,7 +8,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CodeSnippetStudio_StandAlone</RootNamespace>
-    <AssemblyName>CodeSnippetStudio_StandAlone</AssemblyName>
+    <AssemblyName>CodeSnippetStudio</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -21,7 +21,7 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CodeSnippetStudio_StandAlone.xml</DocumentationFile>
+    <DocumentationFile>CodeSnippetStudio.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CodeSnippetStudio_StandAlone.xml</DocumentationFile>
+    <DocumentationFile>CodeSnippetStudio.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.5801.21758\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.5801.35847\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
@@ -190,7 +190,10 @@
     <Resource Include="Images\certificate_16xLG.png" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5801.21758\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
+    <Resource Include="Images\Hammer_Builder_16xLG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5801.35847\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

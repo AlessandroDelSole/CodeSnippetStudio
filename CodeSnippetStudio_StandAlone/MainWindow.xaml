@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CodeSnippetStudio_StandAlone"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
         mc:Ignorable="d" Background="Black"
-        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="650" Width="800">
+        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="768" Width="1024">
 
     <Window.Resources>
         <Style TargetType="{x:Type Control}" x:Key="myErrorTemplate">
@@ -48,20 +48,27 @@
             </ResourceDictionary>
         </Grid.Resources>
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" Name="RootTabControl">
-            <TabItem Header="Snippet Editor" Height="30">
+            <TabItem Height="30">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Source="Images/snippet_16xLG.png" />
+                        <TextBlock Margin="3,0,0,0" Text="Snippet Editor"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="220"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition />
+                            <RowDefinition Height="20"/>
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Language:"/>
+                            <TextBlock Text="Language:" VerticalAlignment="Center"/>
                             <ComboBox Width="100" Margin="5,0,0,0" Name="LanguageCombo">
                                 <ComboBoxItem Tag="VB">Visual Basic</ComboBoxItem>
                                 <ComboBoxItem Tag="CSharp">C#</ComboBoxItem>
@@ -71,14 +78,23 @@
                                 <ComboBoxItem Tag="HTML">Html</ComboBoxItem>
                                 <ComboBoxItem Tag="JavaScript">JavaScript</ComboBoxItem>
                             </ComboBox>
-                            <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click">
+                          
+                            <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save code snippet">
                                 <Image Source="Images/save_16xLG.png" />
                             </Button>
-                        </StackPanel>
-                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="1"
-                                                BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" />
 
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="DeclarationsDataGrid"
+                            <Label Margin="30,0,0,0" >
+                                <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <TextBlock Text="Code Snippets Schema Reference" />
+                                </Hyperlink>
+                            </Label>
+                        </StackPanel>
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="1" 
+                                                BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
+
+                        <TextBlock Text="Select the text you want to provide replacement suggestions for, then click the grid below to add a new row:" 
+                                   Grid.Row="2" FontWeight="Bold"/>
+                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
@@ -97,7 +113,9 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
@@ -105,14 +123,16 @@
                                 <local:SnippetFile/>
                             </syncfusion:PropertyGrid.SelectedObject>
                         </syncfusion:PropertyGrid>
-                        <syncfusion:SfDataGrid Grid.Row="1" ItemsSource="{Binding}" Name="ImportsDataGrid"
+                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1"/>
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
-                                <syncfusion:GridTextColumn HeaderText="Imports directives" MappingName="ImportDirective" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="RefDataGrid"
+                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3"/>
+                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding}" Name="RefDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
@@ -123,7 +143,13 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Package and Share (Vsix)">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Source="Images/ExtensionManager_vsix.png" />
+                        <TextBlock Margin="3,0,0,0" Text="Package and Share (.vsix)"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
@@ -255,7 +281,13 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Vsix Tools">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Source="Images/Hammer_Builder_16xLG.png" />
+                        <TextBlock Margin="3,0,0,0" Text="Vsix Tools"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <StackPanel Orientation="Vertical">
                     <GroupBox>
                         <GroupBox.Header>
@@ -313,7 +345,7 @@
                             <CheckBox Margin="5" Name="OnlySnippetsCheckBox" IsChecked="True" Content="Extract only code snippet files"/>
                             <Button Width="130" Height="30"  x:Name="ExtractButton" Margin="3" HorizontalAlignment="Left" Click="ExtractButton_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Images/VSContentInstaller_16.png" Width="16" />
+                                    <Image Source="Images/ExtensionManager_vsix.png" Width="16" />
                                     <TextBlock Text="Extract .vsix" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>

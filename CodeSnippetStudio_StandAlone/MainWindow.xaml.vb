@@ -6,7 +6,7 @@ Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
 Imports System.ComponentModel
-Imports DelSole.VSIX.VsiTools
+Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 
 Class MainWindow
     Private theData As VSIXPackage
@@ -20,6 +20,11 @@ Class MainWindow
 
         Me.DataContext = Me.theData
         Me.PackageTab.Focus()
+    End Sub
+
+    Private Sub Hyperlink_RequestNavigate(ByVal sender As Object, ByVal e As RequestNavigateEventArgs)
+        Process.Start(New ProcessStartInfo(e.Uri.AbsoluteUri))
+        e.Handled = True
     End Sub
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
@@ -314,26 +319,7 @@ Class MainWindow
 
     Private Sub SaveSnippet(fileName As String)
         Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
-
         Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, SnippetFile)
-        Dim snippetKind As String
-        Select Case selectedSnippet.Kind
-            Case CodeSnippetTypes.MethodBody
-                snippetKind = "method body"
-            Case CodeSnippetTypes.MethodDeclaration
-                snippetKind = "method decl"
-            Case CodeSnippetTypes.File
-                snippetKind = "file"
-            Case CodeSnippetTypes.TypeDeclaration
-                snippetKind = "type decl"
-            Case Else
-                snippetKind = "any"
-        End Select
-
-        Dim editedCode = editControl1.Text
-        For Each decl In Declarations
-            editedCode = editedCode.Replace(decl.Default, "$" & decl.ID & "$")
-        Next
 
         Dim keywords As IEnumerable(Of String)
         If selectedSnippet.Keywords Is Nothing Then
@@ -342,67 +328,11 @@ Class MainWindow
             keywords = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
         End If
 
-        Dim cdata As New XCData(editedCode)
-        Dim doc = <?xml version="1.0" encoding="utf-8"?>
-                  <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
-                      <CodeSnippet Format="1.0.0">
-                          <Header>
-                              <Title><%= snippetProperties.Title %></Title>
-                              <Author><%= snippetProperties.Author %></Author>
-                              <Description><%= snippetProperties.Description %></Description>
-                              <HelpUrl><%= snippetProperties.HelpUrl %></HelpUrl>
-                              <SnippetTypes>
-                                  <SnippetType>Expansion</SnippetType>
-                              </SnippetTypes>
-                              <Keywords>
-                                  <%= From key In keywords
-                                      Select <Keyword><%= key %></Keyword> %>
-                              </Keywords>
-                              <Shortcut><%= snippetProperties.Shortcut %></Shortcut>
-                          </Header>
-                          <Snippet>
-                              <References>
-                                  <%= From ref In Me.References
-                                      Select <Reference>
-                                                 <Assembly><%= ref.Assembly %></Assembly>
-                                                 <Url><%= ref.Url %></Url>
-                                             </Reference> %>
-                              </References>
-                              <Imports>
-                                  <%= From imp In Me.Imports
-                                      Select <Import>
-                                                 <Namespace><%= imp.ImportDirective %></Namespace>
-                                             </Import> %>
-                              </Imports>
-                              <Declarations>
-                                  <%= From decl In Me.Declarations
-                                      Where decl.ReplacementType.ToLower = "object"
-                                      Select <Object Editable="true">
-                                                 <ID><%= decl.ID %></ID>
-                                                 <Type><%= decl.Type %></Type>
-                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
-                                                 <Default><%= decl.Default %></Default>
-                                                 <Function><%= decl.Function %></Function>
-                                             </Object> %>
-                                  <%= From decl In Me.Declarations
-                                      Where decl.ReplacementType.ToLower = "literal"
-                                      Select <Literal Editable="true">
-                                                 <ID><%= decl.ID %></ID>
-                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
-                                                 <Default><%= decl.Default %></Default>
-                                                 <Function><%= decl.Function %></Function>
-                                             </Literal> %>
-                              </Declarations>
-                              <Code Language=<%= currentLang %> Kind=<%= snippetKind %>
-                                  Delimiter="$"></Code>
-                          </Snippet>
-                      </CodeSnippet>
-                  </CodeSnippets>
-
-        doc...<Code>.First.Add(cdata)
-
-        doc.Save(fileName)
-        MessageBox.Show($"{fileName} saved correctly")
+        SnippetService.SaveSnippet(fileName, selectedSnippet.Kind, currentLang, selectedSnippet.Title,
+                               selectedSnippet.Description, selectedSnippet.HelpUrl,
+                               selectedSnippet.Author, selectedSnippet.Shortcut, editControl1.Text,
+                               Me.Imports, References, Declarations, keywords)
+        MessageBox.Show($"{fileName} saved correctly.")
     End Sub
 
     Private Sub ExtractButton_Click(sender As Object, e As RoutedEventArgs)
@@ -440,7 +370,7 @@ Class MainWindow
     End Sub
 
     Private Sub DeclarationsDataGrid_AddNewRowInitiating(sender As Object, args As AddNewRowInitiatingEventArgs) Handles DeclarationsDataGrid.AddNewRowInitiating
-        Dim item = CType(args.NewObject, CodeObject)
+        Dim item = CType(args.NewObject, Declaration)
         item.ID = editControl1.SelectedText
         item.Default = editControl1.SelectedText
     End Sub
@@ -454,135 +384,104 @@ Class MainWindow
         Me.ImportsDataGrid.IsEnabled = True
         Me.RefDataGrid.IsEnabled = True
     End Sub
-End Class
 
-Class Import
-    Property ImportDirective As String
-End Class
+    Private Shared Function ReturnSnippetKind(kind As CodeSnippetKinds) As String
+        Dim snippetKind As String
+        Select Case kind
+            Case CodeSnippetKinds.MethodBody
+                snippetKind = "method body"
+            Case CodeSnippetKinds.MethodDeclaration
+                snippetKind = "method decl"
+            Case CodeSnippetKinds.File
+                snippetKind = "file"
+            Case CodeSnippetKinds.TypeDeclaration
+                snippetKind = "type decl"
+            Case Else
+                snippetKind = "any"
+        End Select
 
-Class [Imports]
-    Inherits ObservableCollection(Of Import)
-End Class
+        Return snippetKind
+    End Function
 
-Class Reference
-    Property Assembly As String
-    Property Url As String
-End Class
+    Public Shared Sub SaveSnippet1(fileName As String, kind As CodeSnippetKinds,
+                        snippetLanguage As String, snippetTitle As String,
+                        snippetDescription As String, snippetHelpUrl As String,
+                        snippetAuthor As String, snippetShortcut As String,
+                        snippetCode As String, importDirectives As [Imports],
+                        references As References, declarations As Declarations,
+                        keywords As IEnumerable(Of String))
 
-Class References
-    Inherits ObservableCollection(Of Reference)
-End Class
+        Dim snippetKind As String = ReturnSnippetKind(kind)
 
-Class CodeObject
-    Implements INotifyPropertyChanged
+        Dim editedCode = snippetCode
+        For Each decl In declarations
+            editedCode = editedCode.Replace(decl.Default, "$" & decl.ID & "$")
+        Next
 
-    Private _editable As Boolean
-    Property Editable As Boolean
-        Get
-            Return _editable
-        End Get
-        Set(value As Boolean)
-            _editable = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Editable)))
-        End Set
-    End Property
-    Private _id As String
+        If keywords Is Nothing Then
+            keywords = New List(Of String) From {String.Empty}
+        End If
 
-    ''' <summary>
-    ''' The replacement ID
-    ''' </summary>
-    Property ID As String
-        Get
-            Return _id
-        End Get
-        Set(value As String)
-            _id = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ID)))
-        End Set
-    End Property
+        Dim cdata As New XCData(editedCode)
+        Dim doc = <?xml version="1.0" encoding="utf-8"?>
+                  <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+                      <CodeSnippet Format="1.0.0">
+                          <Header>
+                              <Title><%= snippetTitle %></Title>
+                              <Author><%= snippetAuthor %></Author>
+                              <Description><%= snippetDescription %></Description>
+                              <HelpUrl><%= snippetHelpUrl %></HelpUrl>
+                              <SnippetTypes>
+                                  <SnippetType>Expansion</SnippetType>
+                              </SnippetTypes>
+                              <Keywords>
+                                  <%= From key In keywords
+                                      Select <Keyword><%= key %></Keyword> %>
+                              </Keywords>
+                              <Shortcut><%= snippetShortcut %></Shortcut>
+                          </Header>
+                          <Snippet>
+                              <References>
+                                  <%= From ref In references
+                                      Select <Reference>
+                                                 <Assembly><%= ref.Assembly %></Assembly>
+                                                 <Url><%= ref.Url %></Url>
+                                             </Reference> %>
+                              </References>
+                              <Imports>
+                                  <%= From imp In importDirectives
+                                      Select <Import>
+                                                 <Namespace><%= imp.ImportDirective %></Namespace>
+                                             </Import> %>
+                              </Imports>
+                              <Declarations>
+                                  <%= From decl In declarations
+                                      Where decl.ReplacementType.ToLower = "object"
+                                      Select <Object Editable="true">
+                                                 <ID><%= decl.ID %></ID>
+                                                 <Type><%= decl.Type %></Type>
+                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
+                                                 <Default><%= decl.Default %></Default>
+                                                 <Function><%= decl.Function %></Function>
+                                             </Object> %>
+                                  <%= From decl In declarations
+                                      Where decl.ReplacementType.ToLower = "literal"
+                                      Select <Literal Editable="true">
+                                                 <ID><%= decl.ID %></ID>
+                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
+                                                 <Default><%= decl.Default %></Default>
+                                                 <Function><%= decl.Function %></Function>
+                                             </Literal> %>
+                              </Declarations>
+                              <Code Language=<%= snippetLanguage %> Kind=<%= snippetKind %>
+                                  Delimiter="$"></Code>
+                          </Snippet>
+                      </CodeSnippet>
+                  </CodeSnippets>
 
-    Private _type As String
-    ''' <summary>
-    ''' The .NET type of the object 
-    ''' </summary>
-    ''' <returns></returns>
-    Property [Type] As String
-        Get
-            Return _type
-        End Get
-        Set(value As String)
-            _type = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(Type)))
-        End Set
-    End Property
+        doc...<Code>.First.Add(cdata)
 
-    Private _toolTip As String
-    ''' <summary>
-    ''' A description explaining how the user can replace the code
-    ''' </summary>
-    ''' <returns></returns>
-    Property ToolTip As String
-        Get
-            Return _toolTip
-        End Get
-        Set(value As String)
-            _toolTip = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ToolTip)))
-        End Set
-    End Property
-
-    Private _default As String
-    ''' <summary>
-    ''' The default value for the replacement
-    ''' </summary>
-    ''' <returns></returns>
-    Property [Default] As String
-        Get
-            Return _default
-        End Get
-        Set(value As String)
-            _default = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf([Default])))
-        End Set
-    End Property
-
-    Private _function As String
-    ''' <summary>
-    ''' A method that will be invoked when the snippet is inserted
-    ''' </summary>
-    ''' <returns></returns>
-    Property [Function] As String
-        Get
-            Return _function
-        End Get
-        Set(value As String)
-            _function = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf([Function])))
-        End Set
-    End Property
-
-    Private _replacementType As String
-    Property ReplacementType As String
-        Get
-            Return _replacementType
-        End Get
-        Set(value As String)
-            _replacementType = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(NameOf(ReplacementType)))
-        End Set
-    End Property
-
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
-
-    Public Sub New()
-        Editable = True
-        ReplacementType = "Literal"
+        doc.Save(fileName)
     End Sub
 End Class
-
-Class Declarations
-    Inherits ObservableCollection(Of CodeObject)
-End Class
-
-
 
