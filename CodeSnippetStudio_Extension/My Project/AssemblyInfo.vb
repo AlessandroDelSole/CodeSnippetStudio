@@ -6,12 +6,12 @@ Imports System.Runtime.InteropServices
 ' General Information about an assembly is controlled through the following 
 ' set of attributes. Change these attribute values to modify the information
 ' associated with an assembly.
-<Assembly: AssemblyTitle("CodeSnippetStudio_Extension")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("Code Snippet Studio for Visual Studio 2015")>
+<Assembly: AssemblyDescription("Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015")>
 <Assembly: AssemblyConfiguration("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("CodeSnippetStudio_Extension")>
-<Assembly: AssemblyCopyright("")>
+<Assembly: AssemblyCompany("Alessandro Del Sole")>
+<Assembly: AssemblyProduct("Code Snippet Studio for Visual Studio 2015")>
+<Assembly: AssemblyCopyright("Copyright (C), 2015 - Alessandro Del Sole")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 

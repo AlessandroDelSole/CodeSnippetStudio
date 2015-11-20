@@ -11,11 +11,11 @@ Imports System.Windows
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("CodeSnippetStudio_StandAlone")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Guardia di Finanza")>
-<Assembly: AssemblyProduct("CodeSnippetStudio_StandAlone")>
-<Assembly: AssemblyCopyright("Copyright © Guardia di Finanza 2015")>
+<Assembly: AssemblyTitle("Code Snippet Studio 2016")>
+<Assembly: AssemblyDescription("Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015")>
+<Assembly: AssemblyCompany("Alessandro Del Sole")>
+<Assembly: AssemblyProduct("Code Snippet Studio 2016")>
+<Assembly: AssemblyCopyright("Copyright © Alessandro Del Sole 2015")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(false)>
 
