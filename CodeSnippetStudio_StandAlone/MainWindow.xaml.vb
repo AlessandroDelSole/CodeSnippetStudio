@@ -10,7 +10,7 @@ Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 
 Class MainWindow
     Private theData As VSIXPackage
-    Private snippetProperties As SnippetFile
+    Private snippetProperties As CodeSnippet
     Private Property [Imports] As [Imports]
     Private Property References As References
     Private Property Declarations As Declarations
@@ -180,7 +180,7 @@ Class MainWindow
     End Sub
 
     Private Sub AboutButton_Click(sender As Object, e As Windows.RoutedEventArgs)
-        Process.Start("http://visualstudiogallery.msdn.microsoft.com/de44d368-bab1-43cb-9167-701ac668a09c?SRC=Home")
+        Process.Start("https://github.com/AlessandroDelSole/CodeSnippetStudio")
     End Sub
 
     Private Sub VsiButton_Click(sender As Object, e As Windows.RoutedEventArgs)
@@ -287,7 +287,7 @@ Class MainWindow
     End Sub
 
     Private Sub SaveSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, SnippetFile)
+        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, CodeSnippet)
 
         If snippetProperties.Author = "" Or String.IsNullOrEmpty(snippetProperties.Author) Then
             MessageBox.Show("Snippet author is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -319,7 +319,7 @@ Class MainWindow
 
     Private Sub SaveSnippet(fileName As String)
         Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
-        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, SnippetFile)
+        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, CodeSnippet)
 
         Dim keywords As IEnumerable(Of String)
         If selectedSnippet.Keywords Is Nothing Then
@@ -385,16 +385,16 @@ Class MainWindow
         Me.RefDataGrid.IsEnabled = True
     End Sub
 
-    Private Shared Function ReturnSnippetKind(kind As CodeSnippetKinds) As String
+    Private Shared Function ReturnSnippetKind(kind As SnippetTools.CodeSnippetKinds) As String
         Dim snippetKind As String
         Select Case kind
-            Case CodeSnippetKinds.MethodBody
+            Case SnippetTools.CodeSnippetKinds.MethodBody
                 snippetKind = "method body"
-            Case CodeSnippetKinds.MethodDeclaration
+            Case SnippetTools.CodeSnippetKinds.MethodDeclaration
                 snippetKind = "method decl"
-            Case CodeSnippetKinds.File
+            Case SnippetTools.CodeSnippetKinds.File
                 snippetKind = "file"
-            Case CodeSnippetKinds.TypeDeclaration
+            Case SnippetTools.CodeSnippetKinds.TypeDeclaration
                 snippetKind = "type decl"
             Case Else
                 snippetKind = "any"
@@ -403,7 +403,7 @@ Class MainWindow
         Return snippetKind
     End Function
 
-    Public Shared Sub SaveSnippet1(fileName As String, kind As CodeSnippetKinds,
+    Public Shared Sub SaveSnippet1(fileName As String, kind As SnippetTools.CodeSnippetKinds,
                         snippetLanguage As String, snippetTitle As String,
                         snippetDescription As String, snippetHelpUrl As String,
                         snippetAuthor As String, snippetShortcut As String,

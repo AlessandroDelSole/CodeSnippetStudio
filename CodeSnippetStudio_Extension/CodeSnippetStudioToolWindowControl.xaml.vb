@@ -22,7 +22,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     Inherits System.Windows.Controls.UserControl
 
     Private theData As VSIXPackage
-    Private snippetProperties As SnippetFile
+    Private snippetProperties As CodeSnippet
     Private Property [Imports] As [Imports]
     Private Property References As References
     Private Property Declarations As Declarations
@@ -44,7 +44,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Syncfusion.Windows.Edit.Languages.VisualBasic
         Me.LanguageCombo.SelectedIndex = 0
-        Me.SnippetPropertyGrid.SelectedObject = New SnippetFile
+        Me.SnippetPropertyGrid.SelectedObject = New CodeSnippet
         'Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
         Me.Imports = New [Imports]
         Me.Declarations = New Declarations
@@ -81,12 +81,12 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub BuildVsixButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
         If Me.theData.HasErrors Then
-            System.Windows.MessageBox.Show("The metadata information is incomplete. Fix errors before compiling.", "Snippet Package Builder", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error)
+            System.Windows.MessageBox.Show("The metadata information is incomplete. Fix errors before compiling.", "Code Snippet Studio", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
         If theData.CodeSnippets.Any = False Then
-            System.Windows.MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.", "Snippet Package Builder", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error)
+            System.Windows.MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.", "Code Snippet Studio", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -94,7 +94,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
         If testLang = False Then
             System.Windows.MessageBox.Show("You have added code snippets of different programming languages. " + Environment.NewLine + "VSIX packages offer the best customer experience possible with snippets of only one language." +
-                                           "For this reason, leave snippets of only one language and remove others before building the package.", "Snippet Package Builder", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning)
+                                           "For this reason, leave snippets of only one language and remove others before building the package.", "Code Snippet Studio", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning)
             Exit Sub
         End If
 
@@ -106,7 +106,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                 .Filter = "VSIX packages|*.vsix"
                 If .ShowDialog = True Then
                     Me.theData.Build(.FileName)
-                    Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Snippet Package Builder", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question)
+                    Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Code Snippet Studio", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question)
                     If result = System.Windows.MessageBoxResult.No Then
                         Exit Sub
                     Else
@@ -191,7 +191,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub AboutButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
-        System.Diagnostics.Process.Start("http://visualstudiogallery.msdn.microsoft.com/de44d368-bab1-43cb-9167-701ac668a09c?SRC=Home")
+        System.Diagnostics.Process.Start("https://github.com/AlessandroDelSole/CodeSnippetStudio")
     End Sub
 
     Private Sub VsiButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
@@ -298,7 +298,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub SaveSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, SnippetFile)
+        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, CodeSnippet)
 
         If snippetProperties.Author = "" Or String.IsNullOrEmpty(snippetProperties.Author) Then
             MessageBox.Show("Snippet author is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -330,7 +330,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub SaveSnippet(fileName As String)
         Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
-        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, SnippetFile)
+        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, CodeSnippet)
 
         Dim keywords As IEnumerable(Of String)
         If selectedSnippet.Keywords Is Nothing Then
@@ -396,16 +396,16 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Me.RefDataGrid.IsEnabled = True
     End Sub
 
-    Private Shared Function ReturnSnippetKind(kind As CodeSnippetKinds) As String
+    Private Shared Function ReturnSnippetKind(kind As SnippetTools.CodeSnippetKinds) As String
         Dim snippetKind As String
         Select Case kind
-            Case CodeSnippetKinds.MethodBody
+            Case SnippetTools.CodeSnippetKinds.MethodBody
                 snippetKind = "method body"
-            Case CodeSnippetKinds.MethodDeclaration
+            Case SnippetTools.CodeSnippetKinds.MethodDeclaration
                 snippetKind = "method decl"
-            Case CodeSnippetKinds.File
+            Case SnippetTools.CodeSnippetKinds.File
                 snippetKind = "file"
-            Case CodeSnippetKinds.TypeDeclaration
+            Case SnippetTools.CodeSnippetKinds.TypeDeclaration
                 snippetKind = "type decl"
             Case Else
                 snippetKind = "any"
@@ -414,7 +414,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Return snippetKind
     End Function
 
-    Public Shared Sub SaveSnippet1(fileName As String, kind As CodeSnippetKinds,
+    Public Shared Sub SaveSnippet1(fileName As String, kind As SnippetTools.CodeSnippetKinds,
                         snippetLanguage As String, snippetTitle As String,
                         snippetDescription As String, snippetHelpUrl As String,
                         snippetAuthor As String, snippetShortcut As String,

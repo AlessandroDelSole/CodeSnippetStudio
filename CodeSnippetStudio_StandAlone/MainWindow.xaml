@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CodeSnippetStudio_StandAlone"
+        xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
         mc:Ignorable="d" Background="Black"
         Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="768" Width="1024">
@@ -120,7 +120,7 @@
                         </Grid.RowDefinitions>
                         <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
                             <syncfusion:PropertyGrid.SelectedObject>
-                                <local:SnippetFile/>
+                                <local:CodeSnippet/>
                             </syncfusion:PropertyGrid.SelectedObject>
                         </syncfusion:PropertyGrid>
                         <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1"/>
