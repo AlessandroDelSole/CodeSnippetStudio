@@ -1,12 +1,11 @@
-﻿Imports System.Collections.ObjectModel
-Imports DelSole.VSIX
+﻿Imports DelSole.VSIX
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
-Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
-Imports System.ComponentModel
 Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
+Imports System.Reflection
+Imports Syncfusion.UI.Xaml.Grid.Helpers
 
 Class MainWindow
     Private theData As VSIXPackage
@@ -61,7 +60,6 @@ Class MainWindow
                     sninfo.SnippetDescription = SnippetInfo.GetSnippetDescription(item)
                     Me.theData.CodeSnippets.Add(sninfo)
                 Next
-
             Else
                 Exit Sub
             End If
@@ -70,12 +68,18 @@ Class MainWindow
 
     Private Sub BuildVsixButton_Click(sender As Object, e As Windows.RoutedEventArgs)
         If Me.theData.HasErrors Then
-            System.Windows.MessageBox.Show("The metadata information is incomplete. Fix errors before compiling.", "Snippet Package Builder", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Error)
+            System.Windows.MessageBox.Show("The metadata information is incomplete. Fix errors before compiling.",
+                                           "Code Snippet Studio",
+                                           Windows.MessageBoxButton.OK,
+                                           Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
         If theData.CodeSnippets.Any = False Then
-            MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.", "Snippet Package Builder", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Error)
+            MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.",
+                            "Code Snippet Studio",
+                            Windows.MessageBoxButton.OK,
+                            Windows.MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -83,7 +87,7 @@ Class MainWindow
 
         If testLang = False Then
             System.Windows.MessageBox.Show("You have added code snippets of different programming languages. " + Environment.NewLine + "VSIX packages offer the best customer experience possible with snippets of only one language." +
-                                           "For this reason, leave snippets of only one language and remove others before building the package.", "Snippet Package Builder", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Warning)
+                                           "For this reason, leave snippets of only one language and remove others before building the package.", "Code Snippet Studio", Windows.MessageBoxButton.OK, Windows.MessageBoxImage.Warning)
             Exit Sub
         End If
 
@@ -95,7 +99,7 @@ Class MainWindow
                 .Filter = "VSIX packages|*.vsix"
                 If .ShowDialog = True Then
                     Me.theData.Build(.FileName)
-                    Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Snippet Package Builder", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
+                    Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Code Snippet Studio", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
                     If result = Windows.MessageBoxResult.No Then
                         Exit Sub
                     Else
@@ -321,18 +325,15 @@ Class MainWindow
         Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
         Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, CodeSnippet)
 
-        Dim keywords As IEnumerable(Of String)
-        If selectedSnippet.Keywords Is Nothing Then
-            keywords = New List(Of String) From {String.Empty}
-        Else
-            keywords = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
-        End If
+        Dim keywords As IEnumerable(Of String) = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
 
         SnippetService.SaveSnippet(fileName, selectedSnippet.Kind, currentLang, selectedSnippet.Title,
-                               selectedSnippet.Description, selectedSnippet.HelpUrl,
-                               selectedSnippet.Author, selectedSnippet.Shortcut, editControl1.Text,
-                               Me.Imports, References, Declarations, keywords)
+                       selectedSnippet.Description, selectedSnippet.HelpUrl,
+                       selectedSnippet.Author, selectedSnippet.Shortcut, editControl1.Text,
+                       Me.Imports, References, Declarations, keywords)
+
         MessageBox.Show($"{fileName} saved correctly.")
+
     End Sub
 
     Private Sub ExtractButton_Click(sender As Object, e As RoutedEventArgs)
@@ -369,12 +370,6 @@ Class MainWindow
         MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
     End Sub
 
-    Private Sub DeclarationsDataGrid_AddNewRowInitiating(sender As Object, args As AddNewRowInitiatingEventArgs) Handles DeclarationsDataGrid.AddNewRowInitiating
-        Dim item = CType(args.NewObject, Declaration)
-        item.ID = editControl1.SelectedText
-        item.Default = editControl1.SelectedText
-    End Sub
-
     Private Sub DisableDataGrids()
         Me.ImportsDataGrid.IsEnabled = False
         Me.RefDataGrid.IsEnabled = False
@@ -403,85 +398,92 @@ Class MainWindow
         Return snippetKind
     End Function
 
-    Public Shared Sub SaveSnippet1(fileName As String, kind As SnippetTools.CodeSnippetKinds,
-                        snippetLanguage As String, snippetTitle As String,
-                        snippetDescription As String, snippetHelpUrl As String,
-                        snippetAuthor As String, snippetShortcut As String,
-                        snippetCode As String, importDirectives As [Imports],
-                        references As References, declarations As Declarations,
-                        keywords As IEnumerable(Of String))
+    Private Sub DeclarationsDataGrid_SelectionChanged(sender As Object, e As GridSelectionChangedEventArgs) Handles DeclarationsDataGrid.SelectionChanged
+        Try
+            Dim item = CType(CType(sender, SfDataGrid).SelectedItem, Declaration)
+            Dim fo As New FindOptions(editControl1)
+            fo.FindText = item.Default
+            'fo.IsSelectionSelected = True
+            If editControl1.DocumentLanguage = Languages.VisualBasic Then
+                fo.IsMatchCase = False
+            Else
+                fo.IsMatchCase = True
+            End If
+            editControl1.FindAllOccurences()
+            For Each result In editControl1.SearchResults.FindAllResult
+                editControl1.SelectLines(result.LineNumber, result.LineNumber, result.Index, result.Index)
+            Next
+            Dim res = editControl1.SearchResults
+        Catch ex As Exception
 
-        Dim snippetKind As String = ReturnSnippetKind(kind)
+        End Try
 
-        Dim editedCode = snippetCode
-        For Each decl In declarations
-            editedCode = editedCode.Replace(decl.Default, "$" & decl.ID & "$")
-        Next
+    End Sub
 
-        If keywords Is Nothing Then
-            keywords = New List(Of String) From {String.Empty}
+    Private Sub SaveCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
+        If editControl1.Text = "" Then
+            MessageBox.Show("Write some code first!")
+            Exit Sub
         End If
 
-        Dim cdata As New XCData(editedCode)
-        Dim doc = <?xml version="1.0" encoding="utf-8"?>
-                  <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
-                      <CodeSnippet Format="1.0.0">
-                          <Header>
-                              <Title><%= snippetTitle %></Title>
-                              <Author><%= snippetAuthor %></Author>
-                              <Description><%= snippetDescription %></Description>
-                              <HelpUrl><%= snippetHelpUrl %></HelpUrl>
-                              <SnippetTypes>
-                                  <SnippetType>Expansion</SnippetType>
-                              </SnippetTypes>
-                              <Keywords>
-                                  <%= From key In keywords
-                                      Select <Keyword><%= key %></Keyword> %>
-                              </Keywords>
-                              <Shortcut><%= snippetShortcut %></Shortcut>
-                          </Header>
-                          <Snippet>
-                              <References>
-                                  <%= From ref In references
-                                      Select <Reference>
-                                                 <Assembly><%= ref.Assembly %></Assembly>
-                                                 <Url><%= ref.Url %></Url>
-                                             </Reference> %>
-                              </References>
-                              <Imports>
-                                  <%= From imp In importDirectives
-                                      Select <Import>
-                                                 <Namespace><%= imp.ImportDirective %></Namespace>
-                                             </Import> %>
-                              </Imports>
-                              <Declarations>
-                                  <%= From decl In declarations
-                                      Where decl.ReplacementType.ToLower = "object"
-                                      Select <Object Editable="true">
-                                                 <ID><%= decl.ID %></ID>
-                                                 <Type><%= decl.Type %></Type>
-                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
-                                                 <Default><%= decl.Default %></Default>
-                                                 <Function><%= decl.Function %></Function>
-                                             </Object> %>
-                                  <%= From decl In declarations
-                                      Where decl.ReplacementType.ToLower = "literal"
-                                      Select <Literal Editable="true">
-                                                 <ID><%= decl.ID %></ID>
-                                                 <ToolTip><%= decl.ToolTip %></ToolTip>
-                                                 <Default><%= decl.Default %></Default>
-                                                 <Function><%= decl.Function %></Function>
-                                             </Literal> %>
-                              </Declarations>
-                              <Code Language=<%= snippetLanguage %> Kind=<%= snippetKind %>
-                                  Delimiter="$"></Code>
-                          </Snippet>
-                      </CodeSnippet>
-                  </CodeSnippets>
+        Dim filter As String = "All files|*.*"
+        Select Case LanguageCombo.SelectedIndex
+            Case = 0
+                filter = "Visual Basic code file (.vb)|*.vb|All files|*.*"
+            Case = 1
+                filter = "C# code file (.cs)|*.cs|All files|*.*"
+            Case = 2
+                filter = "SQL code file (.sql)|*.sql|All files|*.*"
+            Case = 3
+                filter = "XML file (.xml)|*.xml|All files|*.*"
+            Case = 4
+                filter = "C++ code file (.cpp)|*.cpp|All files|*.*"
+            Case = 5
+                filter = "HTML file (.htm)|*.htm|All files|*.*"
+            Case = 6
+                filter = "JavaScript code file (.js)|*.js|All files|*.*"
+        End Select
 
-        doc...<Code>.First.Add(cdata)
+        Dim dlg As New SaveFileDialog
+        dlg.Title = "Specify code file name"
+        dlg.Filter = filter
+        dlg.OverwritePrompt = True
 
-        doc.Save(fileName)
+        If dlg.ShowDialog = True Then
+            My.Computer.FileSystem.WriteAllText(dlg.FileName, editControl1.Text, False)
+        End If
+    End Sub
+
+    Private Sub AddDecButton_Click(sender As Object, e As RoutedEventArgs)
+        If editControl1.SelectedText = "" Then Exit Sub
+
+        If editControl1.SelectedText.ToLower = "end" Or editControl1.SelectedText.ToLower = "select" Then
+            MessageBox.Show("Declarations are not supported for Select and End words.", "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
+
+        Dim newDecl As New Declaration
+        newDecl.Default = editControl1.SelectedText
+        newDecl.ID = editControl1.SelectedText
+        newDecl.ToolTip = "Replace with yours...."
+
+        Dim query = From decl In Me.Declarations
+                    Where decl.Default = newDecl.Default
+                    Select decl
+
+        If query.Any Then
+            MessageBox.Show("A declaration already exists for the specified word", "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
+
+        Me.Declarations.Add(newDecl)
+    End Sub
+
+    Private Sub DeleteDecButton_Click(sender As Object, e As RoutedEventArgs) Handles DeleteDecButton.Click
+        If Me.DeclarationsDataGrid.SelectedItem Is Nothing Then
+            Exit Sub
+        End If
+        Me.DeclarationsDataGrid.View.Remove(Me.DeclarationsDataGrid.SelectedItem)
     End Sub
 End Class
 

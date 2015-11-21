@@ -63,8 +63,8 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
-                            <RowDefinition />
                             <RowDefinition Height="20"/>
+                            <RowDefinition />
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -83,19 +83,31 @@
                                 <Image Source="Images/save_16xLG.png" />
                             </Button>
 
+                            <Button Margin="5,0,0,0" Width="24" Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
+                                <Image Source="Images/SaveFileDialogControl_703.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
+                                <Image Source="Images/AddMark_10580.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" Name="DeleteDecButton" ToolTip="Delete selected declaration">
+                                <Image Source="Images/Remove_16xLG.png" />
+                            </Button>
+
                             <Label Margin="30,0,0,0" >
                                 <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
                                     <TextBlock Text="Code Snippets Schema Reference" />
                                 </Hyperlink>
                             </Label>
                         </StackPanel>
-                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="1" 
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" 
                                                 BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
 
-                        <TextBlock Text="Select the text you want to provide replacement suggestions for, then click the grid below to add a new row:" 
-                                   Grid.Row="2" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid"
-                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+                        <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
+                                   Grid.Row="1" FontWeight="Bold"/>
+                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid" 
+                                               AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
