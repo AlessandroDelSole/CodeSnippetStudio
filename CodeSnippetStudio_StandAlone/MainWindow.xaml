@@ -193,9 +193,16 @@
                                 <TextBlock Text="Reset Package" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
+
+                        <Button Width="130" x:Name="OpenVsixButton" Margin="3" Click="OpenVsixButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/Open_6529.png" Width="16" />
+                                <TextBlock Text="Open VSIX" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                     <TabControl Grid.Row="1">
-                        <TabItem Header="Package Metadata" x:Name="PackageTab">
+                        <TabItem Header="Package Metadata" x:Name="PackageTab" Height="30">
                             <Grid>
                                 <Grid x:Name="Grid1" HorizontalAlignment="Left" Margin="0,0,0,-332" VerticalAlignment="Top">
                                     <Grid.ColumnDefinitions>
@@ -228,7 +235,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Label Content="Package Name:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" />
-                                    <TextBox x:Name="PackageNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="0" Text="{Binding PackageName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
+                                    <TextBox x:Name="PackageNameTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="0" Text="{Binding ProductName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
                                     <Label Content="Package Description:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="1" VerticalAlignment="Center" FontWeight="Bold"/>
                                     <TextBox x:Name="PackageDescriptionTextBox" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="3" Grid.Row="1" Text="{Binding PackageDescription, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=true}" VerticalAlignment="Center" Width="320"/>
                                     <Label Content="Package Author:" Grid.Column="0" HorizontalAlignment="Left" Margin="3" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold"/>

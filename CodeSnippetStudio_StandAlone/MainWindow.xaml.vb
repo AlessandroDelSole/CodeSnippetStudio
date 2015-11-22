@@ -485,5 +485,19 @@ Class MainWindow
         End If
         Me.DeclarationsDataGrid.View.Remove(Me.DeclarationsDataGrid.SelectedItem)
     End Sub
+
+    Private Sub OpenVsixButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select .vsix file"
+            .Filter = "Visual Studio Extension (*.vsix)|*.vsix|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            theData = VSIXPackage.OpenVsix(.FileName)
+            Me.DataContext = theData
+        End With
+    End Sub
 End Class
 
