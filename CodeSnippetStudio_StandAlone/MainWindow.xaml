@@ -135,7 +135,7 @@
                                 <local:CodeSnippet/>
                             </syncfusion:PropertyGrid.SelectedObject>
                         </syncfusion:PropertyGrid>
-                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1"/>
+                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
@@ -143,7 +143,7 @@
                                 <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
-                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3"/>
+                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding}" Name="RefDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">

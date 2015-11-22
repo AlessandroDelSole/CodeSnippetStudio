@@ -4,6 +4,9 @@
     <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.0" Language="en-US" Publisher="Alessandro Del Sole" />
     <DisplayName>Code Snippet Studio 2016</DisplayName>
     <Description xml:space="preserve">Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015. Powered by Syncfusion's Essential Studio</Description>
+    <MoreInfo>https://github.com/AlessandroDelSole/CodeSnippetStudio</MoreInfo>
+    <License>Apache_License.txt</License>
+    <Icon>CodeSnippetStudioToolWindowPackage.ico</Icon>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

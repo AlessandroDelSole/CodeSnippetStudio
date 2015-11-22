@@ -90,6 +90,17 @@
     <Resource Include="Images\snippet_16xLG.png" />
     <Resource Include="Images\StatusAnnotations_Help_and_inconclusive_16xLG_color.png" />
     <Resource Include="Images\VSContentInstaller_16.png" />
+    <Content Include="Apache_License.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="CodeSnippetStudioToolWindowPackage.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Resource Include="Images\SaveFileDialogControl_703.png" />
+    <Resource Include="Images\AddMark_10580.png" />
+    <Resource Include="Images\Remove_16xLG.png" />
     <Content Include="index.html" />
     <Content Include="Resources\CodeSnippetStudioToolWindowCommand.png" />
     <Content Include="Resources\CodeSnippetStudioToolWindowPackage.ico" />

@@ -52,7 +52,7 @@
             <TabItem Height="30">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Source="/Images/snippet_16xLG.png" />
+                        <Image Width="16" Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
                         <TextBlock Margin="3,0,0,0" Text="Snippet Editor"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -64,8 +64,8 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
-                            <RowDefinition />
                             <RowDefinition Height="20"/>
+                            <RowDefinition />
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -81,7 +81,19 @@
                             </ComboBox>
 
                             <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save code snippet">
-                                <Image Source="pack://application:,,,/Images/save_16xLG.png" />
+                                <Image Source="/CodeSnippetStudio;component/Images/save_16xLG.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
+                                <Image Source="/CodeSnippetStudio;component/Images/SaveFileDialogControl_703.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
+                                <Image Source="/CodeSnippetStudio;component/Images/AddMark_10580.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" Name="DeleteDecButton" ToolTip="Delete selected declaration">
+                                <Image Source="/CodeSnippetStudio;component/Images/Remove_16xLG.png" />
                             </Button>
 
                             <Label Margin="30,0,0,0" >
@@ -90,13 +102,13 @@
                                 </Hyperlink>
                             </Label>
                         </StackPanel>
-                        <syncfusion:EditControl Name="editControl1" Grid.Row="1" 
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" 
                                                 BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
 
-                        <TextBlock Text="Select the text you want to provide replacement suggestions for, then click the grid below to add a new row:" 
-                                   Grid.Row="2" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid"
-                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+                        <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
+                                   Grid.Row="1" FontWeight="Bold"/>
+                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid" 
+                                               AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
@@ -122,7 +134,7 @@
                         <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
 
                         </syncfusion:PropertyGrid>
-                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1"/>
+                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
@@ -130,7 +142,7 @@
                                 <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
-                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3"/>
+                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding}" Name="RefDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
@@ -145,7 +157,7 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Source="pack://application:,,,/Images/ExtensionManager_vsix.png" />
+                        <Image Width="16" Source="/CodeSnippetStudio;component/Images/ExtensionManager_vsix.png" />
                         <TextBlock Margin="3,0,0,0" Text="Package and Share (.vsix)"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -157,26 +169,26 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Width="130" x:Name="AddSnippetsButton" Margin="3" Click="AddSnippetsButton_Click">
                             <StackPanel Orientation="Horizontal">
-                                <Image Width="16" Source="pack://application:,,,/Images/snippet_16xLG.png" />
+                                <Image Width="16" Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
                                 <TextBlock Text="Add Snippets" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
                         <Button Width="130" x:Name="BuildVsixButton" Margin="3" Click="BuildVsixButton_Click">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="pack://application:,,,/Images/ExtensionManager_vsix.png" Width="16" />
+                                <Image Source="/CodeSnippetStudio;component/Images/ExtensionManager_vsix.png" Width="16" />
                                 <TextBlock Text="Build VSIX" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
                         <Button Width="130" x:Name="RemoveSnippetButton" Margin="3" Click="RemoveSnippetButton_Click">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="pack://application:,,,/Images/delete.png" Width="16" />
+                                <Image Source="/CodeSnippetStudio;component/Images/delete.png" Width="16" />
                                 <TextBlock Text="Remove Snippet(s)" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
 
                         <Button Width="130" x:Name="ResetPkgButton" Margin="3" Click="ResetPkgButton_Click">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="pack://application:,,,/Images/RestoreDefaultView_9695.png" Width="16" />
+                                <Image Source="/CodeSnippetStudio;component/Images/RestoreDefaultView_9695.png" Width="16" />
                                 <TextBlock Text="Reset Package" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
@@ -283,7 +295,7 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Source="pack://application:,,,/Images/Hammer_Builder_16xLG.png" />
+                        <Image Width="16" Source="/CodeSnippetStudio;component/Images/Hammer_Builder_16xLG.png" />
                         <TextBlock Margin="3,0,0,0" Text="Vsix Tools"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -301,7 +313,7 @@
 								Foreground="Red" />
                             <Button Width="130" Height="30"  x:Name="VsiButton" Margin="3" HorizontalAlignment="Left" Click="VsiButton_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="pack://application:,,,/Images/VSContentInstaller_16.png" Width="16" />
+                                    <Image Source="/CodeSnippetStudio;component/Images/VSContentInstaller_16.png" Width="16" />
                                     <TextBlock Text="Convert .vsi to .vsix" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>
@@ -327,7 +339,7 @@
                             </StackPanel>
                             <Button Width="130" x:Name="SignButton" Height="30"  Margin="3" HorizontalAlignment="Left" Click="SignButton_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="pack://application:,,,/Images/certificate_16xLG.png" Width="16" />
+                                    <Image Source="/CodeSnippetStudio;component/Images/certificate_16xLG.png" Width="16" />
                                     <TextBlock Text="Sign .vsix package" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>
@@ -344,7 +356,7 @@
                             <CheckBox Margin="5" Name="OnlySnippetsCheckBox" IsChecked="True" Content="Extract only code snippet files"/>
                             <Button Width="130" Height="30"  x:Name="ExtractButton" Margin="3" HorizontalAlignment="Left" Click="ExtractButton_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="pack://application:,,,/Images/ExtensionManager_vsix.png" Width="16" />
+                                    <Image Source="/CodeSnippetStudio;component/Images/ExtensionManager_vsix.png" Width="16" />
                                     <TextBlock Text="Extract .vsix" Margin="5,0,0,0"/>
                                 </StackPanel>
                             </Button>
