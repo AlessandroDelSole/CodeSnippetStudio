@@ -130,11 +130,7 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
-                            <syncfusion:PropertyGrid.SelectedObject>
-                                <local:CodeSnippet/>
-                            </syncfusion:PropertyGrid.SelectedObject>
-                        </syncfusion:PropertyGrid>
+                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid"/>
                         <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 

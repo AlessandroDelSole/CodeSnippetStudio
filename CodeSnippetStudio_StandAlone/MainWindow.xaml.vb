@@ -8,16 +8,13 @@ Imports System.Reflection
 Imports Syncfusion.UI.Xaml.Grid.Helpers
 
 Class MainWindow
-    Private theData As VSIXPackage
-    Private snippetProperties As CodeSnippet
-    Private Property [Imports] As [Imports]
-    Private Property References As References
-    Private Property Declarations As Declarations
+    Private vsixData As VSIXPackage
+    Private snippetData As CodeSnippet
 
     Private Sub ResetPkg()
-        Me.theData = New VSIXPackage
+        Me.vsixData = New VSIXPackage
 
-        Me.DataContext = Me.theData
+        Me.DataContext = Me.vsixData
         Me.PackageTab.Focus()
     End Sub
 
@@ -27,19 +24,26 @@ Class MainWindow
     End Sub
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
+        Me.snippetData = New CodeSnippet
+        Me.SnippetPropertyGrid.SelectedObject = Me.snippetData
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Namespaces")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Declarations")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("References")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Language")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Code")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Error")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("HasErrors")
+        SnippetPropertyGrid.RefreshPropertygrid()
+
         ResetPkg()
+
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = Languages.VisualBasic
         Me.LanguageCombo.SelectedIndex = 0
 
-        'Me.SnippetPropertyGrid.DescriptionPanelVisibility = Visibility.Visible
-        Me.Imports = New [Imports]
-        Me.Declarations = New Declarations
-        Me.References = New References
-
-        Me.ImportsDataGrid.ItemsSource = Me.Imports
-        Me.RefDataGrid.ItemsSource = Me.References
-        Me.DeclarationsDataGrid.ItemsSource = Me.Declarations
+        Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
+        Me.RefDataGrid.ItemsSource = snippetData.References
+        Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
     End Sub
 
 
@@ -58,7 +62,7 @@ Class MainWindow
                     sninfo.SnippetPath = IO.Path.GetDirectoryName(item)
                     sninfo.SnippetLanguage = SnippetInfo.GetSnippetLanguage(item)
                     sninfo.SnippetDescription = SnippetInfo.GetSnippetDescription(item)
-                    Me.theData.CodeSnippets.Add(sninfo)
+                    Me.vsixData.CodeSnippets.Add(sninfo)
                 Next
             Else
                 Exit Sub
@@ -67,7 +71,7 @@ Class MainWindow
     End Sub
 
     Private Sub BuildVsixButton_Click(sender As Object, e As Windows.RoutedEventArgs)
-        If Me.theData.HasErrors Then
+        If Me.vsixData.HasErrors Then
             System.Windows.MessageBox.Show("The metadata information is incomplete. Fix errors before compiling.",
                                            "Code Snippet Studio",
                                            Windows.MessageBoxButton.OK,
@@ -75,7 +79,7 @@ Class MainWindow
             Exit Sub
         End If
 
-        If theData.CodeSnippets.Any = False Then
+        If vsixData.CodeSnippets.Any = False Then
             MessageBox.Show("The code snippet list is empty. Please add at least one before proceding.",
                             "Code Snippet Studio",
                             Windows.MessageBoxButton.OK,
@@ -83,7 +87,7 @@ Class MainWindow
             Exit Sub
         End If
 
-        Dim testLang = Me.theData.TestLanguageGroup()
+        Dim testLang = Me.vsixData.TestLanguageGroup()
 
         If testLang = False Then
             System.Windows.MessageBox.Show("You have added code snippets of different programming languages. " + Environment.NewLine + "VSIX packages offer the best customer experience possible with snippets of only one language." +
@@ -98,7 +102,7 @@ Class MainWindow
                 .OverwritePrompt = True
                 .Filter = "VSIX packages|*.vsix"
                 If .ShowDialog = True Then
-                    Me.theData.Build(.FileName)
+                    Me.vsixData.Build(.FileName)
                     Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Code Snippet Studio", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
                     If result = Windows.MessageBoxResult.No Then
                         Exit Sub
@@ -119,7 +123,7 @@ Class MainWindow
             .Title = "Select documentation file"
             .Filter = "All supported files (*.doc, *.docx, *.rtf, *.txt, *.htm, *.html)|*.doc;*.docx;*.rtf;*.htm;*.html;*.txt|All files|*.*"
             If .ShowDialog = True Then
-                Me.theData.GettingStartedGuide = .FileName
+                Me.vsixData.GettingStartedGuide = .FileName
             End If
         End With
     End Sub
@@ -130,7 +134,7 @@ Class MainWindow
             .Title = "Select icon file"
             .Filter = "All supported files (*.jpg, *.png, *.ico, *.bmp, *.tif, *.tiff, *.gif)|*.jpg;*.png;*.ico;*.bmp;*.tiff;*.tif;*.gif|All files|*.*"
             If .ShowDialog = True Then
-                Me.theData.IconPath = .FileName
+                Me.vsixData.IconPath = .FileName
             End If
         End With
     End Sub
@@ -141,7 +145,7 @@ Class MainWindow
             .Title = "Select preview image"
             .Filter = "All supported files (*.jpg, *.png, *.ico, *.bmp, *.tif, *.tiff, *.gif)|*.jpg;*.png;*.ico;*.bmp;*.tiff;*.tif;*.gif|All files|*.*"
             If .ShowDialog = True Then
-                Me.theData.PreviewImagePath = .FileName
+                Me.vsixData.PreviewImagePath = .FileName
             End If
         End With
     End Sub
@@ -152,7 +156,7 @@ Class MainWindow
             .Title = "Select documentation file"
             .Filter = "All supported files (*.rtf, *.txt)|*.rtf;*.txt|All files|*.*"
             If .ShowDialog = True Then
-                Me.theData.License = .FileName
+                Me.vsixData.License = .FileName
             End If
         End With
     End Sub
@@ -163,7 +167,7 @@ Class MainWindow
             .Title = "Select documentation file"
             .Filter = "All supported files (*.rtf, *.txt, *.htm, *.html)|*.rtf;*.htm;*.html;*.txt|All files|*.*"
             If .ShowDialog = True Then
-                Me.theData.ReleaseNotes = .FileName
+                Me.vsixData.ReleaseNotes = .FileName
             End If
         End With
     End Sub
@@ -172,7 +176,7 @@ Class MainWindow
         Try
 
             For Each item In Me.CodeSnippetsDataGrid.SelectedItems.Cast(Of SnippetInfo).ToList
-                Me.theData.CodeSnippets.Remove(TryCast(item, SnippetInfo))
+                Me.vsixData.CodeSnippets.Remove(TryCast(item, SnippetInfo))
             Next
         Catch ex As Exception
 
@@ -188,7 +192,7 @@ Class MainWindow
     End Sub
 
     Private Sub VsiButton_Click(sender As Object, e As Windows.RoutedEventArgs)
-        If theData.HasErrors Then
+        If vsixData.HasErrors Then
             MessageBox.Show("The package metadata contain errors that must be fixed before performing a conversion." & Environment.NewLine &
                             "Please go to the Package and Share tab and check values in the Metadata nested tab.")
             Exit Sub
@@ -217,11 +221,11 @@ Class MainWindow
             outputFile = .FileName
         End With
 
-        VsiService.Vsi2Vsix(inputFile, outputFile, theData.SnippetFolderName,
-                             theData.PackageAuthor, theData.ProductName,
-                             theData.PackageDescription,
-                             theData.IconPath, theData.PreviewImagePath,
-                             theData.MoreInfoURL)
+        VsiService.Vsi2Vsix(inputFile, outputFile, vsixData.SnippetFolderName,
+                             vsixData.PackageAuthor, vsixData.ProductName,
+                             vsixData.PackageDescription,
+                             vsixData.IconPath, vsixData.PreviewImagePath,
+                             vsixData.MoreInfoURL)
         MessageBox.Show($"Successfully converted {inputFile} into {outputFile}")
     End Sub
 
@@ -268,44 +272,41 @@ Class MainWindow
         Select Case cb.SelectedIndex
             Case = 0
                 Me.editControl1.DocumentLanguage = Languages.VisualBasic
+                Me.snippetData.Language = "VB"
                 EnableDataGrids()
             Case = 1
                 Me.editControl1.DocumentLanguage = Languages.CSharp
+                Me.snippetData.Language = "CSharp"
                 DisableDataGrids()
             Case = 2
                 Me.editControl1.DocumentLanguage = Languages.SQL
+                Me.snippetData.Language = "SQL"
                 DisableDataGrids()
             Case = 3
                 Me.editControl1.DocumentLanguage = Languages.XML
+                Me.snippetData.Language = "XML"
                 DisableDataGrids()
             Case = 4
                 Me.editControl1.DocumentLanguage = Languages.Text
+                Me.snippetData.Language = "CPP"
                 DisableDataGrids()
             Case = 5
                 Me.editControl1.DocumentLanguage = Languages.XML
+                Me.snippetData.Language = "HTML"
                 DisableDataGrids()
             Case = 6
                 Me.editControl1.DocumentLanguage = Languages.XML
+                Me.snippetData.Language = "JavaScript"
                 DisableDataGrids()
         End Select
     End Sub
 
     Private Sub SaveSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.snippetProperties = CType(Me.SnippetPropertyGrid.SelectedObject, CodeSnippet)
-
-        If snippetProperties.Author = "" Or String.IsNullOrEmpty(snippetProperties.Author) Then
-            MessageBox.Show("Snippet author is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-            Exit Sub
-        End If
-
-        If snippetProperties.Title = "" Or String.IsNullOrEmpty(snippetProperties.Title) Then
-            MessageBox.Show("Snippet title is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-            Exit Sub
-        End If
-
-        If snippetProperties.Description = "" Or String.IsNullOrEmpty(snippetProperties.Description) Then
-            MessageBox.Show("Snippet description is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-            Exit Sub
+        If snippetData.HasErrors Then
+            MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
+                            & Environment.NewLine &
+                            "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error)
         End If
 
         Dim dlg2 As New SaveFileDialog
@@ -317,23 +318,9 @@ Class MainWindow
                 Exit Sub
             End If
 
-            SaveSnippet(.FileName)
+            CodeSnippet.SaveSnippet(.FileName, snippetData)
+            MessageBox.Show($"{ .FileName} saved correctly.")
         End With
-    End Sub
-
-    Private Sub SaveSnippet(fileName As String)
-        Dim currentLang = CType(LanguageCombo.SelectedItem, ComboBoxItem).Tag.ToString()
-        Dim selectedSnippet = CType(SnippetPropertyGrid.SelectedObject, CodeSnippet)
-
-        Dim keywords As IEnumerable(Of String) = selectedSnippet?.Keywords?.Split(","c).AsEnumerable
-
-        SnippetService.SaveSnippet(fileName, selectedSnippet.Kind, currentLang, selectedSnippet.Title,
-                       selectedSnippet.Description, selectedSnippet.HelpUrl,
-                       selectedSnippet.Author, selectedSnippet.Shortcut, editControl1.Text,
-                       Me.Imports, References, Declarations, keywords)
-
-        MessageBox.Show($"{fileName} saved correctly.")
-
     End Sub
 
     Private Sub ExtractButton_Click(sender As Object, e As RoutedEventArgs)
@@ -467,7 +454,7 @@ Class MainWindow
         newDecl.ID = editControl1.SelectedText
         newDecl.ToolTip = "Replace with yours...."
 
-        Dim query = From decl In Me.Declarations
+        Dim query = From decl In snippetData.Declarations
                     Where decl.Default = newDecl.Default
                     Select decl
 
@@ -476,7 +463,7 @@ Class MainWindow
             Exit Sub
         End If
 
-        Me.Declarations.Add(newDecl)
+        snippetData.Declarations.Add(newDecl)
     End Sub
 
     Private Sub DeleteDecButton_Click(sender As Object, e As RoutedEventArgs) Handles DeleteDecButton.Click
@@ -495,9 +482,13 @@ Class MainWindow
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
-            theData = VSIXPackage.OpenVsix(.FileName)
-            Me.DataContext = theData
+            vsixData = VSIXPackage.OpenVsix(.FileName)
+            Me.DataContext = vsixData
         End With
+    End Sub
+
+    Private Sub editControl1_TextChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs) Handles editControl1.TextChanged
+        snippetData.Code = editControl1.Text
     End Sub
 End Class
 
