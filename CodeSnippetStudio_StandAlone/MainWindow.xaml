@@ -55,7 +55,7 @@
                         <TextBlock Margin="3,0,0,0" Text="Snippet Editor"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid>
+                <Grid Name="EditorRoot" DataContext="{Binding}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="220"/>
@@ -101,12 +101,12 @@
                                 </Hyperlink>
                             </Label>
                         </StackPanel>
-                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" 
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" Text="{Binding Path=Code, Mode=TwoWay}"
                                                 BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
 
                         <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
                                    Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding}" Name="DeclarationsDataGrid" 
+                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding Declarations, Mode=TwoWay}" Name="DeclarationsDataGrid" 
                                                AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
@@ -130,9 +130,9 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid"/>
+                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" SelectedObject="{Binding}"/>
                         <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding}" Name="ImportsDataGrid"
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" Name="ImportsDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
@@ -140,7 +140,7 @@
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding}" Name="RefDataGrid"
+                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" Name="RefDataGrid"
                                                AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
                                                AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>

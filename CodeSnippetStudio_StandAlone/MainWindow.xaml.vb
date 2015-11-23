@@ -25,7 +25,8 @@ Class MainWindow
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
         Me.snippetData = New CodeSnippet
-        Me.SnippetPropertyGrid.SelectedObject = Me.snippetData
+        Me.EditorRoot.DataContext = Me.snippetData
+
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Namespaces")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Declarations")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("References")
