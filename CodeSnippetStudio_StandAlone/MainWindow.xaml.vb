@@ -491,5 +491,21 @@ Class MainWindow
     Private Sub editControl1_TextChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs) Handles editControl1.TextChanged
         snippetData.Code = editControl1.Text
     End Sub
+
+    Private Sub PlayButton_Click(sender As Object, e As RoutedEventArgs)
+        Me.MediaPlayer.Play()
+    End Sub
+
+    Private Sub PauseButton_Click(sender As Object, e As RoutedEventArgs)
+        Me.MediaPlayer.Pause()
+    End Sub
+
+    Private Sub StopButton_Click(sender As Object, e As RoutedEventArgs)
+        Me.MediaPlayer.Stop()
+    End Sub
+
+    Private Sub HelpTab_LostFocus(sender As Object, e As RoutedEventArgs)
+        Me.MediaPlayer.Pause()
+    End Sub
 End Class
 

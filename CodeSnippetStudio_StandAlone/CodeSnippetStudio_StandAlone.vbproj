@@ -206,5 +206,10 @@
   <ItemGroup>
     <Analyzer Include="..\packages\DelSole.VSIX.1.0.5805.27131\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\CodeSnippetStudio.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
