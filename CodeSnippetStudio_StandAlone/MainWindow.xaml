@@ -87,6 +87,10 @@
                                 <Image Source="Images/SaveFileDialogControl_703.png" />
                             </Button>
 
+                            <Button Margin="5,0,0,0" Width="24" Name="LoadCodeFileButton" Click="LoadCodeFileButton_Click" ToolTip="Load code snippet">
+                                <Image Source="Images/Open_6529.png" />
+                            </Button>
+                            
                             <Button Margin="5,0,0,0" Width="24" Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
                                 <Image Source="Images/AddMark_10580.png" />
                             </Button>

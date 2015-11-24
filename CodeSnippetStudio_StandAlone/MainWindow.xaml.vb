@@ -507,5 +507,18 @@ Class MainWindow
     Private Sub HelpTab_LostFocus(sender As Object, e As RoutedEventArgs)
         Me.MediaPlayer.Pause()
     End Sub
+
+    Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select code snippet file"
+            .Filter = "Snippet files (*.snippet)|*.snippet|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            Me.EditorRoot.DataContext = CodeSnippet.LoadSnippet(.FileName)
+        End With
+    End Sub
 End Class
 

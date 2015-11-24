@@ -61,7 +61,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="220"/>
                     </Grid.ColumnDefinitions>
-                    <Grid>
+                    <Grid Name="EditorRoot">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="20"/>
@@ -88,6 +88,10 @@
                                 <Image Source="/CodeSnippetStudio;component/Images/SaveFileDialogControl_703.png" />
                             </Button>
 
+                            <Button Margin="5,0,0,0" Width="24" Name="LoadCodeFileButton" Click="LoadCodeFileButton_Click" ToolTip="Load code snippet">
+                                <Image Source="/CodeSnippetStudio;component/Images/Open_6529.png" />
+                            </Button>
+                            
                             <Button Margin="5,0,0,0" Width="24" Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
                                 <Image Source="/CodeSnippetStudio;component/Images/AddMark_10580.png" />
                             </Button>
@@ -131,7 +135,7 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" >
+                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" SelectedObject="{Binding}">
 
                         </syncfusion:PropertyGrid>
                         <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>

@@ -38,7 +38,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub MyControl_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Me.snippetData = New CodeSnippet
-        Me.SnippetPropertyGrid.SelectedObject = Me.snippetData
+        Me.EditorRoot.DataContext = Me.snippetData
+
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Namespaces")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Declarations")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("References")
@@ -502,5 +503,18 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub editControl1_TextChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs) Handles editControl1.TextChanged
         snippetData.Code = editControl1.Text
+    End Sub
+
+    Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select code snippet file"
+            .Filter = "Snippet files (*.snippet)|*.snippet|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            Me.EditorRoot.DataContext = CodeSnippet.LoadSnippet(.FileName)
+        End With
     End Sub
 End Class
