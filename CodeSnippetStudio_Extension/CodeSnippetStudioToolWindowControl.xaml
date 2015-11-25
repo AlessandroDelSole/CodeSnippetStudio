@@ -61,7 +61,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="220"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Name="EditorRoot">
+                    <Grid Name="EditorRoot" DataContext="{Binding}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="20"/>
@@ -382,57 +382,58 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="HelpTab">
+            <TabItem x:Name="HelpTab" GotFocus="HelpTab_GotFocus">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" />
                         <TextBlock Margin="3,0,0,0" Text="User guide"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid ShowGridLines="True">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical"/>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="200"/>
+                    </Grid.RowDefinitions>
+                    <PdfViewer:PdfViewerControl Name="PdfReader" />
+                    <Grid Grid.Row="1" ShowGridLines="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical" Margin="5">
                             <TextBlock Text="Credits and information" FontWeight="Bold"/>
+                            <TextBlock Text="Code Snippet Studio has been developed by Alessandro Del Sole and has been built using some external components." TextWrapping="Wrap"/>
+                            <TextBlock Text="The APIs used to create and manage code snippets and .vsix packages are offered by the:" TextWrapping="Wrap"/>
+                            <Label>
+                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="The DelSole.VSIX library" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
+                            <TextBlock Text="The syntax editor, the property window, and data grids are offered by the:" TextWrapping="Wrap"/>
+                            <Label>
+                                <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="Essential Studio for WPF by Syncfusion (Community License)" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="5">
-                            <TextBlock Text="Collaborate" FontWeight="Bold"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="5">
-                            <TextBlock Text="Resources:" FontWeight="Bold"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5">
+                            <TextBlock Text="Resources and collaboration:" FontWeight="Bold"/>
+                            <TextBlock Text="Code Snippet Studio is an open source application written in Visual Basic 2015. If you want to be an active contributor on the project, please join on GitHub, create a fork, send pull requests and submit your issues." TextWrapping="Wrap" />
                             <Label Margin="0,5,0,0" >
                                 <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
                                     <InlineUIContainer>
-                                        <TextBlock Text="Source code for Code Snippet Studio on GitHub" />
+                                        <TextBlock Text="Code Snippet Studio on GitHub" />
                                     </InlineUIContainer>
                                 </Hyperlink>
                             </Label>
-                            <Label Margin="0,5,0,0" >
-                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="The DelSole.VSIX library on GitHub" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
-                            <Label Margin="0,5,0,0" >
-                                <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="The Syncfusion Community License of Essential Studio" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
+
                         </StackPanel>
+
                     </Grid>
-                    <PdfViewer:PdfViewerControl ShowToolbar="False" />
                 </Grid>
             </TabItem>
         </TabControl>

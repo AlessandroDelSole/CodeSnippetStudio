@@ -531,4 +531,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             Me.DataContext = vsixData
         End With
     End Sub
+
+    Private Sub HelpTab_GotFocus(sender As Object, e As RoutedEventArgs)
+        Me.PdfReader.Load(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\..\..\..\..\..\..\..\Common\Assets\Code_Snippet_Studio_User_Guide.pdf"))
+    End Sub
 End Class
