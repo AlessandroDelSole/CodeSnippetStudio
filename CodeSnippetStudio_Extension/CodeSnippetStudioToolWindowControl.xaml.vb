@@ -517,4 +517,18 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             Me.EditorRoot.DataContext = CodeSnippet.LoadSnippet(.FileName)
         End With
     End Sub
+
+    Private Sub ImportVsiButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select .vsi file"
+            .Filter = "Visual Studio Content Installer (*.vsi)|*.vsi|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            vsixData = VsiService.Vsi2Vsix(.FileName)
+            Me.DataContext = vsixData
+        End With
+    End Sub
 End Class

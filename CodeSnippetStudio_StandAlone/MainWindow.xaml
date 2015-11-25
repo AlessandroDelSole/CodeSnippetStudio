@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX"
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
-        mc:Ignorable="d" Background="Black"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="MainWindow"
+        mc:Ignorable="d" Background="Gray" syncfusion:SkinStorage.VisualStyle="Metro"
         Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="768" Width="1024">
 
     <Window.Resources>
@@ -40,14 +40,14 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
-        <Grid.Resources>
+        <!--<Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="/Syncfusion.SfGrid.WPF;component/Styles/Styles.xaml" />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
-        </Grid.Resources>
-        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" Name="RootTabControl">
+        </Grid.Resources>-->
+        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl">
             <TabItem Height="30">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -55,10 +55,10 @@
                         <TextBlock Margin="3,0,0,0" Text="Snippet Editor"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid Name="EditorRoot" DataContext="{Binding}">
+                <Grid x:Name="EditorRoot" DataContext="{Binding}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="250"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -69,50 +69,52 @@
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Language:" VerticalAlignment="Center"/>
-                            <ComboBox Width="100" Margin="5,0,0,0" Name="LanguageCombo">
-                                <ComboBoxItem Tag="VB">Visual Basic</ComboBoxItem>
-                                <ComboBoxItem Tag="CSharp">C#</ComboBoxItem>
-                                <ComboBoxItem Tag="SQL">SQL</ComboBoxItem>
-                                <ComboBoxItem Tag="XML">XML</ComboBoxItem>
-                                <ComboBoxItem Tag="CPP">C++</ComboBoxItem>
-                                <ComboBoxItem Tag="HTML">Html</ComboBoxItem>
-                                <ComboBoxItem Tag="JavaScript">JavaScript</ComboBoxItem>
+                            <ComboBox Width="100" Margin="5,0,0,0" x:Name="LanguageCombo">
+                                <ComboBoxItem Tag="VB" Content="Visual Basic"/>
+                                <ComboBoxItem Tag="CSharp" Content="C#"/>
+                                <ComboBoxItem Tag="SQL" Content="SQL"/>
+                                <ComboBoxItem Tag="XML" Content="XML"/>
+                                <ComboBoxItem Tag="CPP" Content="C++"/>
+                                <ComboBoxItem Tag="HTML" Content="Html"/>
+                                <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>
                             </ComboBox>
-                          
-                            <Button Margin="5,0,0,0" Width="24" Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save code snippet">
+
+                            <Button Margin="5,0,0,0" Width="24" x:Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save code snippet">
                                 <Image Source="Images/save_16xLG.png" />
                             </Button>
 
-                            <Button Margin="5,0,0,0" Width="24" Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
+                            <Button Margin="5,0,0,0" Width="24" x:Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
                                 <Image Source="Images/SaveFileDialogControl_703.png" />
                             </Button>
 
-                            <Button Margin="5,0,0,0" Width="24" Name="LoadCodeFileButton" Click="LoadCodeFileButton_Click" ToolTip="Load code snippet">
+                            <Button Margin="5,0,0,0" Width="24" x:Name="LoadCodeFileButton" Click="LoadCodeFileButton_Click" ToolTip="Load code snippet">
                                 <Image Source="Images/Open_6529.png" />
                             </Button>
-                            
-                            <Button Margin="5,0,0,0" Width="24" Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
+
+                            <Button Margin="5,0,0,0" Width="24" x:Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
                                 <Image Source="Images/AddMark_10580.png" />
                             </Button>
 
-                            <Button Margin="5,0,0,0" Width="24" Name="DeleteDecButton" ToolTip="Delete selected declaration">
+                            <Button Margin="5,0,0,0" Width="24" x:Name="DeleteDecButton" ToolTip="Delete selected declaration">
                                 <Image Source="Images/Remove_16xLG.png" />
                             </Button>
 
                             <Label Margin="30,0,0,0" >
-                                <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <TextBlock Text="Code Snippets Schema Reference" />
+                                <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="Code Snippets Schema Reference" />
+                                    </InlineUIContainer>
                                 </Hyperlink>
                             </Label>
                         </StackPanel>
-                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" Text="{Binding Path=Code, Mode=TwoWay}"
-                                                BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
+                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" Text="{Binding Code, Mode=TwoWay}"
+							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
 
                         <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
-                                   Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding Declarations, Mode=TwoWay}" Name="DeclarationsDataGrid" 
-                                               AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
-                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+							Grid.Row="1" FontWeight="Bold"/>
+                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding Declarations, Mode=TwoWay}" x:Name="DeclarationsDataGrid" 
+							AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
+							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Type" MappingName="Type" TextAlignment="Left" />
@@ -120,9 +122,9 @@
                                 <syncfusion:GridTextColumn HeaderText="ToolTip" MappingName="ToolTip" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Function" MappingName="Function" TextAlignment="Left" />
                                 <syncfusion:GridCheckBoxColumn HeaderText="Editable" MappingName="Editable" IsHidden="True"
-                                                               TextAlignment="Left" />
+									TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Replacement mode" IsHidden="True"
-                                                               MappingName="ReplacementType"/>
+									MappingName="ReplacementType"/>
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                     </Grid>
@@ -134,19 +136,19 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid Name="SnippetPropertyGrid" SelectedObject="{Binding}"/>
+                        <syncfusion:PropertyGrid x:Name="SnippetPropertyGrid" SelectedObject="{Binding}"/>
                         <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" Name="ImportsDataGrid"
-                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
+                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" x:Name="ImportsDataGrid"
+							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
                         <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" Name="RefDataGrid"
-                                               AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-                                               AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
+                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" x:Name="RefDataGrid"
+							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />
@@ -194,12 +196,20 @@
                             </StackPanel>
                         </Button>
 
-                        <Button Width="130" x:Name="OpenVsixButton" Margin="3" Click="OpenVsixButton_Click">
+                        <Button Width="130" x:Name="OpenVsixButton" Margin="3,1,3,5" Click="OpenVsixButton_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="Images/Open_6529.png" Width="16" />
                                 <TextBlock Text="Open VSIX" Margin="5,0,0,0"/>
                             </StackPanel>
                         </Button>
+
+                        <Button Width="130" x:Name="ImportVsiButton" Margin="3,1,3,5" Click="ImportVsiButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/VSContentInstaller_16.png" Width="16" />
+                                <TextBlock Text="Import .vsi" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+
                     </StackPanel>
                     <TabControl Grid.Row="1">
                         <TabItem Header="Package Metadata" x:Name="PackageTab" Height="30">
@@ -361,7 +371,7 @@
                         </GroupBox.Header>
                         <StackPanel Orientation="Vertical" Margin="5" >
                             <TextBlock Text="Extract the whole content of any existing .vsix package, including definition and manifest files." TextWrapping="Wrap" Margin="5"/>
-                            <CheckBox Margin="5" Name="OnlySnippetsCheckBox" IsChecked="True" Content="Extract only code snippet files"/>
+                            <CheckBox Margin="5" x:Name="OnlySnippetsCheckBox" IsChecked="True" Content="Extract only code snippet files"/>
                             <Button Width="130" Height="30"  x:Name="ExtractButton" Margin="3" HorizontalAlignment="Left" Click="ExtractButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Images/ExtensionManager_vsix.png" Width="16" />
@@ -372,7 +382,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Name="HelpTab" LostFocus="HelpTab_LostFocus">
+            <TabItem x:Name="HelpTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" />
@@ -384,43 +394,47 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="500"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical">
-                       <TextBlock Text="Watch video tutorial:" Margin="5" FontWeight="Bold"/>
-                        <MediaElement Name="MediaPlayer" Source="Assets/CodeSnippetStudio.mp4" UnloadedBehavior="Stop" LoadedBehavior="Manual" />
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <Button Name="PlayButton" Content="Play" Width="80" Height="30" Click="PlayButton_Click" />
-                            <Button Name="PauseButton" Content="Pause" Width="80" Height="30" Margin="3,0,0,0" Click="PauseButton_Click"/>
-                            <Button Name="StopButton" Content="Stop" Width="80" Height="30" Margin="3,0,0,0" Click="StopButton_Click"/>
+                    <StackPanel Orientation="Vertical"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Credits and information" FontWeight="Bold"/>
                         </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical" Grid.Row="1" Margin="5">
-                        <TextBlock Text="Resources:" FontWeight="Bold"/>
-                        <Label Margin="0,5,0,0" >
-                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
-                                <TextBlock Text="Source code for Code Snippet Studio on GitHub" />
-                            </Hyperlink>
-                        </Label>
-                        <Label Margin="0,5,0,0" >
-                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
-                                <TextBlock Text="The DelSole.VSIX library on GitHub" />
-                            </Hyperlink>
-                        </Label>
-                        <Label Margin="0,5,0,0" >
-                            <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" Hyperlink.RequestNavigate="Hyperlink_RequestNavigate" >
-                                <TextBlock Text="The Syncfusion Community License of Essential Studio" />
-                            </Hyperlink>
-                        </Label>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
-                        <TextBlock Text="Credits and information" FontWeight="Bold"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="5">
-                        <TextBlock Text="Collaborate" FontWeight="Bold"/>
-                    </StackPanel>
+                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Collaborate" FontWeight="Bold"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="5">
+                            <TextBlock Text="Resources:" FontWeight="Bold"/>
+                            <Label Margin="0,5,0,0" >
+                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="Source code for Code Snippet Studio on GitHub" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
+                            <Label Margin="0,5,0,0" >
+                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="The DelSole.VSIX library on GitHub" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
+                            <Label Margin="0,5,0,0" >
+                                <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="The Syncfusion Community License of Essential Studio" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
+                        </StackPanel>
+                    </Grid>
+
+                    <PdfViewer:PdfViewerControl ShowToolbar="False" />
+
                 </Grid>
             </TabItem>
         </TabControl>

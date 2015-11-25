@@ -368,24 +368,6 @@ Class MainWindow
         Me.RefDataGrid.IsEnabled = True
     End Sub
 
-    Private Shared Function ReturnSnippetKind(kind As SnippetTools.CodeSnippetKinds) As String
-        Dim snippetKind As String
-        Select Case kind
-            Case SnippetTools.CodeSnippetKinds.MethodBody
-                snippetKind = "method body"
-            Case SnippetTools.CodeSnippetKinds.MethodDeclaration
-                snippetKind = "method decl"
-            Case SnippetTools.CodeSnippetKinds.File
-                snippetKind = "file"
-            Case SnippetTools.CodeSnippetKinds.TypeDeclaration
-                snippetKind = "type decl"
-            Case Else
-                snippetKind = "any"
-        End Select
-
-        Return snippetKind
-    End Function
-
     Private Sub DeclarationsDataGrid_SelectionChanged(sender As Object, e As GridSelectionChangedEventArgs) Handles DeclarationsDataGrid.SelectionChanged
         Try
             Dim item = CType(CType(sender, SfDataGrid).SelectedItem, Declaration)
@@ -492,22 +474,6 @@ Class MainWindow
         snippetData.Code = editControl1.Text
     End Sub
 
-    Private Sub PlayButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.MediaPlayer.Play()
-    End Sub
-
-    Private Sub PauseButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.MediaPlayer.Pause()
-    End Sub
-
-    Private Sub StopButton_Click(sender As Object, e As RoutedEventArgs)
-        Me.MediaPlayer.Stop()
-    End Sub
-
-    Private Sub HelpTab_LostFocus(sender As Object, e As RoutedEventArgs)
-        Me.MediaPlayer.Pause()
-    End Sub
-
     Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
         Dim dlg As New OpenFileDialog
 
@@ -518,6 +484,20 @@ Class MainWindow
                 Exit Sub
             End If
             Me.EditorRoot.DataContext = CodeSnippet.LoadSnippet(.FileName)
+        End With
+    End Sub
+
+    Private Sub ImportVsiButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select .vsi file"
+            .Filter = "Visual Studio Content Installer (*.vsi)|*.vsi|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+            vsixData = VsiService.Vsi2Vsix(.FileName)
+            Me.DataContext = vsixData
         End With
     End Sub
 End Class
