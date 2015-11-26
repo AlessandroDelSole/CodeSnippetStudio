@@ -27,7 +27,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     Private Sub ResetPkg()
         Me.vsixData = New VSIXPackage
 
-        Me.DataContext = Me.vsixData
+        Me.VsixGrid.DataContext = Me.vsixData
         Me.PackageTab.Focus()
     End Sub
 
@@ -497,7 +497,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                 Exit Sub
             End If
             vsixData = VSIXPackage.OpenVsix(.FileName)
-            Me.DataContext = vsixData
+            Me.VsixGrid.DataContext = vsixData
         End With
     End Sub
 
@@ -528,11 +528,17 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                 Exit Sub
             End If
             vsixData = VsiService.Vsi2Vsix(.FileName)
-            Me.DataContext = vsixData
+            Me.VsixGrid.DataContext = vsixData
         End With
     End Sub
 
     Private Sub HelpTab_GotFocus(sender As Object, e As RoutedEventArgs)
-        Me.PdfReader.Load(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\..\..\..\..\..\..\..\Common\Assets\Code_Snippet_Studio_User_Guide.pdf"))
+        Dim pathName = (From res In Me.GetType.Assembly.GetManifestResourceNames
+                        Where res.ToLower.Contains("pdf")
+                        Select res).First
+
+        Using fs = Me.GetType.Assembly.GetManifestResourceStream(pathName)
+            Me.PdfReader.Load(fs)
+        End Using
     End Sub
 End Class

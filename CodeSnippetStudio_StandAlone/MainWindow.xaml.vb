@@ -14,7 +14,7 @@ Class MainWindow
     Private Sub ResetPkg()
         Me.vsixData = New VSIXPackage
 
-        Me.DataContext = Me.vsixData
+        Me.VsixGrid.DataContext = Me.vsixData
         Me.PackageTab.Focus()
     End Sub
 
@@ -466,7 +466,7 @@ Class MainWindow
                 Exit Sub
             End If
             vsixData = VSIXPackage.OpenVsix(.FileName)
-            Me.DataContext = vsixData
+            Me.VsixGrid.DataContext = vsixData
         End With
     End Sub
 
@@ -497,7 +497,7 @@ Class MainWindow
                 Exit Sub
             End If
             vsixData = VsiService.Vsi2Vsix(.FileName)
-            Me.DataContext = vsixData
+            Me.VsixGrid.DataContext = vsixData
         End With
     End Sub
 

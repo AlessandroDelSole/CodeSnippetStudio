@@ -40,13 +40,6 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
-        <!--<Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/Syncfusion.SfGrid.WPF;component/Styles/Styles.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>-->
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl">
             <TabItem Height="30">
                 <TabItem.Header>
@@ -164,7 +157,7 @@
                         <TextBlock Margin="3,0,0,0" Text="Package and Share (.vsix)"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid>
+                <Grid Name="VsixGrid" DataContext="{Binding}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                         <RowDefinition />
