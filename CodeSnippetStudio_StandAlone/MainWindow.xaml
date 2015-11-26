@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="MainWindow"
         mc:Ignorable="d" Background="Gray" syncfusion:SkinStorage.VisualStyle="Metro"
-        Title="Code Snippet Studio 2016, powered by Syncfusion Essential Studio" Height="768" Width="1024">
+        Title="Code Snippet Studio" Height="768" Width="1024">
 
     <Window.Resources>
         <Style TargetType="{x:Type Control}" x:Key="myErrorTemplate">
