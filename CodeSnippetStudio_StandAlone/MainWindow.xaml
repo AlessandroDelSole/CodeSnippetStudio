@@ -67,6 +67,7 @@
                                 <ComboBoxItem Tag="CSharp" Content="C#"/>
                                 <ComboBoxItem Tag="SQL" Content="SQL"/>
                                 <ComboBoxItem Tag="XML" Content="XML"/>
+                                <ComboBoxItem Tag="XAML" Content="XAML"/>
                                 <ComboBoxItem Tag="CPP" Content="C++"/>
                                 <ComboBoxItem Tag="HTML" Content="Html"/>
                                 <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>

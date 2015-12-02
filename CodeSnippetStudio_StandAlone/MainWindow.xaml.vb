@@ -288,14 +288,18 @@ Class MainWindow
                 Me.snippetData.Language = "XML"
                 DisableDataGrids()
             Case = 4
+                Me.editControl1.DocumentLanguage = Languages.XAML
+                Me.snippetData.Language = "XAML"
+                DisableDataGrids()
+            Case = 5
                 Me.editControl1.DocumentLanguage = Languages.Text
                 Me.snippetData.Language = "CPP"
                 DisableDataGrids()
-            Case = 5
+            Case = 6
                 Me.editControl1.DocumentLanguage = Languages.XML
                 Me.snippetData.Language = "HTML"
                 DisableDataGrids()
-            Case = 6
+            Case = 7
                 Me.editControl1.DocumentLanguage = Languages.XML
                 Me.snippetData.Language = "JavaScript"
                 DisableDataGrids()
@@ -407,10 +411,12 @@ Class MainWindow
             Case = 3
                 filter = "XML file (.xml)|*.xml|All files|*.*"
             Case = 4
-                filter = "C++ code file (.cpp)|*.cpp|All files|*.*"
+                filter = "XAML file (.xaml)|*.xaml|All files|*.*"
             Case = 5
-                filter = "HTML file (.htm)|*.htm|All files|*.*"
+                filter = "C++ code file (.cpp)|*.cpp|All files|*.*"
             Case = 6
+                filter = "HTML file (.htm)|*.htm|All files|*.*"
+            Case = 7
                 filter = "JavaScript code file (.js)|*.js|All files|*.*"
         End Select
 
