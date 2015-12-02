@@ -332,7 +332,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                 Exit Sub
             End If
 
-            CodeSnippet.SaveSnippet(.FileName, snippetData)
+            CodeSnippet.SaveSnippet(.FileName, snippetData, IDEType.VisualStudio)
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub

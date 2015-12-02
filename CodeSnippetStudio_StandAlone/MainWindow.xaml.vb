@@ -323,7 +323,7 @@ Class MainWindow
                 Exit Sub
             End If
 
-            CodeSnippet.SaveSnippet(.FileName, snippetData)
+            CodeSnippet.SaveSnippet(.FileName, snippetData, IDEType.VisualStudio)
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub
@@ -509,6 +509,28 @@ Class MainWindow
 
     Private Sub HelpTab_GotFocus(sender As Object, e As RoutedEventArgs)
         Me.PdfReader.Load(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets\Code_Snippet_Studio_User_Guide.pdf"))
+    End Sub
+
+    Private Sub SaveVSCodeSnippetButton_Click(sender As Object, e As RoutedEventArgs)
+        If snippetData.HasErrors Then
+            MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
+                            & Environment.NewLine &
+                            "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        End If
+
+        Dim dlg2 As New SaveFileDialog
+        With dlg2
+            .OverwritePrompt = True
+            .Title = "Output .json file"
+            .Filter = ".json files (*.json)|*.json|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+
+            CodeSnippet.SaveSnippet(.FileName, snippetData, IDEType.Code)
+            MessageBox.Show($"{ .FileName} saved correctly.")
+        End With
     End Sub
 End Class
 

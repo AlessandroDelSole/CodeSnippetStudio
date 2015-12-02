@@ -73,10 +73,14 @@
                                 <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>
                             </ComboBox>
 
-                            <Button Margin="5,0,0,0" Width="24" x:Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save code snippet">
+                            <Button Margin="5,0,0,0" Width="24" x:Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save snippet for Visual Studio">
                                 <Image Source="Images/save_16xLG.png" />
                             </Button>
 
+                            <Button Margin="5,0,0,0" Width="24" x:Name="SaveVSCodeSnippetButton" Click="SaveVSCodeSnippetButton_Click" ToolTip="Save snippet for VS Code">
+                                <Image Source="Images/ExporttoScript_9881.png" />
+                            </Button>
+                            
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
                                 <Image Source="Images/SaveFileDialogControl_703.png" />
                             </Button>
