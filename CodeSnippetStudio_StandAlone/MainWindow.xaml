@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="MainWindow"
-        mc:Ignorable="d" Background="Gray" syncfusion:SkinStorage.VisualStyle="Metro"
+        mc:Ignorable="d" Background="#353535" syncfusion:SkinStorage.VisualStyle="Metro"
         Title="Code Snippet Studio" Height="768" Width="1024">
 
     <Window.Resources>
@@ -40,6 +40,14 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Code Snippet Studio" Foreground="White" FontSize="24"/>
+            <TextBlock Text="2016" Margin="3,0,0,0" FontSize="24" Foreground="#558FCB"/>
+        </StackPanel>
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl">
             <TabItem Height="30">
                 <TabItem.Header>
