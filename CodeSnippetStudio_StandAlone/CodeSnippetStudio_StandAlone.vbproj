@@ -195,6 +195,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\Save_For_Code.png" />
+    <Resource Include="Images\Save_For_VS.png" />
+    <Resource Include="Images\CSS_AppIcon_SM.png" />
     <Resource Include="Images\ExporttoScript_9881.png" />
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

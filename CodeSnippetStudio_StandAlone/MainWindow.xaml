@@ -45,6 +45,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
+            <Image Source="Images/CSS_AppIcon_SM.png" Margin="2"/>
             <TextBlock Text="Code Snippet Studio" Foreground="White" FontSize="24"/>
             <TextBlock Text="2016" Margin="3,0,0,0" FontSize="24" Foreground="#558FCB"/>
         </StackPanel>
@@ -82,11 +83,11 @@
                             </ComboBox>
 
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveSnippetButton" Click="SaveSnippetButton_Click" ToolTip="Save snippet for Visual Studio">
-                                <Image Source="Images/save_16xLG.png" />
+                                <Image Source="Images/Save_For_VS.png" />
                             </Button>
 
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveVSCodeSnippetButton" Click="SaveVSCodeSnippetButton_Click" ToolTip="Save snippet for VS Code">
-                                <Image Source="Images/ExporttoScript_9881.png" />
+                                <Image Source="Images/Save_For_Code.png" />
                             </Button>
                             
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
