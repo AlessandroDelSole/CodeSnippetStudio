@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX"
+        xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX" xmlns:skinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="MainWindow"
         mc:Ignorable="d" Background="#353535" syncfusion:SkinStorage.VisualStyle="Metro"
         Title="Code Snippet Studio" Height="768" Width="1024">
@@ -46,8 +46,8 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Image Source="Images/CSS_AppIcon_SM.png" Margin="2"/>
-            <TextBlock Text="Code Snippet Studio" Foreground="White" FontSize="24"/>
-            <TextBlock Text="2016" Margin="3,0,0,0" FontSize="24" Foreground="#558FCB"/>
+            <TextBlock Text="Code Snippet" Foreground="White" FontSize="24"/>
+            <TextBlock Text="Studio" Margin="5,0,0,0" FontSize="24" Foreground="#558FCB"/>
         </StackPanel>
         <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl">
             <TabItem Height="30">
@@ -389,59 +389,96 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem x:Name="HelpTab" GotFocus="HelpTab_GotFocus">
+            <TabItem x:Name="HelpTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/StatusAnnotations_Help_and_inconclusive_16xLG_color.png" />
-                        <TextBlock Margin="3,0,0,0" Text="User guide"/>
+                        <TextBlock Margin="3,0,0,0" Text="Help &amp; settings"/>
                     </StackPanel>
                 </TabItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="200"/>
-                    </Grid.RowDefinitions>
-                    <PdfViewer:PdfViewerControl ShowToolbar="False" Name="PdfReader" />
-                    <Grid Grid.Row="1" ShowGridLines="True">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical">
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <TextBlock Text=" Help " FontWeight="Bold"/>
+                        </GroupBox.Header>
+                        <Button Margin="5" Name="HelpButton" Width="150" Height="30" HorizontalAlignment="Left" Click="HelpButton_Click">Show user guide (PDF)</Button>
+                      </GroupBox>
+
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <TextBlock Text=" Settings " FontWeight="Bold"></TextBlock>
+                        </GroupBox.Header>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Default language:"/>
+                                <ComboBox Width="100" Margin="5,0,0,0" x:Name="PrefLanguageCombo" SelectionChanged="PrefLanguageCombo_SelectionChanged">
+                                    <ComboBoxItem Tag="VB" Content="Visual Basic"/>
+                                    <ComboBoxItem Tag="CSharp" Content="C#"/>
+                                    <ComboBoxItem Tag="SQL" Content="SQL"/>
+                                    <ComboBoxItem Tag="XML" Content="XML"/>
+                                    <ComboBoxItem Tag="XAML" Content="XAML"/>
+                                    <ComboBoxItem Tag="CPP" Content="C++"/>
+                                    <ComboBoxItem Tag="HTML" Content="Html"/>
+                                    <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Theme:"/>
+                                <ComboBox Width="150" Margin="5,0,0,0" Name="ThemeCombo" SelectionChanged="ThemeCombo_SelectionChanged">
+                                    <ComboBoxItem>Metro</ComboBoxItem>
+                                    <ComboBoxItem>Blend</ComboBoxItem>
+                                    <ComboBoxItem>VisualStudio2013</ComboBoxItem>
+                                    <ComboBoxItem>Office2013DarkGray</ComboBoxItem>
+                                    <ComboBoxItem>Office2013LightGray</ComboBoxItem>
+                                    <ComboBoxItem>Office2013White</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <TextBlock Text=" Credits and information " FontWeight="Bold"/>
+                        </GroupBox.Header>
                         <StackPanel Orientation="Vertical" Margin="5">
-                            <TextBlock Text="Credits and information" FontWeight="Bold"/>
-                            <TextBlock Text="Code Snippet Studio has been developed by Alessandro Del Sole and has been built using some external components." TextWrapping="Wrap"/>
-                            <TextBlock Text="The APIs used to create and manage code snippets and .vsix packages are offered by the:" TextWrapping="Wrap"/>
-                            <Label>
-                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="The DelSole.VSIX library" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
-                            <TextBlock Text="The syntax editor, the property window, and data grids are offered by the:" TextWrapping="Wrap"/>
-                            <Label>
-                                <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="Essential Studio for WPF by Syncfusion (Community License)" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5">
-                            <TextBlock Text="Resources and collaboration:" FontWeight="Bold"/>
-                            <TextBlock Text="Code Snippet Studio is an open source application written in Visual Basic 2015. If you want to be an active contributor on the project, please join on GitHub, create a fork, send pull requests and submit your issues." TextWrapping="Wrap" />
-                            <Label Margin="0,5,0,0" >
-                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="Code Snippet Studio on GitHub" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
+                        <TextBlock Text="Code Snippet Studio has been developed by Alessandro Del Sole and has been built using some external components." TextWrapping="Wrap"/>
+                        <TextBlock Text="The APIs used to create and manage code snippets and .vsix packages are offered by the:" TextWrapping="Wrap"/>
+                        <Label>
+                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
+                                <InlineUIContainer>
+                                    <TextBlock Text="The DelSole.VSIX library" />
+                                </InlineUIContainer>
+                            </Hyperlink>
+                        </Label>
+                        <TextBlock Text="The syntax editor, the property window, and data grids are offered by the:" TextWrapping="Wrap"/>
+                        <Label>
+                            <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
+                                <InlineUIContainer>
+                                    <TextBlock Text="Essential Studio for WPF by Syncfusion (Community License)" />
+                                </InlineUIContainer>
+                            </Hyperlink>
+                        </Label>
+                    </StackPanel>                        
+                    </GroupBox>
 
-                        </StackPanel>
+                    <GroupBox>
+                        <GroupBox.Header>
+                            <TextBlock Text=" Collaboration " FontWeight="Bold"/>
+                        </GroupBox.Header>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Text="Code Snippet Studio is an open source application written in Visual Basic 2015. If you want to be an active contributor on the project, please join on GitHub, create a fork, send pull requests and submit your issues." TextWrapping="Wrap" />
+                        <Label Margin="0,5,0,0" >
+                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
+                                <InlineUIContainer>
+                                    <TextBlock Text="Code Snippet Studio on GitHub" />
+                                </InlineUIContainer>
+                            </Hyperlink>
+                        </Label>
 
-                    </Grid>
-                </Grid>
+                    </StackPanel>                        
+                    </GroupBox>
+
+                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

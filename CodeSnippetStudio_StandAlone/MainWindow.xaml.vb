@@ -6,6 +6,7 @@ Imports Syncfusion.UI.Xaml.Grid
 Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 Imports System.Reflection
 Imports Syncfusion.UI.Xaml.Grid.Helpers
+Imports Syncfusion.sfskinmanager
 
 Class MainWindow
     Private vsixData As VSIXPackage
@@ -39,12 +40,13 @@ Class MainWindow
         ResetPkg()
 
         Me.RootTabControl.SelectedIndex = 0
-        Me.editControl1.DocumentLanguage = Languages.VisualBasic
-        Me.LanguageCombo.SelectedIndex = 0
+        Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
 
         Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
         Me.RefDataGrid.ItemsSource = snippetData.References
         Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
+
+        SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
     End Sub
 
 
@@ -312,6 +314,7 @@ Class MainWindow
                             & Environment.NewLine &
                             "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
                             "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
         End If
 
         Dim dlg2 As New SaveFileDialog
@@ -507,16 +510,13 @@ Class MainWindow
         End With
     End Sub
 
-    Private Sub HelpTab_GotFocus(sender As Object, e As RoutedEventArgs)
-        Me.PdfReader.Load(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets\Code_Snippet_Studio_User_Guide.pdf"))
-    End Sub
-
     Private Sub SaveVSCodeSnippetButton_Click(sender As Object, e As RoutedEventArgs)
         If snippetData.HasErrors Then
             MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
                             & Environment.NewLine &
                             "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
                             "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
         End If
 
         Dim dlg2 As New SaveFileDialog
@@ -532,5 +532,104 @@ Class MainWindow
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub
+
+    Private Sub HelpButton_Click(sender As Object, e As RoutedEventArgs)
+        Process.Start(IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets\Code_Snippet_Studio_User_Guide.pdf"))
+    End Sub
+
+    Private Sub SaveSettings()
+        My.Settings.PreferredLanguage = PrefLanguageCombo.SelectedItem.ToString
+    End Sub
+
+    Private Sub PrefLanguageCombo_SelectionChanged(sender As Object, e As Windows.Controls.SelectionChangedEventArgs)
+        Dim cb = CType(sender, ComboBox)
+        Select Case cb.SelectedIndex
+            Case = 0
+                My.Settings.PreferredLanguage = "VB"
+                My.Settings.Save()
+            Case = 1
+                My.Settings.PreferredLanguage = "CSharp"
+                My.Settings.Save()
+            Case = 2
+                My.Settings.PreferredLanguage = "SQL"
+                My.Settings.Save()
+            Case = 3
+                My.Settings.PreferredLanguage = "XML"
+                My.Settings.Save()
+            Case = 4
+                My.Settings.PreferredLanguage = "XAML"
+                My.Settings.Save()
+            Case = 5
+                My.Settings.PreferredLanguage = "CPP"
+                My.Settings.Save()
+            Case = 6
+                My.Settings.PreferredLanguage = "HTML"
+                My.Settings.Save()
+            Case = 7
+                My.Settings.PreferredLanguage = "JavaScript"
+                My.Settings.Save()
+        End Select
+    End Sub
+
+    Private Sub ThemeCombo_SelectionChanged(sender As Object, e As Windows.Controls.SelectionChangedEventArgs)
+        Dim cb = CType(sender, ComboBox)
+        Select Case cb.SelectedIndex
+            Case = 0
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Metro)
+                My.Settings.PreferredTheme = VisualStyles.Metro
+                My.Settings.Save()
+            Case = 1
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Blend)
+                My.Settings.PreferredTheme = VisualStyles.Blend
+                My.Settings.Save()
+            Case = 2
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.VisualStudio2013)
+                My.Settings.PreferredTheme = VisualStyles.VisualStudio2013
+                My.Settings.Save()
+            Case = 3
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013DarkGray)
+                My.Settings.PreferredTheme = VisualStyles.Office2013DarkGray
+                My.Settings.Save()
+            Case = 4
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013LightGray)
+                My.Settings.PreferredTheme = VisualStyles.Office2013LightGray
+                My.Settings.Save()
+            Case = 5
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013White)
+                My.Settings.PreferredTheme = VisualStyles.Office2013White
+                My.Settings.Save()
+        End Select
+    End Sub
+
+    Private Function LoadPreferredLanguage() As Languages
+        Select Case My.Settings.PreferredLanguage
+            Case = "VB"
+                Me.LanguageCombo.SelectedIndex = 0
+                Return Languages.VisualBasic
+            Case = "CSharp"
+                Me.LanguageCombo.SelectedIndex = 1
+                Return Languages.CSharp
+            Case = "SQL"
+                Me.LanguageCombo.SelectedIndex = 2
+                Return Languages.SQL
+            Case = "XML"
+                Me.LanguageCombo.SelectedIndex = 3
+                Return Languages.XML
+            Case = "XAML"
+                Me.LanguageCombo.SelectedIndex = 4
+                Return Languages.XAML
+            Case = "CPP"
+                Me.LanguageCombo.SelectedIndex = 5
+                Return Languages.CSharp
+            Case = "HTML"
+                Me.LanguageCombo.SelectedIndex = 6
+                Return Languages.XML
+            Case = "JavaScript"
+                Me.LanguageCombo.SelectedIndex = 7
+                Return Languages.XML
+            Case Else
+                Return Languages.Text
+        End Select
+    End Function
 End Class
 
