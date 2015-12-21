@@ -520,13 +520,13 @@ Class MainWindow
     End Sub
 
     Private Sub SaveVSCodeSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        'If snippetData.HasErrors Then
-        '    MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
-        '                    & Environment.NewLine &
-        '                    "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
-        '                    "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-        '    Exit Sub
-        'End If
+        If snippetData.HasErrors Then
+            MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
+                            & Environment.NewLine &
+                            "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
 
         Dim dlg2 As New SaveFileDialog
         With dlg2
