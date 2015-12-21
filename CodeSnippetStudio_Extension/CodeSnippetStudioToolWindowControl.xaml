@@ -72,7 +72,10 @@
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Language:" VerticalAlignment="Center"/>
+                            <Button Margin="5,0,0,0" Width="24" x:Name="NewSnippetButton" Click="NewSnippetButton_Click" ToolTip="New code snippet">
+                                <Image Source="/CodeSnippetStudio;component/Images/document_16xLG.png" />
+                            </Button>
+                            <TextBlock Text="Language:" VerticalAlignment="Center" Margin="3,0,0,0"/>
                             <ComboBox Width="100" Margin="5,0,0,0" x:Name="LanguageCombo">
                                 <ComboBoxItem Tag="VB" Content="Visual Basic"/>
                                 <ComboBoxItem Tag="CSharp" Content="C#"/>

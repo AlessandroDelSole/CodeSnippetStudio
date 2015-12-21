@@ -696,4 +696,15 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
         v.Build(snippetFolder, IDEType.Code)
     End Sub
+
+    Private Sub NewSnippetButton_Click(sender As Object, e As RoutedEventArgs)
+        If Me.snippetData.Code <> "" Or String.IsNullOrEmpty(snippetData.Code) = False Then
+            Dim result = MessageBox.Show("You have written some code. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            If result = MessageBoxResult.No Then Exit Sub
+        End If
+
+        Me.snippetData = Nothing
+        Me.snippetData = New CodeSnippet
+        Me.EditorRoot.DataContext = snippetData
+    End Sub
 End Class

@@ -202,6 +202,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Images\document_16xLG.png" />
     <Resource Include="Images\Save_For_Code.png" />
     <Resource Include="Images\Save_For_VS.png" />
     <Resource Include="Images\CSS_AppIcon_SM.png" />

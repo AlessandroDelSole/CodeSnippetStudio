@@ -6,7 +6,9 @@
     <Description xml:space="preserve">Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015 and Visual Studio Code.</Description>
     <MoreInfo>https://github.com/AlessandroDelSole/CodeSnippetStudio</MoreInfo>
     <License>Apache_License.txt</License>
+    <GettingStartedGuide>Code_Snippet_Studio_User_Guide.docx</GettingStartedGuide>
     <Icon>CodeSnippetStudioToolWindowPackage.ico</Icon>
+    <PreviewImage>PreviewImage.jpg</PreviewImage>
     <Tags>snippet</Tags>
   </Metadata>
   <Installation>
