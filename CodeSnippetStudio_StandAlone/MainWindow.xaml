@@ -42,14 +42,15 @@
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition/>
+            <RowDefinition Height="235*"/>
+            <RowDefinition Height="462*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Image Source="Images/CSS_AppIcon_SM.png" Margin="2"/>
             <TextBlock Text="Code Snippet" Foreground="White" FontSize="24"/>
             <TextBlock Text="Studio" Margin="5,0,0,0" FontSize="24" Foreground="#558FCB"/>
         </StackPanel>
-        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl">
+        <TabControl SelectedIndex="{Binding Mode=OneWay}" Grid.Row="1" x:Name="RootTabControl" Grid.RowSpan="2">
             <TabItem Height="30">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -89,7 +90,7 @@
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveVSCodeSnippetButton" Click="SaveVSCodeSnippetButton_Click" ToolTip="Save snippet for VS Code">
                                 <Image Source="Images/Save_For_Code.png" />
                             </Button>
-                            
+
                             <Button Margin="5,0,0,0" Width="24" x:Name="SaveCodeFileButton" Click="SaveCodeFileButton_Click" ToolTip="Save as code file">
                                 <Image Source="Images/SaveFileDialogControl_703.png" />
                             </Button>
@@ -105,14 +106,6 @@
                             <Button Margin="5,0,0,0" Width="24" x:Name="DeleteDecButton" ToolTip="Delete selected declaration">
                                 <Image Source="Images/Remove_16xLG.png" />
                             </Button>
-
-                            <Label Margin="30,0,0,0" >
-                                <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" RequestNavigate="Hyperlink_RequestNavigate" >
-                                    <InlineUIContainer>
-                                        <TextBlock Text="Code Snippets Schema Reference" />
-                                    </InlineUIContainer>
-                                </Hyperlink>
-                            </Label>
                         </StackPanel>
                         <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" Text="{Binding Code, Mode=TwoWay}"
 							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
@@ -171,6 +164,12 @@
                         <TextBlock Margin="3,0,0,0" Text="Package and Share (.vsix)"/>
                     </StackPanel>
                 </TabItem.Header>
+                <Grid>
+                    <TabControl>
+                        <TabItem Height="30">
+                            <TabItem.Header>
+                                <TextBlock Text="Visual Studio 2015's .vsix" Foreground="#68217A" FontWeight="Bold" />
+                            </TabItem.Header>
                 <Grid Name="VsixGrid" DataContext="{Binding}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
@@ -218,7 +217,7 @@
                         </Button>
 
                     </StackPanel>
-                    <TabControl Grid.Row="1">
+                    <TabControl Grid.Row="1" Name="VSVsixTabControl">
                         <TabItem Header="Package Metadata" x:Name="PackageTab" Height="30">
                             <Grid>
                                 <Grid x:Name="Grid1" HorizontalAlignment="Left" Margin="0,0,0,-332" VerticalAlignment="Top">
@@ -314,14 +313,98 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
+                </Grid>                            
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <TextBlock Text="Visual Studio Code's .vsix" Foreground="#007ACC" FontWeight="Bold"/>
+                            </TabItem.Header>
+                            <StackPanel Margin="5">
+                                <TextBlock TextWrapping="Wrap"
+                                    Text="In order to correctly package your snippets into a proper .vsix file, Code Snippet Studio requires you to follow the guidelines described in the Visual Studio Code's documentation at:"/>
+                                <Label>
+                                    <Hyperlink NavigateUri="https://code.visualstudio.com/docs/customization/userdefinedsnippets" RequestNavigate="Hyperlink_RequestNavigate" >
+                                        <InlineUIContainer>
+                                            <TextBlock Text="Adding snippets to Visual Studio Code" />
+                                        </InlineUIContainer>
+                                    </Hyperlink>
+                                </Label>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center"
+                                    Text="Make sure you have Node.js installed. If not, visit: "/>
+                                    <Label>
+                                        <Hyperlink NavigateUri="https://nodejs.org" RequestNavigate="Hyperlink_RequestNavigate" >
+                                            <InlineUIContainer>
+                                                <TextBlock Text="https://nodejs.org" />
+                                            </InlineUIContainer>
+                                        </Hyperlink>
+                                    </Label>
+                                </StackPanel>
+                                <TextBlock TextWrapping="Wrap"
+                                    Text="Make sure you have the vsce tool installed, as per the documentation above."/>
+                                <TextBlock TextWrapping="Wrap" Margin="0,5,0,0"
+                                    Text="With that said, follow these steps:"/>
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="1. Create a new empty folder (e.g. C:\javascript)"/>
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="2. Create a new 'snippets' subfolder (e.g. C:\javascript\snippets)"/>
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="3. In the 'snippets' subfolder, copy the .json file containing the code snippets for the language of your choice. You can use the Snippet Editor to save snippets into .json"/>
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="4. When ready, pick up your .json file: "/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0" Height="30">
+                                    <TextBox Width="250" Name="JsonSnippetFolderTextBox"/>
+                                    <Button Margin="5,0,0,0" Width="100" Name="BrowseSnippetFolderButton" Click="BrowseSnippetFolderButton_Click">Browse...</Button>
+                                </StackPanel>
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="5. Specify the language for the snippets matching exactly one of the supported language IDs: "/>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0" Height="30">
+                                    <TextBox Width="250" Name="SnippetLanguageTextBox"/>
+                                    <Label>
+                                        <Hyperlink NavigateUri="https://code.visualstudio.com/docs/languages/overview" RequestNavigate="Hyperlink_RequestNavigate" >
+                                            <InlineUIContainer>
+                                                <TextBlock Text="Supported language IDs" />
+                                            </InlineUIContainer>
+                                        </Hyperlink>
+                                    </Label>
+                                </StackPanel>
+
+                                <TextBlock TextWrapping="Wrap" Margin="0,3,0,0"
+                                    Text="6. Provide the following .vsix package metadata: "/>
+                                <StackPanel Orientation="Horizontal" Margin="12,3,0,0" Height="25">
+                                    <TextBlock Text="Product name: " FontWeight="Bold"/>
+                                    <TextBox Width="200" Margin="34,0,0,0" Name="CodeProductNameTextBox"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="12,3,0,0" Height="25">
+                                    <TextBlock Text="Author name: " FontWeight="Bold"/>
+                                    <TextBox Width="200" Margin="39,0,0,0" Name="CodeAuthorNameTextBox"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="12,3,0,0" Height="25">
+                                    <TextBlock Text="Package description: " FontWeight="Bold"/>
+                                    <TextBox Width="200" Name="CodePackageDescriptionTextBox"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="12,3,0,0" Height="25">
+                                    <TextBlock Text="Package version: " FontWeight="Bold"/>
+                                    <TextBox Width="200" Text="0.1.0" Name="CodePackageVersionTextBox" Margin="23,0,0,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                    <TextBlock TextWrapping="Wrap" Margin="0,3,0,0" VerticalAlignment="Center"
+                                    Text="7. Build the package: "/>
+                                    <Button Margin="18,0,0,0" Width="100" Height="30" Name="BuildVsCodePackageButton" HorizontalAlignment="Left"
+                                        Click="BuildVsCodePackageButton_Click">Build</Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
+
             </TabItem>
 
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/Hammer_Builder_16xLG.png" />
-                        <TextBlock Margin="3,0,0,0" Text="Vsix Tools"/>
+                        <TextBlock Margin="3,0,0,0" Text=".vsix Tools"/>
                     </StackPanel>
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
@@ -401,8 +484,17 @@
                         <GroupBox.Header>
                             <TextBlock Text=" Help " FontWeight="Bold"/>
                         </GroupBox.Header>
-                        <Button Margin="5" Name="HelpButton" Width="150" Height="30" HorizontalAlignment="Left" Click="HelpButton_Click">Show user guide (PDF)</Button>
-                      </GroupBox>
+                        <StackPanel>
+                            <Button Margin="5" Name="HelpButton" Width="150" Height="30" HorizontalAlignment="Left" Click="HelpButton_Click">Show user guide (PDF)</Button>
+                            <Label Margin="5,0,0,0" >
+                                <Hyperlink NavigateUri="https://msdn.microsoft.com/en-us/library/ms171418.aspx" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="Code Snippets Schema Reference" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
+                        </StackPanel>
+                    </GroupBox>
 
                     <GroupBox>
                         <GroupBox.Header>
@@ -435,47 +527,53 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-                    
+
                     <GroupBox>
                         <GroupBox.Header>
                             <TextBlock Text=" Credits and information " FontWeight="Bold"/>
                         </GroupBox.Header>
                         <StackPanel Orientation="Vertical" Margin="5">
-                        <TextBlock Text="Code Snippet Studio has been developed by Alessandro Del Sole and has been built using some external components." TextWrapping="Wrap"/>
-                        <TextBlock Text="The APIs used to create and manage code snippets and .vsix packages are offered by the:" TextWrapping="Wrap"/>
-                        <Label>
-                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
-                                <InlineUIContainer>
-                                    <TextBlock Text="The DelSole.VSIX library" />
-                                </InlineUIContainer>
-                            </Hyperlink>
-                        </Label>
-                        <TextBlock Text="The syntax editor, the property window, and data grids are offered by the:" TextWrapping="Wrap"/>
-                        <Label>
-                            <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
-                                <InlineUIContainer>
-                                    <TextBlock Text="Essential Studio for WPF by Syncfusion (Community License)" />
-                                </InlineUIContainer>
-                            </Hyperlink>
-                        </Label>
-                    </StackPanel>                        
+                            <TextBlock Text="Code Snippet Studio has been developed by Alessandro Del Sole and has been built using some external components." TextWrapping="Wrap"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="The APIs used to create and manage code snippets and .vsix packages are offered by the:" TextWrapping="Wrap"
+                                           VerticalAlignment="Center"/>
+                                <Label>
+                                    <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/delsolevsix" RequestNavigate="Hyperlink_RequestNavigate" >
+                                        <InlineUIContainer>
+                                            <TextBlock Text="The DelSole.VSIX library" />
+                                        </InlineUIContainer>
+                                    </Hyperlink>
+                                </Label>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="The syntax editor, the property window, theme support, and data grids are offered by the:" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                <Label>
+                                    <Hyperlink NavigateUri="https://www.syncfusion.com/products/communitylicense" RequestNavigate="Hyperlink_RequestNavigate" >
+                                        <InlineUIContainer>
+                                            <TextBlock Text="Essential Studio for WPF by Syncfusion (Community License)" />
+                                        </InlineUIContainer>
+                                    </Hyperlink>
+                                </Label>
+                            </StackPanel>
+                        </StackPanel>
                     </GroupBox>
 
                     <GroupBox>
                         <GroupBox.Header>
                             <TextBlock Text=" Collaboration " FontWeight="Bold"/>
                         </GroupBox.Header>
-                    <StackPanel Orientation="Vertical" Margin="5">
-                        <TextBlock Text="Code Snippet Studio is an open source application written in Visual Basic 2015. If you want to be an active contributor on the project, please join on GitHub, create a fork, send pull requests and submit your issues." TextWrapping="Wrap" />
-                        <Label Margin="0,5,0,0" >
-                            <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
-                                <InlineUIContainer>
-                                    <TextBlock Text="Code Snippet Studio on GitHub" />
-                                </InlineUIContainer>
-                            </Hyperlink>
-                        </Label>
+                        <StackPanel Orientation="Vertical" Margin="5">
+                            <TextBlock Text="Code Snippet Studio is an open source WPF application written in Visual Basic 2015. If you want to be an active contributor on the project, please join on GitHub, create a fork, send pull requests and submit your issues." TextWrapping="Wrap" />
+                            <Label Margin="0,5,0,0" >
+                                <Hyperlink NavigateUri="https://github.com/AlessandroDelSole/CodeSnippetStudio" RequestNavigate="Hyperlink_RequestNavigate" >
+                                    <InlineUIContainer>
+                                        <TextBlock Text="Code Snippet Studio on GitHub" />
+                                    </InlineUIContainer>
+                                </Hyperlink>
+                            </Label>
 
-                    </StackPanel>                        
+                        </StackPanel>
                     </GroupBox>
 
                 </StackPanel>

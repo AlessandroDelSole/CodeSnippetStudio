@@ -28,6 +28,7 @@ Class MainWindow
         Me.snippetData = New CodeSnippet
         Me.EditorRoot.DataContext = Me.snippetData
 
+        'Properties that must be hidden from the PropertyGrid
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Namespaces")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Declarations")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("References")
@@ -67,6 +68,7 @@ Class MainWindow
                     sninfo.SnippetDescription = SnippetInfo.GetSnippetDescription(item)
                     Me.vsixData.CodeSnippets.Add(sninfo)
                 Next
+                Me.VSVsixTabControl.SelectedIndex = 1
             Else
                 Exit Sub
             End If
@@ -105,7 +107,7 @@ Class MainWindow
                 .OverwritePrompt = True
                 .Filter = "VSIX packages|*.vsix"
                 If .ShowDialog = True Then
-                    Me.vsixData.Build(.FileName)
+                    Me.vsixData.Build(.FileName, IDEType.VisualStudio)
                     Dim result = MessageBox.Show("Package " + IO.Path.GetFileName(.FileName) + " created. Would you like to install the package for testing now?", "Code Snippet Studio", Windows.MessageBoxButton.YesNo, Windows.MessageBoxImage.Question)
                     If result = Windows.MessageBoxResult.No Then
                         Exit Sub
@@ -177,8 +179,15 @@ Class MainWindow
 
     Private Sub RemoveSnippetButton_Click(sender As Object, e As Windows.RoutedEventArgs)
         Try
+            Dim selectedList = Me.CodeSnippetsDataGrid.SelectedItems.Cast(Of SnippetInfo).ToList
+            If Not selectedList.Any Then Exit Sub
 
-            For Each item In Me.CodeSnippetsDataGrid.SelectedItems.Cast(Of SnippetInfo).ToList
+            Me.VSVsixTabControl.SelectedIndex = 1
+
+            Dim result = MessageBox.Show("Are you sure you want to remove the selected snippet(s)?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            If result = MessageBoxResult.No Then Exit Sub
+
+            For Each item In selectedList
                 Me.vsixData.CodeSnippets.Remove(TryCast(item, SnippetInfo))
             Next
         Catch ex As Exception
@@ -511,13 +520,13 @@ Class MainWindow
     End Sub
 
     Private Sub SaveVSCodeSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        If snippetData.HasErrors Then
-            MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
-                            & Environment.NewLine &
-                            "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
-                            "Error", MessageBoxButton.OK, MessageBoxImage.Error)
-            Exit Sub
-        End If
+        'If snippetData.HasErrors Then
+        '    MessageBox.Show("The current code snippet has errors that must be fixed before saving." _
+        '                    & Environment.NewLine &
+        '                    "Ensure that Author, Title, Description, and snippet language have been supplied properly.",
+        '                    "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+        '    Exit Sub
+        'End If
 
         Dim dlg2 As New SaveFileDialog
         With dlg2
@@ -631,5 +640,49 @@ Class MainWindow
                 Return Languages.Text
         End Select
     End Function
+
+    Private Sub BrowseSnippetFolderButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+        With dlg
+            .Title = "Select .json snippet"
+            .Filter = ".json files (*.json)|*.json"
+            If .ShowDialog = True Then
+                Me.JsonSnippetFolderTextBox.Text = .FileName
+            End If
+        End With
+    End Sub
+
+    Private Sub BuildVsCodePackageButton_Click(sender As Object, e As RoutedEventArgs)
+        If JsonSnippetFolderTextBox.Text = "" Or String.IsNullOrEmpty(JsonSnippetFolderTextBox.Text) Then
+            MessageBox.Show("Please select a snippet first.")
+            Exit Sub
+        End If
+
+        If SnippetLanguageTextBox.Text = "" Or String.IsNullOrEmpty(SnippetLanguageTextBox.Text) Then
+            MessageBox.Show("Please specify the language first.")
+            Exit Sub
+        End If
+
+        Dim sninfo As New SnippetInfo
+        sninfo.SnippetFileName = IO.Path.GetFileName(JsonSnippetFolderTextBox.Text)
+        sninfo.SnippetPath = IO.Path.GetDirectoryName(JsonSnippetFolderTextBox.Text)
+        sninfo.SnippetDescription = $"{SnippetLanguageTextBox.Text} snippets"
+        sninfo.SnippetLanguage = SnippetLanguageTextBox.Text
+
+        Dim v As New VSIXPackage
+        v.PackageAuthor = CodeAuthorNameTextBox.Text
+        v.PackageDescription = CodePackageDescriptionTextBox.Text
+        v.ProductName = CodeProductNameTextBox.Text
+        v.PackageVersion = CodePackageVersionTextBox.Text
+        v.CodeSnippets.Add(sninfo)
+        If v.HasErrors Then
+            MessageBox.Show("Please make sure you have provided all the required information.")
+            Exit Sub
+        End If
+
+        Dim snippetFolder = IO.Path.GetDirectoryName(JsonSnippetFolderTextBox.Text)
+
+        v.Build(snippetFolder, IDEType.Code)
+    End Sub
 End Class
 

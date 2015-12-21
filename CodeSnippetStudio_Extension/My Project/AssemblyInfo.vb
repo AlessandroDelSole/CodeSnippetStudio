@@ -7,7 +7,7 @@ Imports System.Runtime.InteropServices
 ' set of attributes. Change these attribute values to modify the information
 ' associated with an assembly.
 <Assembly: AssemblyTitle("Code Snippet Studio for Visual Studio 2015")>
-<Assembly: AssemblyDescription("Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015")>
+<Assembly: AssemblyDescription("Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015 and Visual Studio Code")>
 <Assembly: AssemblyConfiguration("")>
 <Assembly: AssemblyCompany("Alessandro Del Sole")>
 <Assembly: AssemblyProduct("Code Snippet Studio for Visual Studio 2015")>
