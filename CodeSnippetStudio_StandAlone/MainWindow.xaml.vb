@@ -6,11 +6,12 @@ Imports Syncfusion.UI.Xaml.Grid
 Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 Imports System.Reflection
 Imports Syncfusion.UI.Xaml.Grid.Helpers
-Imports Syncfusion.sfskinmanager
+Imports Syncfusion.SfSkinManager
+Imports Newtonsoft.Json
 
 Class MainWindow
     Private vsixData As VSIXPackage
-    Private snippetData As CodeSnippet
+    Private Property snippetData As CodeSnippet
 
     Private Sub ResetPkg()
         Me.vsixData = New VSIXPackage
@@ -36,6 +37,7 @@ Class MainWindow
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Code")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Error")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("HasErrors")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("IsDirty")
         SnippetPropertyGrid.RefreshPropertygrid()
 
         ResetPkg()
@@ -335,7 +337,7 @@ Class MainWindow
                 Exit Sub
             End If
 
-            CodeSnippet.SaveSnippet(.FileName, snippetData, IDEType.VisualStudio)
+            snippetData.SaveSnippet(.FileName, IDEType.VisualStudio)
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub
@@ -493,6 +495,13 @@ Class MainWindow
     End Sub
 
     Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
+        If snippetData.IsDirty Then
+            Dim result = MessageBox.Show("The current snippet has unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            If result = MessageBoxResult.No Then
+                Exit Sub
+            End If
+        End If
+
         Dim dlg As New OpenFileDialog
 
         With dlg
@@ -501,7 +510,22 @@ Class MainWindow
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
-            Me.EditorRoot.DataContext = CodeSnippet.LoadSnippet(.FileName)
+
+            Try
+                Dim tempData = CodeSnippet.LoadSnippet(.FileName)
+                If tempData IsNot Nothing Then
+                    Me.snippetData = Nothing
+                    Me.snippetData = tempData
+                    Me.EditorRoot.DataContext = Me.snippetData
+                    Me.snippetData.IsDirty = False
+                End If
+            Catch ex As JsonReaderException
+                MessageBox.Show("The .json snippet file is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+                Exit Sub
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Exit Sub
+            End Try
         End With
     End Sub
 
@@ -537,7 +561,7 @@ Class MainWindow
                 Exit Sub
             End If
 
-            CodeSnippet.SaveSnippet(.FileName, snippetData, IDEType.Code)
+            snippetData.SaveSnippet(.FileName, IDEType.Code)
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub
@@ -686,7 +710,7 @@ Class MainWindow
     End Sub
 
     Private Sub NewSnippetButton_Click(sender As Object, e As RoutedEventArgs)
-        If Me.snippetData.Code <> "" Or String.IsNullOrEmpty(snippetData.Code) = False Then
+        If Me.snippetData.IsDirty Then
             Dim result = MessageBox.Show("You have written some code. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
             If result = MessageBoxResult.No Then Exit Sub
         End If
