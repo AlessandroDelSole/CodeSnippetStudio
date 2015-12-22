@@ -324,6 +324,7 @@
                                 <TextBlock Text="Visual Studio Code's .vsix" Foreground="#007ACC" FontWeight="Bold"/>
                             </TabItem.Header>
                             <StackPanel Margin="5">
+                                <TextBlock Text="Disclaimer: generating the .vsix package is demanded to the vsce.cmd command line tool. So, if it fails, please see the VS Code documentation." Foreground="Red" FontWeight="Bold"/>
                                 <TextBlock TextWrapping="Wrap"
                                     Text="In order to correctly package your snippets into a proper .vsix file, Code Snippet Studio requires you to follow the guidelines described in the Visual Studio Code's documentation at:"/>
                                 <Label>
@@ -529,6 +530,10 @@
                                     <ComboBoxItem>Office2013LightGray</ComboBoxItem>
                                     <ComboBoxItem>Office2013White</ComboBoxItem>
                                 </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Editor Font Size: "/>
+                                <TextBox Text="14" Width="105" TextAlignment="Right" Name="FontSizeTextBox" TextChanged="FontSizeTextBox_TextChanged"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>

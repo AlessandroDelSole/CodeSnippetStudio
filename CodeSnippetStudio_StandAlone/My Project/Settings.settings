@@ -8,5 +8,11 @@
     <Setting Name="PreferredTheme" Type="Syncfusion.SfSkinManager.VisualStyles" Scope="User">
       <Value Profile="(Default)">Metro</Value>
     </Setting>
+    <Setting Name="EditorFont" Type="System.Windows.Media.FontFamily" Scope="User">
+      <Value Profile="(Default)">Courier New</Value>
+    </Setting>
+    <Setting Name="EditorFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">14</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -8,5 +8,14 @@
     <Setting Name="PreferredLanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)">Text</Value>
     </Setting>
+    <Setting Name="EditorFont" Type="System.Windows.Media.FontFamily" Scope="User">
+      <Value Profile="(Default)">Courier New</Value>
+    </Setting>
+    <Setting Name="EditorFontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">14</Value>
+    </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

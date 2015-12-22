@@ -497,7 +497,7 @@ Class MainWindow
 
         With dlg
             .Title = "Select code snippet file"
-            .Filter = "Snippet files (*.snippet)|*.snippet|All files|*.*"
+            .Filter = "Snippet files (*.snippet)|*.snippet;*.vbsnippet;*.vssnippet|Json snippets for VS Code|*.json|All files|*.*"
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
@@ -694,6 +694,18 @@ Class MainWindow
         Me.snippetData = Nothing
         Me.snippetData = New CodeSnippet
         Me.EditorRoot.DataContext = snippetData
+    End Sub
+
+    Private Sub FontSizeTextBox_TextChanged(sender As Object, e As TextChangedEventArgs)
+        Dim result As Double
+        If Double.TryParse(Me.FontSizeTextBox.Text, result) = True Then
+            My.Settings.EditorFontSize = result
+            My.Settings.Save()
+            Me.editControl1.FontSize = result
+        Else
+            MessageBox.Show("Invalid value", "", MessageBoxButton.OK, MessageBoxImage.Error)
+            Exit Sub
+        End If
     End Sub
 End Class
 

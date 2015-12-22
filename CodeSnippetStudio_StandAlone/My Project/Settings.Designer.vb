@@ -76,6 +76,30 @@ Partial Friend NotInheritable Class MySettings
             Me("PreferredTheme") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Courier New")>  _
+    Public Property EditorFont() As Global.System.Windows.Media.FontFamily
+        Get
+            Return CType(Me("EditorFont"),Global.System.Windows.Media.FontFamily)
+        End Get
+        Set
+            Me("EditorFont") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("14")>  _
+    Public Property EditorFontSize() As Double
+        Get
+            Return CType(Me("EditorFontSize"),Double)
+        End Get
+        Set
+            Me("EditorFontSize") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
