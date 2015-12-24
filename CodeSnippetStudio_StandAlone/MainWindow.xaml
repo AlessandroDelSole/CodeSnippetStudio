@@ -137,11 +137,11 @@
                             <RowDefinition/>
                             <RowDefinition Height="20"/>
                             <RowDefinition/>
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="25"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <syncfusion:PropertyGrid x:Name="SnippetPropertyGrid" SelectedObject="{Binding}"/>
-                        <TextBlock Text="Add required namespaces (VB only):" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
+                        <TextBlock Text="Add required namespaces:" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
                         <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" x:Name="ImportsDataGrid"
 							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
 							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
@@ -149,10 +149,18 @@
                                 <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
                             </syncfusion:SfDataGrid.Columns>
                         </syncfusion:SfDataGrid>
-                        <TextBlock Text="Add assembly references (VB only):" TextWrapping="Wrap" Grid.Row="3" FontWeight="Bold"/>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,2,0,0">
+                            <TextBlock Text="Add assembly references:" TextWrapping="Wrap" FontWeight="Bold"/>
+                            <Button Margin="5,0,0,0" Width="24" x:Name="AddRefButton" Click="AddRefButton_Click" ToolTip="Add assembly reference">
+                                <Image Source="Images/AddMark_10580.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" x:Name="DeleteRefButton" Click="DeleteRefButton_Click" ToolTip="Delete selected reference">
+                                <Image Source="Images/Remove_16xLG.png" />
+                            </Button>
+                        </StackPanel>
                         <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" x:Name="RefDataGrid"
-							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
+							AllowEditing="True" EditTrigger="OnTap" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />

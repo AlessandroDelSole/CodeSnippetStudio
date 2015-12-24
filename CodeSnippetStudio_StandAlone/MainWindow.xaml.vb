@@ -7,11 +7,15 @@ Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 Imports System.Reflection
 Imports Syncfusion.UI.Xaml.Grid.Helpers
 Imports Syncfusion.SfSkinManager
-Imports Newtonsoft.Json
+Imports Newtonsoft.Json, System.Linq
+Imports System.Collections.ObjectModel
+Imports System.ComponentModel
 
 Class MainWindow
     Private vsixData As VSIXPackage
     Private Property snippetData As CodeSnippet
+
+    Private Property IntelliSenseReferences As ObservableCollection(Of Uri)
 
     Private Sub ResetPkg()
         Me.vsixData = New VSIXPackage
@@ -45,9 +49,13 @@ Class MainWindow
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
 
+        Me.IntelliSenseReferences = New ObservableCollection(Of Uri)
+
         Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
         Me.RefDataGrid.ItemsSource = snippetData.References
         Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
+
+        Me.editControl1.AssemblyReferences = IntelliSenseReferences
 
         SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
     End Sub
@@ -562,7 +570,8 @@ Class MainWindow
             End If
 
             snippetData.SaveSnippet(.FileName, IDEType.Code)
-            MessageBox.Show($"{ .FileName} saved correctly.")
+            MessageBox.Show($"{ .FileName} saved correctly. Please visit: " & Environment.NewLine & "https://code.visualstudio.com/docs/customization/userdefinedsnippets" & Environment.NewLine &
+                            "to learn how to consume custom snippets in Visual Studio Code", "Save info", MessageBoxButton.OK, MessageBoxImage.Information)
         End With
     End Sub
 
@@ -711,7 +720,7 @@ Class MainWindow
 
     Private Sub NewSnippetButton_Click(sender As Object, e As RoutedEventArgs)
         If Me.snippetData.IsDirty Then
-            Dim result = MessageBox.Show("You have written some code. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            Dim result = MessageBox.Show("There are unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
             If result = MessageBoxResult.No Then Exit Sub
         End If
 
@@ -729,6 +738,37 @@ Class MainWindow
         Else
             MessageBox.Show("Invalid value", "", MessageBoxButton.OK, MessageBoxImage.Error)
             Exit Sub
+        End If
+    End Sub
+
+    Private Sub AddRefButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New OpenFileDialog
+        With dlg
+            .Title = "Select .NET assembly"
+            .Filter = ".dll files (*.dll)|*.dll|All files|*.*"
+            If .ShowDialog = True Then
+                Me.IntelliSenseReferences.Add(New Uri(.FileName))
+                Dim ref As New Reference
+                ref.Assembly = IO.Path.GetFileName(.FileName)
+                snippetData.References.Add(ref)
+            End If
+        End With
+    End Sub
+
+    Private Sub DeleteRefButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim ref = TryCast(RefDataGrid.SelectedItem, Reference)
+        If ref IsNot Nothing Then
+            snippetData.References.Remove(ref)
+        End If
+    End Sub
+
+    Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If Me.snippetData.IsDirty Then
+            Dim result = MessageBox.Show("There are unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            If result = MessageBoxResult.No Then
+                e.Cancel = True
+                Exit Sub
+            End If
         End If
     End Sub
 End Class
