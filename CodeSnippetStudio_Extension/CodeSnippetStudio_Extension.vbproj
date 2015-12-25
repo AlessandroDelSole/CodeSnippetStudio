@@ -120,6 +120,10 @@
     <Resource Include="Images\Save_For_VS.png" />
     <Resource Include="Images\CSS_AppIcon.png" />
     <Resource Include="Images\document_16xLG.png" />
+    <Resource Include="Images\reference_16xLG.png" />
+    <Resource Include="Images\properties_16xLG.png" />
+    <Resource Include="Images\Namespace.png" />
+    <Resource Include="Images\EditRelation_310.png" />
     <Content Include="index.html" />
     <Resource Include="Images\Open_6529.png" />
     <Content Include="PreviewImage.jpg">

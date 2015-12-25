@@ -42,8 +42,7 @@
     <Grid x:Name="LayoutRoot" DataContext="{Binding}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="235*"/>
-            <RowDefinition Height="462*"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Image Source="Images/CSS_AppIcon_SM.png" Margin="2"/>
@@ -59,18 +58,12 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid x:Name="EditorRoot" DataContext="{Binding}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="250"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition />
-                            <RowDefinition Height="150"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Button Margin="5,0,0,0" Width="24" x:Name="NewSnippetButton" Click="NewSnippetButton_Click" ToolTip="New code snippet">
                                 <Image Source="Images/document_16xLG.png" />
                             </Button>
@@ -111,14 +104,30 @@
                                 <Image Source="Images/Remove_16xLG.png" />
                             </Button>
                         </StackPanel>
-                        <syncfusion:EditControl x:Name="editControl1" Grid.Row="2" Text="{Binding Code, Mode=TwoWay}"
-							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New" />
+                    <syncfusion:DockingManager Grid.Row="2" x:Name="DockingManager" UseDocumentContainer="True">
+                        <syncfusion:PropertyGrid x:Name="SnippetPropertyGrid" SelectedObject="{Binding}" syncfusion:DockingManager.Header="Properties" 
+                                    syncfusion:DockingManager.SideInDockedMode="Right" syncfusion:DockingManager.CanClose="False"
+                                     syncfusion:DockingManager.CanDocument="False" syncfusion:DockingManager.DesiredMinWidthInDockedMode="200"
+                                                 syncfusion:DockingManager.DesiredMinWidthInFloatingMode="200">
+                            <syncfusion:DockingManager.Icon>
+                                <ImageBrush ImageSource="Images/properties_16xLG.png"  />
+                            </syncfusion:DockingManager.Icon>
+                        </syncfusion:PropertyGrid>
+                        <syncfusion:EditControl x:Name="editControl1" Text="{Binding Code, Mode=TwoWay}" syncfusion:DockingManager.CanDock="False" 
+							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New"
+                            syncfusion:DockingManager.CanFloat="False" syncfusion:DockingManager.CanMinimize="False"
+                            syncfusion:DockingManager.State="Document" syncfusion:DockingManager.Header="Untitled" 
+                            syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanAutoHide="False"/>
 
-                        <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
-							Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="3" ItemsSource="{Binding Declarations, Mode=TwoWay}" x:Name="DeclarationsDataGrid" 
-							AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
-							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <syncfusion:SfDataGrid ItemsSource="{Binding Declarations, Mode=TwoWay}" x:Name="DeclarationsDataGrid" 
+                                               syncfusion:DockingManager.DesiredMinHeightInDockedMode="150"
+                                               syncfusion:DockingManager.SideInDockedMode="Bottom" 
+                                               syncfusion:DockingManager.Header="Replacements" 
+                                               syncfusion:DockingManager.CanClose="False"
+                                               syncfusion:DockingManager.CanDocument="False" 
+							                   AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
+							                   AllowDeleting="True" ScrollViewer.CanContentScroll="True" 
+                                               ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Type" MappingName="Type" TextAlignment="Left" />
@@ -130,44 +139,60 @@
                                 <syncfusion:GridTextColumn HeaderText="Replacement mode" IsHidden="True"
 									MappingName="ReplacementType"/>
                             </syncfusion:SfDataGrid.Columns>
+                            <syncfusion:DockingManager.Icon>
+                                <ImageBrush ImageSource="Images/EditRelation_310.png"  />
+                            </syncfusion:DockingManager.Icon>
                         </syncfusion:SfDataGrid>
-                    </Grid>
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <syncfusion:PropertyGrid x:Name="SnippetPropertyGrid" SelectedObject="{Binding}"/>
-                        <TextBlock Text="Add required namespaces:" TextWrapping="Wrap" Grid.Row="1" FontWeight="Bold"/>
-                        <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" x:Name="ImportsDataGrid"
-							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
-							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
-                            <syncfusion:SfDataGrid.Columns>
-                                <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
-                            </syncfusion:SfDataGrid.Columns>
-                        </syncfusion:SfDataGrid>
-                        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,2,0,0">
-                            <TextBlock Text="Add assembly references:" TextWrapping="Wrap" FontWeight="Bold"/>
-                            <Button Margin="5,0,0,0" Width="24" x:Name="AddRefButton" Click="AddRefButton_Click" ToolTip="Add assembly reference">
-                                <Image Source="Images/AddMark_10580.png" />
-                            </Button>
 
-                            <Button Margin="5,0,0,0" Width="24" x:Name="DeleteRefButton" Click="DeleteRefButton_Click" ToolTip="Delete selected reference">
-                                <Image Source="Images/Remove_16xLG.png" />
-                            </Button>
+
+                        <StackPanel Name="ImportsPanel" syncfusion:DockingManager.Header="Namespaces" syncfusion:DockingManager.SideInDockedMode="Bottom" 
+                                   syncfusion:DockingManager.TargetNameInDockedMode="SnippetPropertyGrid" syncfusion:DockingManager.CanClose="False"
+                                     syncfusion:DockingManager.CanDocument="False">
+                            <TextBlock Text="Add required namespaces:" TextWrapping="Wrap" FontWeight="Bold"/>
+                            <syncfusion:SfDataGrid Grid.Row="2" ItemsSource="{Binding Namespaces, Mode=TwoWay}" x:Name="ImportsDataGrid"
+							AllowEditing="True" EditTrigger="OnTap" AddNewRowPosition="Bottom" 
+							AllowDeleting="True" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only"
+                                                   >
+                                <syncfusion:SfDataGrid.Columns>
+                                    <syncfusion:GridTextColumn HeaderText="Namespaces" MappingName="ImportDirective" TextAlignment="Left" />
+                                </syncfusion:SfDataGrid.Columns>
+                            </syncfusion:SfDataGrid>
+                            <syncfusion:DockingManager.Icon>
+                                <ImageBrush ImageSource="Images/Namespace.png"  />
+                            </syncfusion:DockingManager.Icon>
                         </StackPanel>
-                        <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" x:Name="RefDataGrid"
+
+                        <StackPanel Orientation="Vertical" syncfusion:DockingManager.Header="References" syncfusion:DockingManager.SideInDockedMode="Tabbed" 
+                                   syncfusion:DockingManager.TargetNameInDockedMode="ImportsPanel" 
+                                   syncfusion:DockingManager.CanClose="False"
+                                     syncfusion:DockingManager.CanDocument="False">
+                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock Text="Add assembly references:" TextWrapping="Wrap" FontWeight="Bold"/>
+                                <Button Margin="5,0,0,0" Width="24" x:Name="AddRefButton" Click="AddRefButton_Click" ToolTip="Add assembly reference">
+                                    <Image Source="Images/AddMark_10580.png" />
+                                </Button>
+
+                                <Button Margin="5,0,0,0" Width="24" x:Name="DeleteRefButton" Click="DeleteRefButton_Click" ToolTip="Delete selected reference">
+                                    <Image Source="Images/Remove_16xLG.png" />
+                                </Button>
+                            </StackPanel>
+                            <syncfusion:SfDataGrid Grid.Row="4" ItemsSource="{Binding References, Mode=TwoWay}" x:Name="RefDataGrid"
 							AllowEditing="True" EditTrigger="OnTap" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ToolTip="For Visual Basic only">
-                            <syncfusion:SfDataGrid.Columns>
-                                <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
-                                <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />
-                            </syncfusion:SfDataGrid.Columns>
-                        </syncfusion:SfDataGrid>
+                                <syncfusion:SfDataGrid.Columns>
+                                    <syncfusion:GridTextColumn HeaderText="Assembly" MappingName="Assembly" TextAlignment="Left" />
+                                    <syncfusion:GridTextColumn HeaderText="Url" MappingName="Url" TextAlignment="Left" />
+                                </syncfusion:SfDataGrid.Columns>
+                            </syncfusion:SfDataGrid>
+                            <syncfusion:DockingManager.Icon>
+                                <ImageBrush ImageSource="Images/reference_16xLG.png"  />
+                            </syncfusion:DockingManager.Icon>
+                        </StackPanel>
+                    </syncfusion:DockingManager>
+
+                    <TextBlock Text="To add IntelliSense replacements, highlight the text then click the + button above." 
+							Grid.Row="1" FontWeight="Bold"/>
+
                     </Grid>
-                </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>

@@ -355,6 +355,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             End If
 
             snippetData.SaveSnippet(.FileName, IDEType.VisualStudio)
+            editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
             MessageBox.Show($"{ .FileName} saved correctly.")
         End With
     End Sub
@@ -534,6 +535,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                     Me.snippetData = tempData
                     Me.EditorRoot.DataContext = Me.snippetData
                     Me.snippetData.IsDirty = False
+                    editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
                 End If
             Catch ex As JsonReaderException
                 MessageBox.Show("The .json snippet file is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -578,6 +580,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             End If
 
             snippetData.SaveSnippet(.FileName, IDEType.Code)
+            editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
             MessageBox.Show($"{ .FileName} saved correctly. Please visit: " & Environment.NewLine & "https://code.visualstudio.com/docs/customization/userdefinedsnippets" & Environment.NewLine &
                             "to learn how to consume custom snippets in Visual Studio Code", "Save info", MessageBoxButton.OK, MessageBoxImage.Information)
         End With
@@ -754,11 +757,14 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         With dlg
             .Title = "Select .NET assembly"
             .Filter = ".dll files (*.dll)|*.dll|All files|*.*"
+            .Multiselect = True
             If .ShowDialog = True Then
-                Me.IntelliSenseReferences.Add(New Uri(.FileName))
-                Dim ref As New Reference
-                ref.Assembly = IO.Path.GetFileName(.FileName)
-                snippetData.References.Add(ref)
+                For Each fname In .FileNames
+                    Me.IntelliSenseReferences.Add(New Uri(fname))
+                    Dim ref As New Reference
+                    ref.Assembly = IO.Path.GetFileName(fname)
+                    snippetData.References.Add(ref)
+                Next
             End If
         End With
     End Sub
