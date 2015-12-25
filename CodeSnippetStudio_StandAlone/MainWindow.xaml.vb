@@ -528,6 +528,7 @@ Class MainWindow
                     Me.EditorRoot.DataContext = Me.snippetData
                     Me.snippetData.IsDirty = False
                     editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
+                    SetCurrentLanguage(snippetData.Language)
                 End If
             Catch ex As JsonReaderException
                 MessageBox.Show("The .json snippet file is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -643,6 +644,29 @@ Class MainWindow
                 SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013White)
                 My.Settings.PreferredTheme = VisualStyles.Office2013White
                 My.Settings.Save()
+        End Select
+    End Sub
+
+    Private Sub SetCurrentLanguage(snippetLanguage As String)
+        Select Case snippetLanguage.ToUpper
+            Case = "VB"
+                Me.LanguageCombo.SelectedIndex = 0
+            Case = "CSHARP"
+                Me.LanguageCombo.SelectedIndex = 1
+            Case = "SQL"
+                Me.LanguageCombo.SelectedIndex = 2
+            Case = "XML"
+                Me.LanguageCombo.SelectedIndex = 3
+            Case = "XAML"
+                Me.LanguageCombo.SelectedIndex = 4
+            Case = "CPP"
+                Me.LanguageCombo.SelectedIndex = 5
+            Case = "HTML"
+                Me.LanguageCombo.SelectedIndex = 6
+            Case = "JAVASCRIPT"
+                Me.LanguageCombo.SelectedIndex = 7
+            Case Else
+                Me.LanguageCombo.SelectedIndex = 7
         End Select
     End Sub
 
