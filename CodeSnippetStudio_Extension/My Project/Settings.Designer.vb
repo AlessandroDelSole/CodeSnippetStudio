@@ -105,12 +105,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property Setting() As String
+        Public Property LibraryName() As String
             Get
-                Return CType(Me("Setting"),String)
+                Return CType(Me("LibraryName"),String)
             End Get
             Set
-                Me("Setting") = value
+                Me("LibraryName") = value
             End Set
         End Property
     End Class

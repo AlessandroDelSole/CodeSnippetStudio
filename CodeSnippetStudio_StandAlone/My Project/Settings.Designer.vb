@@ -100,6 +100,18 @@ Partial Friend NotInheritable Class MySettings
             Me("EditorFontSize") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("C:\temp\testlib.xml")>  _
+    Public Property LibraryName() As String
+        Get
+            Return CType(Me("LibraryName"),String)
+        End Get
+        Set
+            Me("LibraryName") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

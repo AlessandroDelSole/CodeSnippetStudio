@@ -2,7 +2,6 @@
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
 Imports <xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
-Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
 Imports System.ComponentModel
 Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
@@ -16,6 +15,7 @@ Imports System.Xml.Linq
 Imports System.Collections.Generic
 Imports Newtonsoft.Json
 Imports System.Collections.ObjectModel
+Imports System.Windows.Input
 
 '''<summary>
 ''' Interaction logic for CodeSnippetStudioToolWindowControl.xaml
@@ -26,6 +26,9 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     Private vsixData As VSIXPackage
     Private Property snippetData As CodeSnippet
     Private Property IntelliSenseReferences As ObservableCollection(Of Uri)
+    Private Property snippetLib As SnippetLibrary
+
+    Private LibraryName As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CodeSnippetStudioLibrary.xml")
 
     Private Sub ResetPkg()
         Me.vsixData = New VSIXPackage
@@ -39,10 +42,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         e.Handled = True
     End Sub
 
-    Private Sub MyControl_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.snippetData = New CodeSnippet
-        Me.EditorRoot.DataContext = Me.snippetData
-
+    Private Sub HidePropertiesFromPropertyGrid()
         'Properties that must be hidden from the PropertyGrid
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Namespaces")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Declarations")
@@ -52,15 +52,41 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Error")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("HasErrors")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("IsDirty")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("FileName")
         SnippetPropertyGrid.RefreshPropertygrid()
+    End Sub
 
-        ResetPkg()
+    Private Sub LoadSnippetLibrary()
+        Me.snippetLib = New SnippetLibrary
+        Me.LibraryTreeview.ItemsSource = snippetLib.Folders
 
+        My.Settings.LibraryName = LibraryName
+
+        Me.EditorRoot.DataContext = Me.snippetData
+        Try
+            snippetLib.LoadLibrary(My.Settings.LibraryName)
+        Catch ex As Exception
+            'error loading library, ignore
+        End Try
+    End Sub
+
+    Private Sub EditorSetup()
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
 
         Me.IntelliSenseReferences = New ObservableCollection(Of Uri)
         Me.editControl1.AssemblyReferences = IntelliSenseReferences
+    End Sub
+
+    Private Sub MyControl_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        Me.snippetData = New CodeSnippet
+
+        LoadSnippetLibrary()
+        HidePropertiesFromPropertyGrid()
+
+        ResetPkg()
+
+        EditorSetup()
 
         Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
         Me.RefDataGrid.ItemsSource = snippetData.References
@@ -71,7 +97,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
 
     Private Sub AddSnippetsButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
-        Dim dlg As New OpenFileDialog
+        Dim dlg As New Microsoft.Win32.OpenFileDialog
         With dlg
             .Multiselect = True
             .Filter = "Snippet files (*.snippet)|*.snippet|All files|*.*"
@@ -373,22 +399,15 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             inputFile = .FileName
         End With
 
-        Dim dlg2 As New CommonOpenFileDialog()
-        dlg2.Title = "Destination folder"
-        dlg2.IsFolderPicker = True
-        dlg2.InitialDirectory = Environment.SpecialFolder.MyDocuments
-        dlg2.DefaultDirectory = Environment.SpecialFolder.MyDocuments
-        dlg2.EnsureFileExists = True
-        dlg2.EnsurePathExists = True
-        dlg2.EnsureValidNames = True
-        dlg2.Multiselect = False
-        dlg2.ShowPlacesList = True
+        Dim dlg2 As New System.Windows.Forms.FolderBrowserDialog
+        dlg2.Description = "Select destination folder"
+        dlg2.ShowNewFolderButton = True
 
-        If Not dlg2.ShowDialog = CommonFileDialogResult.Ok Then
+        If Not dlg2.ShowDialog = Forms.DialogResult.OK Then
             Exit Sub
         End If
 
-        outputFolder = dlg2.FileName
+        outputFolder = dlg2.SelectedPath
 
         VSIXPackage.ExtractVsix(inputFile, outputFolder, OnlySnippetsCheckBox.IsChecked)
         MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
@@ -536,7 +555,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                     Me.EditorRoot.DataContext = Me.snippetData
                     Me.snippetData.IsDirty = False
                     editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
-                    SetCurrentLanguage(snippetData.Language)
+                    If Not IO.Path.GetExtension(.FileName).ToLower = "json" Then SetCurrentLanguage(snippetData.Language)
                 End If
             Catch ex As JsonReaderException
                 MessageBox.Show("The .json snippet file is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -797,6 +816,49 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Dim ref = TryCast(RefDataGrid.SelectedItem, Reference)
         If ref IsNot Nothing Then
             snippetData.References.Remove(ref)
+        End If
+    End Sub
+
+    Private Sub LibraryTreeview_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
+        Dim item = TryCast(LibraryTreeview.SelectedItem, CodeSnippet)
+        If item IsNot Nothing Then
+            Me.snippetData = Nothing
+            Me.snippetData = item
+            Me.EditorRoot.DataContext = snippetData
+            editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, snippetData.FileName)
+            If Not IO.Path.GetExtension(snippetData.FileName).ToLower = "json" Then SetCurrentLanguage(snippetData.Language)
+        End If
+    End Sub
+
+    Private Sub AddLibFolderButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim dlg As New System.Windows.Forms.FolderBrowserDialog
+        dlg.Description = "New library folder"
+        dlg.ShowNewFolderButton = True
+
+        If Not dlg.ShowDialog = Forms.DialogResult.OK Then
+            Exit Sub
+        End If
+
+        Dim query = From fold In snippetLib.Folders
+                    Where fold.FolderName.ToLower = dlg.SelectedPath.ToLower
+                    Select fold
+
+        If query.Any Then
+            'already exist
+            MessageBox.Show("Folder already exist in the library", "Not allowed", MessageBoxButton.OK, MessageBoxImage.Warning)
+            Exit Sub
+        End If
+
+        Dim newFolder As New SnippetFolder With {.FolderName = dlg.SelectedPath}
+        snippetLib.Folders.Add(newFolder)
+        snippetLib.SaveLibrary(My.Settings.LibraryName)
+    End Sub
+
+    Private Sub DeleteLibFolderButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim item = TryCast(LibraryTreeview.SelectedItem, SnippetFolder)
+        If item IsNot Nothing Then
+            snippetLib.Folders.Remove(item)
+            snippetLib.SaveLibrary(My.Settings.LibraryName)
         End If
     End Sub
 End Class

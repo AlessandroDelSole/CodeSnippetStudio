@@ -14,7 +14,7 @@
     <Setting Name="EditorFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">14</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.String" Scope="User">
+    <Setting Name="LibraryName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

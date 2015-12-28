@@ -114,6 +114,45 @@
                                 <ImageBrush ImageSource="/CodeSnippetStudio;component/Images/properties_16xLG.png"  />
                             </syncfusion:DockingManager.Icon>
                         </syncfusion:PropertyGrid>
+                        <Grid syncfusion:DockingManager.SideInDockedMode="Left" syncfusion:DockingManager.Header="Library"
+                                  syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanDocument="False"
+                                  syncfusion:DockingManager.DesiredMinWidthInDockedMode="200" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock Text="Manage library:" TextWrapping="Wrap" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Button Margin="5,0,0,0" Width="24" x:Name="AddLibFolderButton" Click="AddLibFolderButton_Click" >
+                                    <Image Source="/CodeSnippetStudio;component/Images/AddMark_10580.png" />
+                                </Button>
+
+                                <Button Margin="5,0,0,0" Width="24" x:Name="DeleteLibFolderButton" Click="DeleteLibFolderButton_Click">
+                                    <Image Source="/CodeSnippetStudio;component/Images/Remove_16xLG.png" />
+                                </Button>
+                            </StackPanel>
+                            <TreeView Name="LibraryTreeview" MouseDoubleClick="LibraryTreeview_MouseDoubleClick" Grid.Row="1">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SnippetFiles}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/CodeSnippetStudio;component/Images/folder_open_16xLG.png" />
+                                            <TextBlock Text="{Binding FolderName}" Margin="2,0,0,0"/>
+                                        </StackPanel>
+                                        <HierarchicalDataTemplate.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
+                                                    <TextBlock Text="{Binding FileName}" ToolTip="{Binding Title}" Margin="2,0,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </HierarchicalDataTemplate.ItemTemplate>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                                <syncfusion:DockingManager.Icon>
+                                    <ImageBrush ImageSource="/CodeSnippetStudio;component/Images/FolderBrowserDialogControl_678.png"  />
+                                </syncfusion:DockingManager.Icon>
+                            </TreeView>
+                        </Grid>
                         <syncfusion:EditControl x:Name="editControl1" Text="{Binding Code, Mode=TwoWay}" syncfusion:DockingManager.CanDock="False" 
 							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New"
                             syncfusion:DockingManager.CanFloat="False" syncfusion:DockingManager.CanMinimize="False"
