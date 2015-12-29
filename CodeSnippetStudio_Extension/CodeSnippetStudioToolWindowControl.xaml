@@ -119,6 +119,7 @@
                                   syncfusion:DockingManager.DesiredMinWidthInDockedMode="200" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/>
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -131,7 +132,14 @@
                                     <Image Source="/CodeSnippetStudio;component/Images/Remove_16xLG.png" />
                                 </Button>
                             </StackPanel>
-                            <TreeView Name="LibraryTreeview" MouseDoubleClick="LibraryTreeview_MouseDoubleClick" Grid.Row="1">
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock Text="Filter: " />
+                                <TextBox Name="FilterLibraryTextBox" Width="150"/>
+                                <Button Name="FilterButton" Width="16" Click="FilterButton_Click">
+                                    <Image Source="/CodeSnippetStudio;component/Images/Find_5650.png"/>
+                                </Button>
+                            </StackPanel>
+                            <TreeView Name="LibraryTreeview" MouseDoubleClick="LibraryTreeview_MouseDoubleClick" Grid.Row="2">
                                 <TreeView.ItemTemplate>
                                     <HierarchicalDataTemplate ItemsSource="{Binding SnippetFiles}">
                                         <StackPanel Orientation="Horizontal">
@@ -153,7 +161,7 @@
                                 </syncfusion:DockingManager.Icon>
                             </TreeView>
                         </Grid>
-                        <syncfusion:EditControl x:Name="editControl1" Text="{Binding Code, Mode=TwoWay}" syncfusion:DockingManager.CanDock="False" 
+                        <syncfusion:EditControl x:Name="editControl1" Text="{Binding Code, Mode=TwoWay}"  
 							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New"
                             syncfusion:DockingManager.CanFloat="False" syncfusion:DockingManager.CanMinimize="False"
                             syncfusion:DockingManager.State="Document" syncfusion:DockingManager.Header="Untitled" 

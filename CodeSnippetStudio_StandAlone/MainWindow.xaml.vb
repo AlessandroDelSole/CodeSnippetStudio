@@ -367,6 +367,11 @@ Class MainWindow
             .OverwritePrompt = True
             .Title = "Output .snippet file"
             .Filter = ".snippet files (*.snippet)|*.snippet|All files|*.*"
+            Dim item = TryCast(LibraryTreeview.SelectedItem, SnippetFolder)
+            If item IsNot Nothing Then
+                .InitialDirectory = item.FolderName
+            End If
+
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
@@ -390,22 +395,15 @@ Class MainWindow
             inputFile = .FileName
         End With
 
-        Dim dlg2 As New CommonOpenFileDialog()
-        dlg2.Title = "Destination folder"
-        dlg2.IsFolderPicker = True
-        dlg2.InitialDirectory = Environment.SpecialFolder.MyDocuments
-        dlg2.DefaultDirectory = Environment.SpecialFolder.MyDocuments
-        dlg2.EnsureFileExists = True
-        dlg2.EnsurePathExists = True
-        dlg2.EnsureValidNames = True
-        dlg2.Multiselect = False
-        dlg2.ShowPlacesList = True
+        Dim dlg2 As New System.Windows.Forms.FolderBrowserDialog
+        dlg2.Description = "Select destination folder"
+        dlg2.ShowNewFolderButton = True
 
-        If Not dlg2.ShowDialog = CommonFileDialogResult.Ok Then
+        If Not dlg2.ShowDialog = Forms.DialogResult.OK Then
             Exit Sub
         End If
 
-        outputFolder = dlg2.FileName
+        outputFolder = dlg2.SelectedPath
 
         VSIXPackage.ExtractVsix(inputFile, outputFolder, OnlySnippetsCheckBox.IsChecked)
         MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
@@ -595,6 +593,10 @@ Class MainWindow
             .OverwritePrompt = True
             .Title = "Output .json file"
             .Filter = ".json files (*.json)|*.json|All files|*.*"
+            Dim item = TryCast(LibraryTreeview.SelectedItem, SnippetFolder)
+            If item IsNot Nothing Then
+                .InitialDirectory = item.FolderName
+            End If
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
@@ -842,23 +844,16 @@ Class MainWindow
     End Sub
 
     Private Sub AddLibFolderButton_Click(sender As Object, e As RoutedEventArgs)
-        Dim dlg As New CommonOpenFileDialog()
-        dlg.Title = "New library folder"
-        dlg.IsFolderPicker = True
-        dlg.InitialDirectory = Environment.SpecialFolder.MyDocuments
-        dlg.DefaultDirectory = Environment.SpecialFolder.MyDocuments
-        dlg.EnsureFileExists = True
-        dlg.EnsurePathExists = True
-        dlg.EnsureValidNames = True
-        dlg.Multiselect = False
-        dlg.ShowPlacesList = True
+        Dim dlg As New System.Windows.Forms.FolderBrowserDialog
+        dlg.Description = "New library folder"
+        dlg.ShowNewFolderButton = True
 
-        If Not dlg.ShowDialog = CommonFileDialogResult.Ok Then
+        If Not dlg.ShowDialog = Forms.DialogResult.OK Then
             Exit Sub
         End If
 
         Dim query = From fold In snippetLib.Folders
-                    Where fold.FolderName.ToLower = dlg.FileName.ToLower
+                    Where fold.FolderName.ToLower = dlg.SelectedPath.ToLower
                     Select fold
 
         If query.Any Then
@@ -867,7 +862,7 @@ Class MainWindow
             Exit Sub
         End If
 
-        Dim newFolder As New SnippetFolder With {.FolderName = dlg.FileName}
+        Dim newFolder As New SnippetFolder With {.FolderName = dlg.SelectedPath}
         snippetLib.Folders.Add(newFolder)
         snippetLib.SaveLibrary(My.Settings.LibraryName)
     End Sub
@@ -878,6 +873,28 @@ Class MainWindow
             snippetLib.Folders.Remove(item)
             snippetLib.SaveLibrary(My.Settings.LibraryName)
         End If
+    End Sub
+
+    Private Sub FilterLibraryTextBox_KeyUp(sender As Object, e As KeyEventArgs) Handles FilterLibraryTextBox.KeyUp
+        If e.Key = Key.Enter Then
+            FilterSnippetList(Me.FilterLibraryTextBox.Text)
+        End If
+    End Sub
+
+    Private Sub FilterSnippetList(criteria As String)
+        If criteria = "" Then
+            Me.LibraryTreeview.ItemsSource = Nothing
+            Me.LibraryTreeview.ItemsSource = Me.snippetLib.Folders
+        End If
+
+        Dim query = Me.snippetLib.Folders.Where(Function(f) f?.SnippetFiles.Any(Function(s) s.FileName IsNot Nothing _
+                    AndAlso s.FileName.ToLowerInvariant.Contains(criteria.ToLowerInvariant)))
+
+        Me.LibraryTreeview.ItemsSource = New ObservableCollection(Of SnippetFolder)(query)
+    End Sub
+
+    Private Sub FilterButton_Click(sender As Object, e As RoutedEventArgs)
+        FilterSnippetList(Me.FilterLibraryTextBox.Text)
     End Sub
 End Class
 

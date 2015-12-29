@@ -126,6 +126,7 @@
     <Resource Include="Images\EditRelation_310.png" />
     <Resource Include="Images\FolderBrowserDialogControl_678.png" />
     <Resource Include="Images\folder_Open_16xLG.png" />
+    <Resource Include="Images\Find_5650.png" />
     <Content Include="index.html" />
     <Resource Include="Images\Open_6529.png" />
     <Content Include="PreviewImage.jpg">
@@ -144,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.5840.20108\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.5841.31612\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -285,7 +286,7 @@
     <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5840.20108\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
+    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5841.31612\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

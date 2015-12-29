@@ -861,4 +861,26 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             snippetLib.SaveLibrary(My.Settings.LibraryName)
         End If
     End Sub
+
+    Private Sub FilterLibraryTextBox_KeyUp(sender As Object, e As KeyEventArgs) Handles FilterLibraryTextBox.KeyUp
+        If e.Key = Key.Enter Then
+            FilterSnippetList(Me.FilterLibraryTextBox.Text)
+        End If
+    End Sub
+
+    Private Sub FilterSnippetList(criteria As String)
+        If criteria = "" Then
+            Me.LibraryTreeview.ItemsSource = Nothing
+            Me.LibraryTreeview.ItemsSource = Me.snippetLib.Folders
+        End If
+
+        Dim query = Me.snippetLib.Folders.Where(Function(f) f?.SnippetFiles.Any(Function(s) s.FileName IsNot Nothing _
+                    AndAlso s.FileName.ToLowerInvariant.Contains(criteria.ToLowerInvariant)))
+
+        Me.LibraryTreeview.ItemsSource = New ObservableCollection(Of SnippetFolder)(query)
+    End Sub
+
+    Private Sub FilterButton_Click(sender As Object, e As RoutedEventArgs)
+        FilterSnippetList(Me.FilterLibraryTextBox.Text)
+    End Sub
 End Class
