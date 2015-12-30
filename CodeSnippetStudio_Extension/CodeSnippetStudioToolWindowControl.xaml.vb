@@ -305,7 +305,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Dim dlg As New OpenFileDialog
         With dlg
             .Title = "Select the .vsix you want to sign"
-            .Filter = "VSIX packages (*.vsix)|*.pfx|All files|*.*"
+            .Filter = "VSIX packages (*.vsix)|*.vsix|All files|*.*"
             If .ShowDialog = True Then
                 VSIXPackage.SignVsix(.FileName, PfxTextBox.Text, PfxPassword.Password)
                 MessageBox.Show($"{ .FileName} signed successfully.")

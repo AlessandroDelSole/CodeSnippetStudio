@@ -1,7 +1,6 @@
 ﻿Imports DelSole.VSIX
 Imports Microsoft.Win32
 Imports Syncfusion.Windows.Edit
-Imports Microsoft.WindowsAPICodePack.Dialogs
 Imports Syncfusion.UI.Xaml.Grid
 Imports DelSole.VSIX.VsiTools, DelSole.VSIX.SnippetTools
 Imports System.Reflection
@@ -296,7 +295,7 @@ Class MainWindow
         Dim dlg As New OpenFileDialog
         With dlg
             .Title = "Select the .vsix you want to sign"
-            .Filter = "VSIX packages (*.vsix)|*.pfx|All files|*.*"
+            .Filter = "VSIX packages (*.vsix)|*.vsix|All files|*.*"
             If .ShowDialog = True Then
                 VSIXPackage.SignVsix(.FileName, PfxTextBox.Text, PfxPassword.Password)
                 MessageBox.Show($"{ .FileName} signed successfully.")
@@ -539,7 +538,7 @@ Class MainWindow
 
         With dlg
             .Title = "Select code snippet file"
-            .Filter = "Snippet files (*.snippet)|*.snippet;*.vbsnippet;*.vssnippet|Json snippets for VS Code|*.json|All files|*.*"
+            .Filter = "Visual Studio Snippet files (*.snippet)|*.snippet;*.vbsnippet;*.vssnippet|Json snippets for VS Code|*.json|All files|*.*"
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
