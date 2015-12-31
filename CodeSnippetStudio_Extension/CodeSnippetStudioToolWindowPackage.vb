@@ -31,6 +31,7 @@ Imports Microsoft.Win32
 <InstalledProductRegistration("#110", "#112", "1.0", IconResourceID:=400)>
 <ProvideMenuResource("Menus.ctmenu", 1)>
 <ProvideToolWindow(GetType(CodeSnippetStudioToolWindow))>
+<ProvideBindingPath>
 <Guid(CodeSnippetStudioToolWindowPackage.PackageGuidString)>
 Public NotInheritable Class CodeSnippetStudioToolWindowPackage
     Inherits Package
