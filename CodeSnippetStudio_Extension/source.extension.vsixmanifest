@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.2.4" Language="en-US" Publisher="Alessandro Del Sole" />
+    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.2.5" Language="en-US" Publisher="Alessandro Del Sole" />
     <DisplayName>Code Snippet Studio</DisplayName>
     <Description xml:space="preserve">Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015 and Visual Studio Code.</Description>
     <MoreInfo>https://github.com/AlessandroDelSole/CodeSnippetStudio</MoreInfo>

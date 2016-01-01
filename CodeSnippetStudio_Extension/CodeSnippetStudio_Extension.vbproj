@@ -145,7 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.5841.31612\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.5843.28159\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -160,8 +160,8 @@
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.9.6\lib\net20\Ionic.Zip.dll</HintPath>
+    <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
@@ -244,8 +244,8 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.14.0.50702\lib\net45\Microsoft.VisualStudio.Validation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -284,7 +284,7 @@
     <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5841.31612\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
+    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5843.28159\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
