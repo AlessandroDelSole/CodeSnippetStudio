@@ -241,7 +241,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub ResetPkgButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
-        ResetPkg()
+        Dim result = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+        If result = MessageBoxResult.Yes Then ResetPkg()
     End Sub
 
     Private Sub AboutButton_Click(sender As Object, e As System.Windows.RoutedEventArgs)
@@ -882,5 +883,28 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub FilterButton_Click(sender As Object, e As RoutedEventArgs)
         FilterSnippetList(Me.FilterLibraryTextBox.Text)
+    End Sub
+
+    Private Sub BackupLibButton_Click(sender As Object, e As RoutedEventArgs)
+        If snippetLib.Folders.Any Then
+            Dim dlg As New SaveFileDialog
+            dlg.Title = "Specify a zip archive name"
+            dlg.Filter = "Zip archives|*.zip|All files|*.*"
+            dlg.OverwritePrompt = True
+
+            If dlg.ShowDialog = True Then
+                Try
+                    snippetLib.BackupLibraryToZip(dlg.FileName)
+                    MessageBox.Show($"{dlg.FileName} created successfully.")
+                    Exit Sub
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                End Try
+            End If
+        End If
+    End Sub
+
+    Private Sub AddFromLibButton_Click(sender As Object, e As RoutedEventArgs)
+        vsixData?.PopulateFromSnippetLibrary(snippetLib)
     End Sub
 End Class

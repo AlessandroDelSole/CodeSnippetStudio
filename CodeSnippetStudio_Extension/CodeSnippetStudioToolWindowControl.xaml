@@ -1,5 +1,4 @@
-﻿<UserControl xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" 
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" syncfusion:SkinStorage.VisualStyle="Metro"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -131,6 +130,10 @@
                                 <Button Margin="5,0,0,0" Width="24" x:Name="DeleteLibFolderButton" Click="DeleteLibFolderButton_Click">
                                     <Image Source="/CodeSnippetStudio;component/Images/Remove_16xLG.png" />
                                 </Button>
+
+                                <Button Margin="5,0,0,0" Width="24" x:Name="BackupLibButton" Click="BackupLibButton_Click" ToolTip="Backup to zip archive">
+                                    <Image Source="/CodeSnippetStudio;component/Images/package_16xLG.png" />
+                                </Button>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,2,0,0">
                                 <TextBlock Text="Filter: " />
@@ -261,25 +264,13 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Width="130" x:Name="AddSnippetsButton" Margin="3" Click="AddSnippetsButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Width="16" Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
-                                            <TextBlock Text="Add Snippets" Margin="5,0,0,0"/>
-                                        </StackPanel>
-                                    </Button>
+
                                     <Button Width="130" x:Name="BuildVsixButton" Margin="3" Click="BuildVsixButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/CodeSnippetStudio;component/Images/ExtensionManager_vsix.png" Width="16" />
                                             <TextBlock Text="Build VSIX" Margin="5,0,0,0"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button Width="130" x:Name="RemoveSnippetButton" Margin="3" Click="RemoveSnippetButton_Click">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="/CodeSnippetStudio;component/Images/delete.png" Width="16" />
-                                            <TextBlock Text="Remove Snippet(s)" Margin="5,0,0,0"/>
-                                        </StackPanel>
-                                    </Button>
-
                                     <Button Width="130" x:Name="ResetPkgButton" Margin="3" Click="ResetPkgButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/CodeSnippetStudio;component/Images/RestoreDefaultView_9695.png" Width="16" />
@@ -287,20 +278,26 @@
                                         </StackPanel>
                                     </Button>
 
-                                    <Button Width="130" x:Name="OpenVsixButton" Margin="3,1,3,5" Click="OpenVsixButton_Click">
+                                    <Button Width="130" x:Name="OpenVsixButton" Margin="3" Click="OpenVsixButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/CodeSnippetStudio;component/Images/Open_6529.png" Width="16" />
                                             <TextBlock Text="Open VSIX" Margin="5,0,0,0"/>
                                         </StackPanel>
                                     </Button>
 
-                                    <Button Width="130" x:Name="ImportVsiButton" Margin="3,1,3,5" Click="ImportVsiButton_Click">
+                                    <Button Width="130" x:Name="ImportVsiButton" Margin="3" Click="ImportVsiButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Source="/CodeSnippetStudio;component/Images/VSContentInstaller_16.png" Width="16" />
                                             <TextBlock Text="Import .vsi" Margin="5,0,0,0"/>
                                         </StackPanel>
                                     </Button>
-
+                                    <Label Margin="5,0,0,0" >
+                                        <Hyperlink NavigateUri="https://visualstudiogallery.msdn.microsoft.com" RequestNavigate="Hyperlink_RequestNavigate" >
+                                            <InlineUIContainer>
+                                                <TextBlock Text="Visual Studio Gallery" />
+                                            </InlineUIContainer>
+                                        </Hyperlink>
+                                    </Label>
                                 </StackPanel>
                                 <TabControl Grid.Row="1" Name="VSVsixTabControl">
                                     <TabItem Header="Package Metadata" x:Name="PackageTab" Height="30">
@@ -381,11 +378,32 @@
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30"/>
+                                                <RowDefinition Height="40"/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="Column headers will be automatically resized when you add snippets. You can remove multiple snippets with multi-selection (e.g. Shift + Click, Ctrl + Click)" VerticalAlignment="Center"/>
 
-                                            <DataGrid x:Name="CodeSnippetsDataGrid" Grid.Row="1"
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                                <Button Width="130" x:Name="AddSnippetsButton" Margin="3" Click="AddSnippetsButton_Click">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Width="16" Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
+                                                        <TextBlock Text="Add Snippets" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button Width="130" x:Name="AddFromLibButton" Margin="3" Click="AddFromLibButton_Click">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Width="16" Source="/CodeSnippetStudio;component/Images/snippet_16xLG.png" />
+                                                        <TextBlock Text="Add from Library" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button Width="130" x:Name="RemoveSnippetButton" Margin="3" Click="RemoveSnippetButton_Click">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="/CodeSnippetStudio;component/Images/delete.png" Width="16" />
+                                                        <TextBlock Text="Remove Snippet(s)" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                            <DataGrid x:Name="CodeSnippetsDataGrid" Grid.Row="2"
 									AutoGenerateColumns="False" EnableRowVirtualization="True" 
 									ItemsSource="{Binding CodeSnippets}" RowDetailsVisibilityMode="VisibleWhenSelected">
                                                 <DataGrid.Columns>
