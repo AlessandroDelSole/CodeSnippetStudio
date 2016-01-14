@@ -107,7 +107,7 @@
                     <syncfusion:DockingManager Grid.Row="2" x:Name="DockingManager" UseDocumentContainer="True">
                         <syncfusion:PropertyGrid x:Name="SnippetPropertyGrid" SelectedObject="{Binding}" syncfusion:DockingManager.Header="Properties" 
                                     syncfusion:DockingManager.SideInDockedMode="Right" syncfusion:DockingManager.CanClose="False"
-                                     syncfusion:DockingManager.CanDocument="False" syncfusion:DockingManager.DesiredMinWidthInDockedMode="200"
+                                     syncfusion:DockingManager.CanDocument="False" 
                                                  syncfusion:DockingManager.DesiredMinWidthInFloatingMode="200">
                             <syncfusion:DockingManager.Icon>
                                 <ImageBrush ImageSource="/CodeSnippetStudio;component/Images/properties_16xLG.png"  />
@@ -115,7 +115,7 @@
                         </syncfusion:PropertyGrid>
                         <Grid syncfusion:DockingManager.SideInDockedMode="Left" syncfusion:DockingManager.Header="Library"
                                   syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanDocument="False"
-                                  syncfusion:DockingManager.DesiredMinWidthInDockedMode="200" >
+                                   >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25"/>
                                 <RowDefinition Height="25"/>
