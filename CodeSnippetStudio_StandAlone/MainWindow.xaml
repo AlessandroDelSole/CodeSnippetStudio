@@ -2,13 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="clr-namespace:CodeSnippetStudio_StandAlone"
         xmlns:local="clr-namespace:DelSole.VSIX.SnippetTools;assembly=DelSole.VSIX" xmlns:skinManager="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:PdfViewer="clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF" x:Class="MainWindow"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="MainWindow"
         mc:Ignorable="d" Background="#353535" syncfusion:SkinStorage.VisualStyle="Metro"
         Title="Code Snippet Studio" Height="768" Width="1024">
 
     <Window.Resources>
+        <converters:LocationConverter x:Key="LocationConverter"/>
         <Style TargetType="{x:Type Control}" x:Key="myErrorTemplate">
             <Setter Property="Validation.ErrorTemplate">
                 <Setter.Value>
@@ -168,7 +169,7 @@
 
                         <syncfusion:EditControl x:Name="editControl1" Text="{Binding Code, Mode=TwoWay}" syncfusion:DockingManager.CanDock="False" 
 							BorderBrush="Black" BorderThickness="1" Background="White" Foreground="Black" FontSize="14" FontFamily="Courier New"
-                            syncfusion:DockingManager.CanFloat="False" syncfusion:DockingManager.CanMinimize="False"
+                            syncfusion:DockingManager.CanFloat="False" syncfusion:DockingManager.CanMinimize="False" ShowLineNumber="True"
                             syncfusion:DockingManager.State="Document" syncfusion:DockingManager.Header="Untitled" 
                             syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanAutoHide="False"/>
 
@@ -180,7 +181,7 @@
                                                syncfusion:DockingManager.CanDocument="False" 
 							                   AllowEditing="True" EditTrigger="OnTap" SelectionMode="Single"
 							                   AllowDeleting="True" ScrollViewer.CanContentScroll="True" 
-                                               ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                               ScrollViewer.VerticalScrollBarVisibility="Auto" ColumnSizer="SizeToCells" AllowResizingColumns="True">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="ID" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Type" MappingName="Type" TextAlignment="Left" />
@@ -197,7 +198,19 @@
                             </syncfusion:DockingManager.Icon>
                         </syncfusion:SfDataGrid>
 
-
+                        <syncfusion:SfDataGrid x:Name="ErrorList" syncfusion:DockingManager.Header="Error List" syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                                               syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanDocument="False" AutoGenerateColumns="False"
+                                               syncfusion:DockingManager.TargetNameInDockedMode="DeclarationsDataGrid" CurrentCellRequestNavigate="ErrorList_CurrentCellRequestNavigate" AllowResizingColumns="True" ColumnSizer="AutoWithLastColumnFill">
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridHyperlinkColumn HeaderText="ID" MappingName="Id" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Severity" MappingName="DefaultSeverity" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Line" MappingName="Location" ValueBinding="{Binding Path=Location, Converter={StaticResource LocationConverter}}" TextAlignment="Left" />
+                                <syncfusion:GridTextColumn HeaderText="Message" MappingName="Descriptor.MessageFormat" TextAlignment="Left" />
+                            </syncfusion:SfDataGrid.Columns>
+                            <syncfusion:DockingManager.Icon>
+                                <ImageBrush ImageSource="Images/Error_6206.png"  />
+                            </syncfusion:DockingManager.Icon>
+                        </syncfusion:SfDataGrid>
                         <StackPanel Name="ImportsPanel" syncfusion:DockingManager.Header="Namespaces" syncfusion:DockingManager.SideInDockedMode="Bottom" 
                                    syncfusion:DockingManager.TargetNameInDockedMode="SnippetPropertyGrid" syncfusion:DockingManager.CanClose="False"
                                      syncfusion:DockingManager.CanDocument="False">

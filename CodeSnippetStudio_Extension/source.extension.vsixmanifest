@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.2.8" Language="en-US" Publisher="Alessandro Del Sole" />
+    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.3.0" Language="en-US" Publisher="Alessandro Del Sole" />
     <DisplayName>Code Snippet Studio</DisplayName>
     <Description xml:space="preserve">Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015 and Visual Studio Code.</Description>
     <MoreInfo>https://github.com/AlessandroDelSole/CodeSnippetStudio</MoreInfo>
     <License>Apache_License.txt</License>
     <GettingStartedGuide>Code_Snippet_Studio_User_Guide.docx</GettingStartedGuide>
+    <ReleaseNotes>Added live Roslyn code analysis as you type for VB and C# snippets</ReleaseNotes>
     <Icon>CodeSnippetStudioToolWindowPackage.ico</Icon>
     <PreviewImage>PreviewImage.jpg</PreviewImage>
     <Tags>snippet</Tags>

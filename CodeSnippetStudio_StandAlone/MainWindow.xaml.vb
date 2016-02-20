@@ -9,9 +9,11 @@ Imports Syncfusion.SfSkinManager
 Imports Newtonsoft.Json, System.Linq
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports Microsoft.CodeAnalysis, Microsoft.CodeAnalysis.VisualBasic, Microsoft.CodeAnalysis.CSharp
+Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 
 Class MainWindow
-    Private vsixData As VSIXPackage
+    Private vsixData As VsixPackage
     Private Property snippetData As CodeSnippet
 
     Private Property snippetLib As SnippetLibrary
@@ -20,8 +22,9 @@ Class MainWindow
 
     Private LibraryName As String = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CodeSnippetStudioLibrary.xml")
 
+
     Private Sub ResetPkg()
-        Me.vsixData = New VSIXPackage
+        Me.vsixData = New VsixPackage
 
         Me.VsixGrid.DataContext = Me.vsixData
         Me.PackageTab.Focus()
@@ -70,6 +73,7 @@ Class MainWindow
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
         Me.snippetData = New CodeSnippet
+        Me.ErrorList.ItemsSource = snippetData.Diagnostics
 
         LoadSnippetLibrary()
         HidePropertiesFromPropertyGrid()
@@ -298,7 +302,7 @@ Class MainWindow
             .Title = "Select the .vsix you want to sign"
             .Filter = "VSIX packages (*.vsix)|*.vsix|All files|*.*"
             If .ShowDialog = True Then
-                VSIXPackage.SignVsix(.FileName, PfxTextBox.Text, PfxPassword.Password)
+                VsixPackage.SignVsix(.FileName, PfxTextBox.Text, PfxPassword.Password)
                 MessageBox.Show($"{ .FileName} signed successfully.")
             End If
         End With
@@ -322,10 +326,12 @@ Class MainWindow
                 Me.editControl1.DocumentLanguage = Languages.VisualBasic
                 Me.snippetData.Language = "VB"
                 EnableDataGrids()
+                AnalyzeCode()
             Case = 1
                 Me.editControl1.DocumentLanguage = Languages.CSharp
                 Me.snippetData.Language = "CSharp"
                 DisableDataGrids()
+                AnalyzeCode()
             Case = 2
                 Me.editControl1.DocumentLanguage = Languages.SQL
                 Me.snippetData.Language = "SQL"
@@ -405,7 +411,7 @@ Class MainWindow
 
         outputFolder = dlg2.SelectedPath
 
-        VSIXPackage.ExtractVsix(inputFile, outputFolder, OnlySnippetsCheckBox.IsChecked)
+        VsixPackage.ExtractVsix(inputFile, outputFolder, OnlySnippetsCheckBox.IsChecked)
         MessageBox.Show($"Successfully extracted {inputFile} into {outputFolder}")
     End Sub
 
@@ -518,13 +524,23 @@ Class MainWindow
             If Not .ShowDialog = True Then
                 Exit Sub
             End If
-            vsixData = VSIXPackage.OpenVsix(.FileName)
+            vsixData = VsixPackage.OpenVsix(.FileName)
             Me.VsixGrid.DataContext = vsixData
         End With
     End Sub
 
     Private Sub editControl1_TextChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs) Handles editControl1.TextChanged
         snippetData.Code = editControl1.Text
+        AnalyzeCode()
+    End Sub
+
+    Private Sub AnalyzeCode()
+        Try
+            If Not String.IsNullOrWhiteSpace(snippetData.Code) Then snippetData.AnalyzeCode()
+            Me.ErrorList.ItemsSource = Me.snippetData.Diagnostics
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
@@ -758,7 +774,7 @@ Class MainWindow
         sninfo.SnippetDescription = $"{SnippetLanguageTextBox.Text} snippets"
         sninfo.SnippetLanguage = SnippetLanguageTextBox.Text
 
-        Dim v As New VSIXPackage
+        Dim v As New VsixPackage
         v.PackageAuthor = CodeAuthorNameTextBox.Text
         v.PackageDescription = CodePackageDescriptionTextBox.Text
         v.ProductName = CodeProductNameTextBox.Text
@@ -918,6 +934,13 @@ Class MainWindow
 
     Private Sub AddFromLibButton_Click(sender As Object, e As RoutedEventArgs)
         vsixData?.PopulateFromSnippetLibrary(snippetLib)
+    End Sub
+
+    Private Sub ErrorList_CurrentCellRequestNavigate(sender As Object, args As CurrentCellRequestNavigateEventArgs)
+        Dim diag = CType(args.RowData, Diagnostic)
+        If diag.Descriptor.HelpLinkUri <> "" Then
+            Process.Start(diag.Descriptor.HelpLinkUri)
+        End If
     End Sub
 End Class
 
