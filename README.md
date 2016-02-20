@@ -1,6 +1,6 @@
 # Code Snippet Studio
 
-Code Snippet Studio is an application that makes it easy to create, edit, package, and share IntelliSense code snippets for **Visual Studio 2015** and **Visual Studio Code**.
+Code Snippet Studio is an application that makes it easy to create, edit, package, and share IntelliSense code snippets for **Visual Studio 2015** and **Visual Studio Code**. For C# and Visual Basic snippets, it also provides live [Roslyn](https://github.com/dotnet/roslyn) code analysis as you type to immediately detect code issues.
 
 ![Code Snippet Studio](http://www.visual-basic.it/Portals/0/Contents/thumb/CodeSnippetStudio.jpg)
 
