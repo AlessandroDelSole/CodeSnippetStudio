@@ -54,6 +54,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("HasErrors")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("IsDirty")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("FileName")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Diagnostics")
         SnippetPropertyGrid.RefreshPropertygrid()
     End Sub
 
@@ -80,20 +81,22 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub MyControl_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.snippetData = New CodeSnippet
+        If Me.snippetData Is Nothing Then
+            Me.snippetData = New CodeSnippet
 
-        LoadSnippetLibrary()
-        HidePropertiesFromPropertyGrid()
+            LoadSnippetLibrary()
+            HidePropertiesFromPropertyGrid()
 
-        ResetPkg()
+            ResetPkg()
 
-        EditorSetup()
+            EditorSetup()
 
-        Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
-        Me.RefDataGrid.ItemsSource = snippetData.References
-        Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
+            Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
+            Me.RefDataGrid.ItemsSource = snippetData.References
+            Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
 
-        SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
+            SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
+        End If
     End Sub
 
 
@@ -492,7 +495,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
             MessageBox.Show("Declarations are not supported for Select and End words.", "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
             Exit Sub
         End If
-
+        DockingManager.ActivateWindow("DeclarationsDataGrid")
         Dim newDecl As New Declaration
         newDecl.Default = editControl1.SelectedText
         newDecl.ID = editControl1.SelectedText

@@ -46,6 +46,7 @@ Class MainWindow
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("HasErrors")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("IsDirty")
         Me.SnippetPropertyGrid.HidePropertiesCollection.Add("FileName")
+        Me.SnippetPropertyGrid.HidePropertiesCollection.Add("Diagnostics")
         SnippetPropertyGrid.RefreshPropertygrid()
     End Sub
 
@@ -72,21 +73,23 @@ Class MainWindow
     End Sub
 
     Private Sub MyControl_Loaded(sender As Object, e As Windows.RoutedEventArgs) Handles Me.Loaded
-        Me.snippetData = New CodeSnippet
-        Me.ErrorList.ItemsSource = snippetData.Diagnostics
+        If Me.snippetData Is Nothing Then
+            Me.snippetData = New CodeSnippet
+            Me.ErrorList.ItemsSource = snippetData.Diagnostics
 
-        LoadSnippetLibrary()
-        HidePropertiesFromPropertyGrid()
+            LoadSnippetLibrary()
+            HidePropertiesFromPropertyGrid()
 
-        ResetPkg()
+            ResetPkg()
 
-        EditorSetup()
+            EditorSetup()
 
-        Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
-        Me.RefDataGrid.ItemsSource = snippetData.References
-        Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
+            Me.ImportsDataGrid.ItemsSource = snippetData.Namespaces
+            Me.RefDataGrid.ItemsSource = snippetData.References
+            Me.DeclarationsDataGrid.ItemsSource = snippetData.Declarations
 
-        SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
+            SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
+        End If
     End Sub
 
 
@@ -490,6 +493,7 @@ Class MainWindow
             MessageBox.Show("Declarations are not supported for Select and End words.", "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
             Exit Sub
         End If
+        DockingManager.ActivateWindow("DeclarationsDataGrid")
 
         Dim newDecl As New Declaration
         newDecl.Default = editControl1.SelectedText
