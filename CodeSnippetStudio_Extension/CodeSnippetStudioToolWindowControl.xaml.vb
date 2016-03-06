@@ -17,6 +17,7 @@ Imports Newtonsoft.Json
 Imports System.Collections.ObjectModel
 Imports System.Windows.Input
 Imports Microsoft.CodeAnalysis
+Imports System.Windows.Media
 
 '''<summary>
 ''' Interaction logic for CodeSnippetStudioToolWindowControl.xaml
@@ -30,6 +31,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     Private Property snippetLib As SnippetLibrary
 
     Private LibraryName As String = IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CodeSnippetStudioLibrary.xml")
+    Private selectionBackground As Brush
 
     Private Sub ResetPkg()
         Me.vsixData = New VsixPackage
@@ -73,6 +75,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub EditorSetup()
+        Me.selectionBackground = editControl1.SelectionBackground
+
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
 
@@ -929,5 +933,63 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         If diag.Descriptor.HelpLinkUri <> "" Then
             System.Diagnostics.Process.Start(diag.Descriptor.HelpLinkUri)
         End If
+    End Sub
+
+    Private Sub ImportCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
+        If snippetData.IsDirty Then
+            Dim result = MessageBox.Show("The current snippet has unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            If result = MessageBoxResult.No Then
+                Exit Sub
+            End If
+        End If
+
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select code  file"
+            .Filter = "Supported code files (.vb,.cs,.cpp,.js,.sql,.xml,.xaml)|*.cs;*.vb;*.cpp;*.sql;*.js;*.xml;*.xaml|All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+
+            Try
+                Dim tempData = CodeSnippet.ImportCodeFile(.FileName)
+                If tempData IsNot Nothing Then
+                    Me.snippetData = Nothing
+                    Me.snippetData = tempData
+                    Me.EditorRoot.DataContext = Me.snippetData
+                    Me.snippetData.IsDirty = False
+                    editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, "Untitled")
+                    SetCurrentLanguage(snippetData.Language)
+                End If
+            Catch ex As UriFormatException
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Exit Sub
+            End Try
+        End With
+    End Sub
+
+    Private Sub ErrorList_SelectionChanged(sender As Object, e As GridSelectionChangedEventArgs) Handles ErrorList.SelectionChanged
+        Dim diag = TryCast(ErrorList.SelectedItem, Diagnostic)
+
+        If diag Is Nothing Then Exit Sub
+
+        Dim span = diag.Location.GetLineSpan
+
+        If diag.DefaultSeverity = DiagnosticSeverity.Error Then
+            editControl1.SelectionBackground = New SolidColorBrush(Colors.Red)
+        ElseIf diag.DefaultSeverity = DiagnosticSeverity.Warning Then
+            editControl1.SelectionBackground = New SolidColorBrush(Colors.Yellow)
+        Else
+            editControl1.SelectionBackground = Me.selectionBackground
+        End If
+
+        editControl1.SelectLines(span.Span.Start.Line, span.Span.End.Line, span.Span.Start.Character, span.Span.End.Character)
+    End Sub
+
+
+    Private Sub editControl1_GotKeyboardFocus(sender As Object, e As KeyboardFocusChangedEventArgs) Handles editControl1.GotKeyboardFocus
+        Me.editControl1.SelectionBackground = Me.selectionBackground
     End Sub
 End Class

@@ -65,6 +65,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                       
                             <Button Margin="5,0,0,0" Width="24" x:Name="NewSnippetButton" Click="NewSnippetButton_Click" ToolTip="New code snippet">
                                 <Image Source="Images/document_16xLG.png" />
                             </Button>
@@ -95,6 +96,10 @@
 
                             <Button Margin="5,0,0,0" Width="24" x:Name="LoadCodeFileButton" Click="LoadCodeFileButton_Click" ToolTip="Load code snippet">
                                 <Image Source="Images/Open_6529.png" />
+                            </Button>
+
+                            <Button Margin="5,0,0,0" Width="24" x:Name="ImportCodeFileButton" Click="ImportCodeFileButton_Click" ToolTip="Import code file">
+                                <Image Source="Images/ImportOrLoad_8600.png" />
                             </Button>
 
                             <Button Margin="5,0,0,0" Width="24" x:Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
@@ -198,9 +203,12 @@
                             </syncfusion:DockingManager.Icon>
                         </syncfusion:SfDataGrid>
 
-                        <syncfusion:SfDataGrid x:Name="ErrorList" syncfusion:DockingManager.Header="Error List" syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                        <syncfusion:SfDataGrid x:Name="ErrorList" syncfusion:DockingManager.Header="Error List" 
+                                               syncfusion:DockingManager.SideInDockedMode="Tabbed"
                                                syncfusion:DockingManager.CanClose="False" syncfusion:DockingManager.CanDocument="False" AutoGenerateColumns="False"
-                                               syncfusion:DockingManager.TargetNameInDockedMode="DeclarationsDataGrid" CurrentCellRequestNavigate="ErrorList_CurrentCellRequestNavigate" AllowResizingColumns="True" ColumnSizer="AutoWithLastColumnFill">
+                                               syncfusion:DockingManager.TargetNameInDockedMode="DeclarationsDataGrid" 
+                                               CurrentCellRequestNavigate="ErrorList_CurrentCellRequestNavigate" 
+                                               AllowResizingColumns="True" ColumnSizer="AutoWithLastColumnFill">
                             <syncfusion:SfDataGrid.Columns>
                                 <syncfusion:GridHyperlinkColumn HeaderText="ID" MappingName="Id" TextAlignment="Left" />
                                 <syncfusion:GridTextColumn HeaderText="Severity" MappingName="DefaultSeverity" TextAlignment="Left" />
