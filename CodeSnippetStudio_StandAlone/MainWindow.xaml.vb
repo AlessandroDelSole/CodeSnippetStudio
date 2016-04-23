@@ -388,6 +388,10 @@ Class MainWindow
                 Exit Sub
             End If
 
+            If snippetData.Language = "" Or String.IsNullOrEmpty(snippetData.Language) Then
+                snippetData.Language = My.Settings.PreferredLanguage
+            End If
+
             snippetData.SaveSnippet(.FileName, IDEType.VisualStudio)
             editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
             MessageBox.Show($"{ .FileName} saved correctly.")
