@@ -25,7 +25,7 @@ Imports System.Windows.Media
 Partial Public Class CodeSnippetStudioToolWindowControl
     Inherits System.Windows.Controls.UserControl
 
-    Private vsixData As VsixPackage
+    Private Property vsixData As VsixPackage
     Private Property snippetData As CodeSnippet
     Private Property IntelliSenseReferences As ObservableCollection(Of Uri)
     Private Property snippetLib As SnippetLibrary
@@ -514,7 +514,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                     Select decl
 
         If query.Any Then
-            MessageBox.Show("A declaration already exists for the specified word", "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("A declaration already exists for the specified word",
+                            "Code Snippet Studio", MessageBoxButton.OK, MessageBoxImage.Error)
             Exit Sub
         End If
 
@@ -549,7 +550,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub LoadCodeFileButton_Click(sender As Object, e As RoutedEventArgs)
         If snippetData.IsDirty Then
-            Dim result = MessageBox.Show("The current snippet has unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            Dim result = MessageBox.Show("The current snippet has unsaved changes. Are you sure?", "Confirmation",
+                                         MessageBoxButton.YesNo, MessageBoxImage.Question)
             If result = MessageBoxResult.No Then
                 Exit Sub
             End If
@@ -617,7 +619,8 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
             snippetData.SaveSnippet(.FileName, IDEType.Code)
             editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, .FileName)
-            MessageBox.Show($"{ .FileName} saved correctly. Please visit: " & Environment.NewLine & "https://code.visualstudio.com/docs/customization/userdefinedsnippets" & Environment.NewLine &
+            MessageBox.Show($"{ .FileName} saved correctly. Please visit: " &
+                            Environment.NewLine & "https://code.visualstudio.com/docs/customization/userdefinedsnippets" & Environment.NewLine &
                             "to learn how to consume custom snippets in Visual Studio Code", "Save info", MessageBoxButton.OK, MessageBoxImage.Information)
         End With
     End Sub
@@ -790,13 +793,15 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub NewSnippetButton_Click(sender As Object, e As RoutedEventArgs)
         If Me.snippetData.IsDirty Then
-            Dim result = MessageBox.Show("There are unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            Dim result = MessageBox.Show("There are unsaved changes. Are you sure?", "Confirmation",
+                                         MessageBoxButton.YesNo, MessageBoxImage.Warning)
             If result = MessageBoxResult.No Then Exit Sub
         End If
 
         Me.snippetData = Nothing
         Me.snippetData = New CodeSnippet
         Me.EditorRoot.DataContext = snippetData
+        editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, "Untitled")
     End Sub
 
     Private Sub FontSizeTextBox_TextChanged(sender As Object, e As TextChangedEventArgs)
@@ -996,4 +1001,6 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     Private Sub editControl1_GotKeyboardFocus(sender As Object, e As KeyboardFocusChangedEventArgs) Handles editControl1.GotKeyboardFocus
         Me.editControl1.SelectionBackground = Me.selectionBackground
     End Sub
+
+
 End Class

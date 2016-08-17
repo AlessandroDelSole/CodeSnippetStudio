@@ -90,7 +90,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>CodeSnippetStudio_StandAlone_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
@@ -275,7 +276,6 @@
     <Content Include="Assets\Code_Snippet_Studio_User_Guide.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="CodeSnippetStudio_StandAlone_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <Resource Include="Images\Find_5650.png" />
     <Resource Include="Images\folder_Open_16xLG.png" />
