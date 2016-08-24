@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.5908.36063\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.6080.40852\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
@@ -431,7 +431,7 @@
     <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\DelSole.VSIX.1.0.5908.36063\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
+    <Analyzer Include="..\packages\DelSole.VSIX.1.0.6080.40852\analyzers\dotnet\vb\DelSole_VSIX_Analysis.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\vb\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\vb\Microsoft.CodeAnalysis.VisualBasic.Analyzers.dll" />
   </ItemGroup>

@@ -506,6 +506,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         DockingManager.ActivateWindow("DeclarationsDataGrid")
         Dim newDecl As New Declaration
         newDecl.Default = editControl1.SelectedText
+
         newDecl.ID = editControl1.SelectedText
         newDecl.ToolTip = "Replace with yours...."
 
