@@ -56,7 +56,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Default")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("VisualStudio2015")>  _
         Public Property PreferredTheme() As Global.Syncfusion.SfSkinManager.VisualStyles
             Get
                 Return CType(Me("PreferredTheme"),Global.Syncfusion.SfSkinManager.VisualStyles)
@@ -68,7 +68,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Text")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("CSharp")>  _
         Public Property PreferredLanguage() As String
             Get
                 Return CType(Me("PreferredLanguage"),String)
@@ -111,6 +111,39 @@ Namespace My
             End Get
             Set
                 Me("LibraryName") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property EditorForeColor() As Global.System.Windows.Media.SolidColorBrush
+            Get
+                Return CType(Me("EditorForeColor"),Global.System.Windows.Media.SolidColorBrush)
+            End Get
+            Set
+                Me("EditorForeColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property EditorSelectionColor() As Global.System.Windows.Media.SolidColorBrush
+            Get
+                Return CType(Me("EditorSelectionColor"),Global.System.Windows.Media.SolidColorBrush)
+            End Get
+            Set
+                Me("EditorSelectionColor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+        Public Property EditorSelectionBackground() As Global.System.Windows.Media.SolidColorBrush
+            Get
+                Return CType(Me("EditorSelectionBackground"),Global.System.Windows.Media.SolidColorBrush)
+            End Get
+            Set
+                Me("EditorSelectionBackground") = value
             End Set
         End Property
     End Class

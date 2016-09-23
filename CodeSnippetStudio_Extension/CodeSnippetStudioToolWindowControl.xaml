@@ -619,36 +619,66 @@
                         <GroupBox.Header>
                             <TextBlock Text=" Settings " FontWeight="Bold"></TextBlock>
                         </GroupBox.Header>
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Default language:"/>
-                                <ComboBox Width="100" Margin="5,0,0,0" x:Name="PrefLanguageCombo" SelectionChanged="PrefLanguageCombo_SelectionChanged">
-                                    <ComboBoxItem Tag="VB" Content="Visual Basic"/>
-                                    <ComboBoxItem Tag="CSharp" Content="C#"/>
-                                    <ComboBoxItem Tag="SQL" Content="SQL"/>
-                                    <ComboBoxItem Tag="XML" Content="XML"/>
-                                    <ComboBoxItem Tag="XAML" Content="XAML"/>
-                                    <ComboBoxItem Tag="CPP" Content="C++"/>
-                                    <ComboBoxItem Tag="HTML" Content="Html"/>
-                                    <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>
-                                </ComboBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="Default language:"/>
+                                    <ComboBox Width="100" Margin="5,0,0,0" x:Name="PrefLanguageCombo" SelectionChanged="PrefLanguageCombo_SelectionChanged">
+                                        <ComboBoxItem Tag="VB" Content="Visual Basic"/>
+                                        <ComboBoxItem Tag="CSharp" Content="C#"/>
+                                        <ComboBoxItem Tag="SQL" Content="SQL"/>
+                                        <ComboBoxItem Tag="XML" Content="XML"/>
+                                        <ComboBoxItem Tag="XAML" Content="XAML"/>
+                                        <ComboBoxItem Tag="CPP" Content="C++"/>
+                                        <ComboBoxItem Tag="HTML" Content="Html"/>
+                                        <ComboBoxItem Tag="JavaScript" Content="JavaScript"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="Theme:"/>
+                                    <ComboBox Width="150" Margin="5,0,0,0" Name="ThemeCombo" SelectionChanged="ThemeCombo_SelectionChanged">
+                                        <ComboBoxItem>Metro</ComboBoxItem>
+                                        <ComboBoxItem>Blend</ComboBoxItem>
+                                        <ComboBoxItem>VisualStudio2015</ComboBoxItem>
+                                        <ComboBoxItem>Office2016Colorful</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="Editor Font Size: "/>
+                                    <TextBox Text="14" Width="105" TextAlignment="Right" Name="FontSizeTextBox" TextChanged="FontSizeTextBox_TextChanged"/>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Theme:"/>
-                                <ComboBox Width="150" Margin="5,0,0,0" Name="ThemeCombo" SelectionChanged="ThemeCombo_SelectionChanged">
-                                    <ComboBoxItem>Metro</ComboBoxItem>
-                                    <ComboBoxItem>Blend</ComboBoxItem>
-                                    <ComboBoxItem>VisualStudio2013</ComboBoxItem>
-                                    <ComboBoxItem>Office2013DarkGray</ComboBoxItem>
-                                    <ComboBoxItem>Office2013LightGray</ComboBoxItem>
-                                    <ComboBoxItem>Office2013White</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Editor Font Size: "/>
-                                <TextBox Text="14" Width="105" TextAlignment="Right" Name="FontSizeTextBox" TextChanged="FontSizeTextBox_TextChanged"/>
-                            </StackPanel>
-                        </StackPanel>
+                            <!-- Color selection -->
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="Editor font color" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <syncfusion:ColorPicker Name="EditorForeColorPicker"
+                                                        BrushMode="Solid" Color="Black" Width="280"
+                                                        EnableToolTip="False" EnableSolidToGradientSwitch="False"
+                                                        SelectedBrushChanged="EditorForeColorPicker_SelectedBrushChanged"/>
+                                    <TextBlock Text="Editor selection background" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <syncfusion:ColorPicker Name="EditorSelectionBackgroundPicker"
+                                                        BrushMode="Solid" Color="Black" Width="280"
+                                                        EnableToolTip="False" EnableSolidToGradientSwitch="False"
+                                                        SelectedBrushChanged="EditorSelectionBackgroundPicker_SelectedBrushChanged"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Editor selection color" FontWeight="Bold" HorizontalAlignment="Center" />
+                                    <syncfusion:ColorPicker Name="EditorSelectionColorPicker"
+                                                        BrushMode="Solid" Color="Black" Width="280" 
+                                                        EnableToolTip="False" EnableSolidToGradientSwitch="False"
+                                                        SelectedBrushChanged="EditorSelectionColorPicker_SelectedBrushChanged"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
                     </GroupBox>
 
                     <GroupBox>

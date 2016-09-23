@@ -75,10 +75,39 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub EditorSetup()
-        Me.selectionBackground = editControl1.SelectionBackground
 
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
+
+        If My.Settings.EditorForeColor IsNot Nothing Then
+            editControl1.Foreground = My.Settings.EditorForeColor
+            EditorForeColorPicker.Brush = My.Settings.EditorForeColor
+        Else
+            EditorForeColorPicker.Brush = editControl1.Foreground
+        End If
+
+        If My.Settings.EditorSelectionColor IsNot Nothing Then
+            editControl1.SelectionForeground = My.Settings.EditorSelectionColor
+            EditorSelectionColorPicker.Brush = My.Settings.EditorSelectionColor
+        Else
+            EditorSelectionColorPicker.Brush = editControl1.SelectionForeground
+        End If
+
+        If My.Settings.EditorSelectionBackground IsNot Nothing Then
+            editControl1.SelectionBackground = My.Settings.EditorSelectionBackground
+            EditorSelectionBackgroundPicker.Brush = My.Settings.EditorSelectionBackground
+        Else
+            EditorSelectionBackgroundPicker.Brush = editControl1.SelectionBackground
+        End If
+
+        Try
+            SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
+            SetPreferredThemeOption(My.Settings.PreferredTheme)
+        Catch ex As Exception
+
+        End Try
+
+        Me.selectionBackground = editControl1.SelectionBackground
 
         Me.IntelliSenseReferences = New ObservableCollection(Of Uri)
         Me.editControl1.AssemblyReferences = IntelliSenseReferences
@@ -664,6 +693,20 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         End Select
     End Sub
 
+    Private Sub SetPreferredThemeOption(style As VisualStyles)
+        Select Case style
+            Case VisualStyles.Metro
+                ThemeCombo.SelectedIndex = 0
+            Case VisualStyles.Blend
+                ThemeCombo.SelectedIndex = 1
+            Case VisualStyles.VisualStudio2015
+                ThemeCombo.SelectedIndex = 2
+            Case VisualStyles.Office2016Colorful
+                ThemeCombo.SelectedIndex = 0
+        End Select
+
+    End Sub
+
     Private Sub ThemeCombo_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs)
         Dim cb = CType(sender, ComboBox)
         Select Case cb.SelectedIndex
@@ -676,20 +719,12 @@ Partial Public Class CodeSnippetStudioToolWindowControl
                 My.Settings.PreferredTheme = VisualStyles.Blend
                 My.Settings.Save()
             Case = 2
-                SfSkinManager.SetVisualStyle(Me, VisualStyles.VisualStudio2013)
-                My.Settings.PreferredTheme = VisualStyles.VisualStudio2013
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.VisualStudio2015)
+                My.Settings.PreferredTheme = VisualStyles.VisualStudio2015
                 My.Settings.Save()
             Case = 3
-                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013DarkGray)
-                My.Settings.PreferredTheme = VisualStyles.Office2013DarkGray
-                My.Settings.Save()
-            Case = 4
-                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013LightGray)
-                My.Settings.PreferredTheme = VisualStyles.Office2013LightGray
-                My.Settings.Save()
-            Case = 5
-                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2013White)
-                My.Settings.PreferredTheme = VisualStyles.Office2013White
+                SfSkinManager.SetVisualStyle(Me, VisualStyles.Office2016Colorful)
+                My.Settings.PreferredTheme = VisualStyles.Office2016Colorful
                 My.Settings.Save()
         End Select
     End Sub
@@ -721,27 +756,35 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Select Case My.Settings.PreferredLanguage
             Case = "VB"
                 Me.LanguageCombo.SelectedIndex = 0
+                Me.PrefLanguageCombo.SelectedIndex = 0
                 Return Syncfusion.Windows.Edit.Languages.VisualBasic
             Case = "CSharp"
                 Me.LanguageCombo.SelectedIndex = 1
+                Me.PrefLanguageCombo.SelectedIndex = 1
                 Return Syncfusion.Windows.Edit.Languages.CSharp
             Case = "SQL"
                 Me.LanguageCombo.SelectedIndex = 2
+                Me.PrefLanguageCombo.SelectedIndex = 2
                 Return Syncfusion.Windows.Edit.Languages.SQL
             Case = "XML"
                 Me.LanguageCombo.SelectedIndex = 3
+                Me.PrefLanguageCombo.SelectedIndex = 3
                 Return Syncfusion.Windows.Edit.Languages.XML
             Case = "XAML"
                 Me.LanguageCombo.SelectedIndex = 4
+                Me.PrefLanguageCombo.SelectedIndex = 4
                 Return Syncfusion.Windows.Edit.Languages.XAML
             Case = "CPP"
                 Me.LanguageCombo.SelectedIndex = 5
+                Me.PrefLanguageCombo.SelectedIndex = 5
                 Return Syncfusion.Windows.Edit.Languages.CSharp
             Case = "HTML"
                 Me.LanguageCombo.SelectedIndex = 6
+                Me.PrefLanguageCombo.SelectedIndex = 6
                 Return Syncfusion.Windows.Edit.Languages.XML
             Case = "JavaScript"
                 Me.LanguageCombo.SelectedIndex = 7
+                Me.PrefLanguageCombo.SelectedIndex = 7
                 Return Syncfusion.Windows.Edit.Languages.XML
             Case Else
                 Return Syncfusion.Windows.Edit.Languages.Text
@@ -1003,5 +1046,21 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Me.editControl1.SelectionBackground = Me.selectionBackground
     End Sub
 
+    Private Sub EditorForeColorPicker_SelectedBrushChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        Me.editControl1.Foreground = EditorForeColorPicker.Brush
+        My.Settings.EditorForeColor = EditorForeColorPicker.Brush
+        My.Settings.Save()
+    End Sub
 
+    Private Sub EditorSelectionColorPicker_SelectedBrushChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        Me.editControl1.SelectionForeground = EditorSelectionColorPicker.Brush
+        My.Settings.EditorSelectionColor = EditorSelectionColorPicker.Brush
+        My.Settings.Save()
+    End Sub
+
+    Private Sub EditorSelectionBackgroundPicker_SelectedBrushChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+        Me.editControl1.SelectionBackground = EditorSelectionBackgroundPicker.Brush
+        My.Settings.EditorSelectionBackground = EditorSelectionBackgroundPicker.Brush
+        My.Settings.Save()
+    End Sub
 End Class

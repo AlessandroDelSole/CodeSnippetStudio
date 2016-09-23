@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="PreferredTheme" Type="Syncfusion.SfSkinManager.VisualStyles" Scope="User">
-      <Value Profile="(Default)">Default</Value>
+      <Value Profile="(Default)">VisualStudio2015</Value>
     </Setting>
     <Setting Name="PreferredLanguage" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Text</Value>
+      <Value Profile="(Default)">CSharp</Value>
     </Setting>
     <Setting Name="EditorFont" Type="System.Windows.Media.FontFamily" Scope="User">
       <Value Profile="(Default)">Courier New</Value>
@@ -15,6 +15,15 @@
       <Value Profile="(Default)">14</Value>
     </Setting>
     <Setting Name="LibraryName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EditorForeColor" Type="System.Windows.Media.SolidColorBrush" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EditorSelectionColor" Type="System.Windows.Media.SolidColorBrush" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EditorSelectionBackground" Type="System.Windows.Media.SolidColorBrush" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
