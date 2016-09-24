@@ -7,6 +7,8 @@ Code Snippet Studio is an [extension for Visual Studio 2015](https://visualstudi
 
 ![Code Snippet Studio](http://community.visual-basic.it/images/community_visual-basic_it/alessandro/184/o_CodeSnippetStudio.gif)
 
+**To show up Code Snippet Studio, in Visual Studio 2015 select View, Other Windows, Code Snippet Studio**
+
 [Getting Started Guide](https://github.com/AlessandroDelSole/CodeSnippetStudio/blob/master/CodeSnippetStudio_StandAlone/Assets/Code_Snippet_Studio_User_Guide.pdf)
 
 With Code Snippet Studio, you have a fully-functional code editor with syntax highlighting, basic IntelliSense, and live code issue detection as you type, where you can write or paste your snippets and supply the information that is required by the respective schema references. Studio will generate the proper .snippet or .json files for you, depending on the target IDE (Visual Studio or Code). You will then be able to package a number of code snippets into a Visual Studio extension by building .vsix packages that you can share with other developers and that you can even publish to the Visual Studio Gallery! Additional tools are available to work with both .vsix and .vsi installers.
