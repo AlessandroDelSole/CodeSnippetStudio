@@ -1,5 +1,8 @@
 #Code Snippet Studio
 
+![](https://img.shields.io/badge/release-stable-brightgreen.svg)
+[![](https://img.shields.io/badge/download-7.5k-blue.svg)](https://visualstudiogallery.msdn.microsoft.com/803e021c-fce2-4637-a05d-bb078cffc492)
+
 Code Snippet Studio is an [extension for Visual Studio 2015](https://visualstudiogallery.msdn.microsoft.com/803e021c-fce2-4637-a05d-bb078cffc492) that makes it easy to create, edit, package, and share IntelliSense code snippets for **Visual Studio 2015** and **Visual Studio Code**. For C# and Visual Basic snippets, it also provides live [Roslyn](https://github.com/dotnet/roslyn) code analysis as you type to immediately detect code issues.
 
 ![Code Snippet Studio](http://community.visual-basic.it/images/community_visual-basic_it/alessandro/184/o_CodeSnippetStudio.gif)
