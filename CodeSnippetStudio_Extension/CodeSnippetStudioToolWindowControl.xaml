@@ -664,11 +664,6 @@
                                                         BrushMode="Solid" Color="Black" Width="280"
                                                         EnableToolTip="False" EnableSolidToGradientSwitch="False"
                                                         SelectedBrushChanged="EditorForeColorPicker_SelectedBrushChanged"/>
-                                    <TextBlock Text="Editor selection background" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                    <syncfusion:ColorPicker Name="EditorSelectionBackgroundPicker"
-                                                        BrushMode="Solid" Color="Black" Width="280"
-                                                        EnableToolTip="False" EnableSolidToGradientSwitch="False"
-                                                        SelectedBrushChanged="EditorSelectionBackgroundPicker_SelectedBrushChanged"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Editor selection color" FontWeight="Bold" HorizontalAlignment="Center" />

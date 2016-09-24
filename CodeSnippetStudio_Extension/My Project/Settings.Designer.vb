@@ -135,17 +135,6 @@ Namespace My
                 Me("EditorSelectionColor") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-        Public Property EditorSelectionBackground() As Global.System.Windows.Media.SolidColorBrush
-            Get
-                Return CType(Me("EditorSelectionBackground"),Global.System.Windows.Media.SolidColorBrush)
-            End Get
-            Set
-                Me("EditorSelectionBackground") = value
-            End Set
-        End Property
     End Class
 End Namespace
 

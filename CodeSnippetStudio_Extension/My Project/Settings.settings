@@ -23,8 +23,5 @@
     <Setting Name="EditorSelectionColor" Type="System.Windows.Media.SolidColorBrush" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EditorSelectionBackground" Type="System.Windows.Media.SolidColorBrush" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
   </Settings>
 </SettingsFile>

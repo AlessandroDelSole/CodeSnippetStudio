@@ -75,7 +75,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
     End Sub
 
     Private Sub EditorSetup()
-
+        'My.Settings.Reset()
         Me.RootTabControl.SelectedIndex = 0
         Me.editControl1.DocumentLanguage = LoadPreferredLanguage()
 
@@ -92,14 +92,6 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         Else
             EditorSelectionColorPicker.Brush = editControl1.SelectionForeground
         End If
-
-        If My.Settings.EditorSelectionBackground IsNot Nothing Then
-            editControl1.SelectionBackground = My.Settings.EditorSelectionBackground
-            EditorSelectionBackgroundPicker.Brush = My.Settings.EditorSelectionBackground
-        Else
-            EditorSelectionBackgroundPicker.Brush = editControl1.SelectionBackground
-        End If
-
         Try
             SfSkinManager.SetVisualStyle(Me, My.Settings.PreferredTheme)
             SetPreferredThemeOption(My.Settings.PreferredTheme)
@@ -1058,9 +1050,5 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         My.Settings.Save()
     End Sub
 
-    Private Sub EditorSelectionBackgroundPicker_SelectedBrushChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
-        Me.editControl1.SelectionBackground = EditorSelectionBackgroundPicker.Brush
-        My.Settings.EditorSelectionBackground = EditorSelectionBackgroundPicker.Brush
-        My.Settings.Save()
-    End Sub
+
 End Class
