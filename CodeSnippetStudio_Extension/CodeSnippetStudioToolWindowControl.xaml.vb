@@ -107,7 +107,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
 
     Private Sub MyControl_Loaded(sender As Object, e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         If Me.snippetData Is Nothing Then
-            Me.snippetData = New CodeSnippet
+            GenerateNewSnippet()
 
             LoadSnippetLibrary()
             HidePropertiesFromPropertyGrid()
@@ -827,6 +827,13 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         v.Build(snippetFolder, IDEType.Code)
     End Sub
 
+    Private Sub GenerateNewSnippet()
+        Me.snippetData = New CodeSnippet
+        Me.EditorRoot.DataContext = snippetData
+        editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, "Untitled")
+        Me.snippetData.IsDirty = False
+    End Sub
+
     Private Sub NewSnippetButton_Click(sender As Object, e As RoutedEventArgs)
         If Me.snippetData.IsDirty Then
             Dim result = MessageBox.Show("There are unsaved changes. Are you sure?", "Confirmation",
@@ -835,9 +842,7 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         End If
 
         Me.snippetData = Nothing
-        Me.snippetData = New CodeSnippet
-        Me.EditorRoot.DataContext = snippetData
-        editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, "Untitled")
+        GenerateNewSnippet()
     End Sub
 
     Private Sub FontSizeTextBox_TextChanged(sender As Object, e As TextChangedEventArgs)
@@ -1050,5 +1055,38 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         My.Settings.Save()
     End Sub
 
+    Private Sub ImportSumblimeButton_Click(sender As Object, e As RoutedEventArgs)
+        If snippetData.IsDirty Then
+            Dim result = MessageBox.Show("The current snippet has unsaved changes. Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question)
+            If result = MessageBoxResult.No Then
+                Exit Sub
+            End If
+        End If
 
+        Dim dlg As New OpenFileDialog
+
+        With dlg
+            .Title = "Select code  file"
+            .Filter = "All files|*.*"
+            If Not .ShowDialog = True Then
+                Exit Sub
+            End If
+
+            Try
+                Dim tempData = CodeSnippet.ImportSublimeSnippet(.FileName)
+                If tempData IsNot Nothing Then
+                    Me.snippetData = Nothing
+                    Me.snippetData = tempData
+                    Me.EditorRoot.DataContext = Me.snippetData
+                    Me.snippetData.IsDirty = False
+                    editControl1.SetValue(Syncfusion.Windows.Tools.Controls.DockingManager.HeaderProperty, "Untitled")
+                    SetCurrentLanguage(snippetData.Language)
+                End If
+            Catch ex As UriFormatException
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Exit Sub
+            End Try
+        End With
+    End Sub
 End Class

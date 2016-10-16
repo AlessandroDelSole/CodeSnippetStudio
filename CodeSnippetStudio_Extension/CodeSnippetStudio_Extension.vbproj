@@ -132,6 +132,7 @@
     <Resource Include="Images\CSS_AppIcon_SM.png" />
     <Resource Include="Images\Error_6206.png" />
     <Resource Include="Images\ImportOrLoad_8600.png" />
+    <Resource Include="Images\ImportSublime.png" />
     <Content Include="index.html" />
     <Resource Include="Images\Open_6529.png" />
     <Content Include="PreviewImage.jpg">
@@ -150,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DelSole.VSIX, Version=1.0.0.1, Culture=neutral, PublicKeyToken=f363590589be2c33, processorArchitecture=MSIL">
-      <HintPath>..\packages\DelSole.VSIX.1.0.6096.42272\lib\net40\DelSole.VSIX.dll</HintPath>
+      <HintPath>..\packages\DelSole.VSIX.1.0.6133.24819\lib\net40\DelSole.VSIX.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">

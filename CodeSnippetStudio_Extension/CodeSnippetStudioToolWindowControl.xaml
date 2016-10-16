@@ -99,6 +99,9 @@
                         <Button Margin="5,0,0,0" Width="24" x:Name="ImportCodeFileButton" Click="ImportCodeFileButton_Click" ToolTip="Import code file">
                             <Image Source="/CodeSnippetStudio;component/Images/ImportOrLoad_8600.png" />
                         </Button>
+                        <Button Margin="5,0,0,0" Width="24" x:Name="ImportSumblimeButton" Click="ImportSumblimeButton_Click" ToolTip="Import Sublime code snippet">
+                            <Image Source="/CodeSnippetStudio;component/Images/ImportSublime.png" />
+                        </Button>
                         <Button Margin="5,0,0,0" Width="24" x:Name="AddDecButton" Click="AddDecButton_Click" ToolTip="Add declaration for selection">
                             <Image Source="/CodeSnippetStudio;component/Images/AddMark_10580.png" />
                         </Button>
