@@ -1,7 +1,7 @@
 #Code Snippet Studio
 
 ![](https://img.shields.io/badge/release-stable-brightgreen.svg)
-[![](https://img.shields.io/badge/download-8.2k-blue.svg)](https://visualstudiogallery.msdn.microsoft.com/803e021c-fce2-4637-a05d-bb078cffc492)
+[![](https://img.shields.io/badge/download-10k-blue.svg)](https://visualstudiogallery.msdn.microsoft.com/803e021c-fce2-4637-a05d-bb078cffc492)
 
 **Released version 1.4 which introduces selecting between Expansion and SurroundsWith modes, fixes a bug on importing .vsi archives, and introduces support for importing Sublime code snippets.**
 
