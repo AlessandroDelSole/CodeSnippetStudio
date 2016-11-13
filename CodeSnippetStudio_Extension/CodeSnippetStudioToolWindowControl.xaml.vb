@@ -934,12 +934,18 @@ Partial Public Class CodeSnippetStudioToolWindowControl
         If criteria = "" Then
             Me.LibraryTreeview.ItemsSource = Nothing
             Me.LibraryTreeview.ItemsSource = Me.snippetLib.Folders
+            Exit Sub
         End If
 
-        Dim query = Me.snippetLib.Folders.Where(Function(f) f?.SnippetFiles.Any(Function(s) s.FileName IsNot Nothing _
-                    AndAlso s.FileName.ToLowerInvariant.Contains(criteria.ToLowerInvariant)))
+        Try
+            Dim query = Me.snippetLib.Folders.Where(Function(f) f?.SnippetFiles.Any(Function(s) s.FileName IsNot Nothing _
+                        AndAlso s.FileName.ToLowerInvariant.Contains(criteria.ToLowerInvariant)))
 
-        Me.LibraryTreeview.ItemsSource = New ObservableCollection(Of SnippetFolder)(query)
+            Me.LibraryTreeview.ItemsSource = New ObservableCollection(Of SnippetFolder)(query)
+        Catch ex As Exception
+            Me.LibraryTreeview.ItemsSource = Me.snippetLib.Folders
+        End Try
+
     End Sub
 
     Private Sub FilterButton_Click(sender As Object, e As RoutedEventArgs)
