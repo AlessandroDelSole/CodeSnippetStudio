@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.4.2" Language="en-US" Publisher="Alessandro Del Sole" />
+    <Identity Id="CodeSnippetStudio_Extension.Alessandro Del Sole.c76974a7-5d80-4824-b961-798a44018340" Version="1.5" Language="en-US" Publisher="Alessandro Del Sole" />
     <DisplayName>Code Snippet Studio</DisplayName>
     <Description xml:space="preserve">Create, edit, package, and share IntelliSense code snippets for Visual Studio 2015 and Visual Studio Code.</Description>
     <MoreInfo>https://github.com/AlessandroDelSole/CodeSnippetStudio</MoreInfo>
@@ -13,7 +13,8 @@
     <Tags>snippet</Tags>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
+    <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[14.0]" Id="Microsoft.VisualStudio.Community" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -22,4 +23,7 @@
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.26004.1,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
 </PackageManifest>
